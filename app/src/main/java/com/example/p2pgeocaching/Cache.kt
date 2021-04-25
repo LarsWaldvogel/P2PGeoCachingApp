@@ -28,7 +28,7 @@ class Cache constructor(private val title: String,
 
     init {
         // Here we fabricate the string we want to hash by concatenating [title], ";" and [desc]
-        val stringToHash: String = "$title;$desc"
+        val stringToHash = "$title;$desc"
 
         // The hash is saved to [id], which serves as the unique identifier of the cache
         id = hash(stringToHash)
@@ -62,7 +62,32 @@ class Cache constructor(private val title: String,
 
     }
 
-    
+    /**
+     * This function takes an ByteArray containing a cipher text [byteCipher] as input
+     * It returns the plain text as a String.
+     * This decryption is done using the public key.
+     */
+    private fun decryptToString(byteCipher: ByteArray): String {
+        // Setting up the object to decrypt
+        val cipher = Cipher.getInstance("RSA")
+        cipher.init(Cipher.DECRYPT_MODE, pubKey)
+
+        // Here we actually decrypt the message and return it as a String
+        val bytePlain = cipher.doFinal(byteCipher)
+        return bytePlain.toString()
+    }
+
+    /**
+     * This function decrypts the [hallOfFame] and returns it as a String.
+     * Each entry of [hallOfFame] is separated by a "\n" in the final String.
+     */
+    fun hallToString(): String {
+        var hofString = ""
+        for (cipherEntry in hallOfFame) {
+            hofString += decryptToString(cipherEntry) + "\n"
+        }
+        return hofString
+    }
 
 
 }
