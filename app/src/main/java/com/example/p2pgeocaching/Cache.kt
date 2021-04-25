@@ -34,8 +34,8 @@ class Cache(
 
 
     /**
-     * Constructor for creating a new cache
-     * Here, we only give it
+     * Constructor for creating a new cache.
+     * Here, we only give it the [title], the [desc] and the [creator]. The rest is derived from it.
      */
     constructor(title: String, desc: String, creator: String) : this(
         title,
@@ -73,8 +73,8 @@ class Cache(
 
 
     /**
-     * Constructor for saving existing cache
-     * This assumes, all information of the cache is known, except for the [prvKey]
+     * Constructor for saving existing cache.
+     * This assumes, all information of the cache is known, except for the [prvKey].
      */
     constructor(
         title: String,
@@ -104,7 +104,7 @@ class Cache(
         // The generator is initialized with a key length of 2048 bit and a random number
         generator.initialize(2048, SecureRandom())
 
-        // key pair is created and returned
+        // Key pair is created and returned
         return generator.genKeyPair()
 
     }
@@ -158,7 +158,7 @@ class Cache(
             throw KeysDoNotMatchException()
         }
 
-        // finder cannot contain any illegal characters
+        // Finder cannot contain any illegal characters
         checkForIllegalCharacters(finder)
 
         // Adds the encrypted name to [hallOfFame], if it is null, creates a new one
@@ -198,11 +198,13 @@ class Cache(
     /**
      * Simple function that checks if any of the Strings provided in [arguments] contains an illegal
      * character.
-     * If it does, throws a StringContainsIllegalCharacterException()
+     * If it does, throws a StringContainsIllegalCharacterException().
      */
     private fun checkForIllegalCharacters(arguments: List<String>) {
         // This contains a list of all the illegal characters
-        val illegalCharacters: List<Char> = arrayListOf(';', ' ', ':', '\n')
+        val illegalCharacters: List<Char> = arrayListOf(';', ' ', ':', '\n', '{', '}')
+
+        // Checks for illegal characters in strings
         for (str in arguments) {
             for (illChr in illegalCharacters) {
                 if (str.contains(illChr)) {
@@ -213,7 +215,7 @@ class Cache(
     }
 
     /**
-     * If only a single string is provided, casts it to array list and calls original function
+     * If only a single string is provided, casts it to array list and calls original function.
      */
     private fun checkForIllegalCharacters(argument: String) {
         checkForIllegalCharacters(arrayListOf(argument))
@@ -221,8 +223,8 @@ class Cache(
 
 
     /**
-     * Simple function that checks if the [creator] is in the [hallOfFame]
-     * If [creator] is not contained, throws CreatorNotInHallOfFameException
+     * Simple function that checks if the [creator] is in the [hallOfFame].
+     * If [creator] is not contained, throws CreatorNotInHallOfFameException.
      */
     private fun checkCreatorInHOF() {
         val stringHOF: String = hallToString()
@@ -231,9 +233,10 @@ class Cache(
         }
     }
 
+
     /**
      * The toString() function now concatenates most things in human readable format.
-     * Format is as follows: "<name>: <data>;"
+     * Format is as follows: "<name>: <data>;", repeated.
      */
     override fun toString(): String {
         return "Title: $title; Description: $desc; Creator: $creator; ID: $id; " +
