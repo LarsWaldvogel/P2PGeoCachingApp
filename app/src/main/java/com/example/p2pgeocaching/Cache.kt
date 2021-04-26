@@ -128,7 +128,7 @@ class Cache(
 
     /**
      * This function decrypts the [hallOfFame] and returns it as a String.
-     * Each entry of [hallOfFame] is separated by a "\n" in the final String.
+     * Each entry of [hallOfFame] is separated by a ";" in the final String.
      * If [hallOfFame] is null, an empty string is returned.
      */
     fun hallToString(): String {
@@ -137,7 +137,7 @@ class Cache(
             ""
         } else {
             for (cipherEntry in hallOfFame!!) {
-                hofString += decryptToString(cipherEntry) + "\n"
+                hofString += decryptToString(cipherEntry) + ";"
             }
             hofString
         }
@@ -202,7 +202,7 @@ class Cache(
      */
     private fun checkForIllegalCharacters(arguments: List<String>) {
         // This contains a list of all the illegal characters
-        val illegalCharacters: List<Char> = arrayListOf(';', ' ', ':', '\n', '{', '}')
+        val illegalCharacters: List<Char> = arrayListOf(';', '{', '}', '"')
 
         // Checks for illegal characters in strings
         for (str in arguments) {
