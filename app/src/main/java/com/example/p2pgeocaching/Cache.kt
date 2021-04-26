@@ -30,6 +30,7 @@ class Cache(
     private var pubKey: PublicKey?,
     private var prvKey: PrivateKey?,
     private var hallOfFame: MutableList<ByteArray>?
+    private var plainTextHOF: String // TODO implement this
 ) {
 
 
