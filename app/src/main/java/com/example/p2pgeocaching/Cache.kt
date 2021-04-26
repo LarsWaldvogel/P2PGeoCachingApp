@@ -63,6 +63,7 @@ class Cache(
         pubKey = keyPair.public
         prvKey = keyPair.private
 
+        // TODO: make encrypt/decrypt their own functions
         // Here we encrypt [creator] and add it to [hallOfFame]
         val cipher = Cipher.getInstance("RSA")
         cipher.init(Cipher.ENCRYPT_MODE, prvKey)
