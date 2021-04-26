@@ -21,3 +21,4 @@ class MainActivity : AppCompatActivity() {
 //  - page that shows the private key of owned cache
 //  - cache detail view with hallOfFame and "found it" button
 //  - form to enter found private key
+//  - screen for bluetooth transfer

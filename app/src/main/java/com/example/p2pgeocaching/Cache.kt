@@ -8,6 +8,7 @@ import java.security.*
 import java.util.Objects.hash
 import javax.crypto.Cipher
 
+// TODO: cache should update with bluetooth connection transfer
 /**
  * This class saves all the data related to a cache.
  * Cache class can be called in two ways, either to create a new cache or to save an existing one.
