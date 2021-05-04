@@ -1,4 +1,4 @@
-package com.example.p2pgeocaching
+package com.example.p2pgeocaching.Caches
 
 import android.security.keystore.KeyProperties
 import com.example.p2pgeocaching.p2pexceptions.CreatorNotInHallOfFameException
@@ -23,7 +23,7 @@ import javax.crypto.Cipher
  * To decrypt, the [pubKey] is used.
  * For encrypting, you need the [prvKey], which you receive upon finding the physical cache.
  */
-class Cache(
+open class Cache(
     private val title: String,
     private val desc: String,
     private val creator: String,
@@ -31,8 +31,8 @@ class Cache(
     private var pubKey: PublicKey?,
     private var prvKey: PrivateKey?,
     private var hallOfFame: MutableList<ByteArray>?
-    private var plainTextHOF: String // TODO implement this
 ) {
+    private lateinit var plainTextHOF: String // TODO implement this
 
 
     /**
@@ -198,31 +198,9 @@ class Cache(
     }
 
 
-    /**
-     * Simple function that checks if any of the Strings provided in [arguments] contains an illegal
-     * character.
-     * If it does, throws a StringContainsIllegalCharacterException().
-     */
-    private fun checkForIllegalCharacters(arguments: List<String>) {
-        // This contains a list of all the illegal characters
-        val illegalCharacters: List<Char> = arrayListOf(';', '{', '}', '"')
 
-        // Checks for illegal characters in strings
-        for (str in arguments) {
-            for (illChr in illegalCharacters) {
-                if (str.contains(illChr)) {
-                    throw StringContainsIllegalCharacterException()
-                }
-            }
-        }
-    }
 
-    /**
-     * If only a single string is provided, casts it to array list and calls original function.
-     */
-    private fun checkForIllegalCharacters(argument: String) {
-        checkForIllegalCharacters(arrayListOf(argument))
-    }
+
 
 
     /**
