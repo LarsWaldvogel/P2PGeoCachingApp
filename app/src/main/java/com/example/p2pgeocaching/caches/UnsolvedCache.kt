@@ -1,4 +1,4 @@
-package com.example.p2pgeocaching.Caches
+package com.example.p2pgeocaching.caches
 
 import com.example.p2pgeocaching.InputValidator.Companion.checkForIllegalCharacters
 import com.example.p2pgeocaching.p2pexceptions.CreatorNotInHallOfFameException
@@ -27,8 +27,8 @@ class UnsolvedCache(
 
 
     /**
-     * Here we check if the entries are all legal, and if the [creator] is contained in the
-     * [hallOfFame], and then the [hallOfFame] is decrypted and saved in [plainTextHOF]
+     * Here we check if the entries are all legal, and if the creator is contained in the
+     * hallOfFame, and then the hallOfFame is decrypted and saved in plainTextHOF
      */
     init {
         // This checks if the arguments contain an illegal character, which it should not

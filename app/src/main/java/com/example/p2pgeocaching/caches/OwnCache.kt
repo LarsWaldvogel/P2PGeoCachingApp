@@ -1,4 +1,4 @@
-package com.example.p2pgeocaching.Caches
+package com.example.p2pgeocaching.caches
 
 import android.security.keystore.KeyProperties
 import com.example.p2pgeocaching.InputValidator.Companion.checkForIllegalCharacters

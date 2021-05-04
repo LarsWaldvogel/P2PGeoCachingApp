@@ -1,8 +1,15 @@
-package com.example.p2pgeocaching.Caches
+package com.example.p2pgeocaching.caches
 
+import com.example.p2pgeocaching.p2pexceptions.CacheDataTypeNotDefinedException
+import com.example.p2pgeocaching.p2pexceptions.IllegalCacheTypeException
+import com.example.p2pgeocaching.p2pexceptions.ParametersAreNullException
 import java.security.PrivateKey
 import java.security.PublicKey
 import javax.crypto.Cipher
+
+const val OWN_CACHE = "OwnCache"
+const val UNSOLVED_CACHE = "UnsolvedCache"
+const val SOLVED_CACHE = "SolvedCache"
 
 // TODO: cache should update with bluetooth connection transfer
 /**
@@ -32,7 +39,7 @@ open class Cache(
 
 
     /**
-     * Here we only have to initialize [plainTextHOF]
+     * Here we only have to initialize plainTextHOF
      */
     init {
         updatePlainTextHOF()
@@ -96,7 +103,7 @@ open class Cache(
         updatePlainTextHOF()
     }
 
-    
+
     /**
      * Simple function that calls the addPeopleToHOF() function, with its input cast to a set.
      */
@@ -114,6 +121,106 @@ open class Cache(
         return "Title: $title; Description: $desc; Creator: $creator; ID: $id; " +
                 "Public Key: ${pubKey.toString()}; Private key: ${prvKey.toString()}; " +
                 "Hall of Fame: ${hallOfFame.toString()};"
+    }
+
+
+    /**
+     * This is used to create a [Cache] from a [CacheData] object.
+     * [data] is the object to be read from.
+     */
+    fun dataToCache(data: CacheData): Cache {
+        return when (data.type) {
+            OWN_CACHE -> dataToOwnCache(data)
+            SOLVED_CACHE -> dataToSolvedCache(data)
+            UNSOLVED_CACHE -> dataToUnsolvedCache(data)
+            else -> throw CacheDataTypeNotDefinedException()
+        }
+    }
+
+
+    /**
+     * Simple function that makes a [OwnCache] from a [CacheData] object [data].
+     */
+    private fun dataToOwnCache(data: CacheData): Cache {
+        return OwnCache(data.title, data.desc, data.creator)
+    }
+
+
+    /**
+     * Simple function that makes a [SolvedCache] from a [CacheData] object [data].
+     */
+    private fun dataToSolvedCache(data: CacheData): Cache {
+        if (data.pubKey != null && data.prvKey != null && data.hallOfFame != null) {
+            return SolvedCache(
+                data.title,
+                data.desc,
+                data.creator,
+                data.id,
+                data.pubKey!!,
+                data.prvKey!!,
+                data.hallOfFame!!
+            )
+        } else {
+            throw ParametersAreNullException()
+        }
+    }
+
+
+    /**
+     * Simple function that makes a [UnsolvedCache] from a [CacheData] object [data].
+     */
+    private fun dataToUnsolvedCache(data: CacheData): Cache {
+        if (data.pubKey != null && data.hallOfFame != null) {
+            return UnsolvedCache(
+                data.title,
+                data.desc,
+                data.creator,
+                data.id,
+                data.pubKey!!,
+                data.hallOfFame!!
+            )
+        } else {
+            throw ParametersAreNullException()
+        }
+    }
+
+    /**
+     * This function takes a [Cache] [cache] and transforms it into a [CacheData] object.
+     */
+    fun cacheToData(cache: Cache): CacheData {
+        return when (cache) {
+            is OwnCache -> CacheData(
+                cache.title,
+                cache.desc,
+                cache.creator,
+                cache.id,
+                cache.pubKey,
+                cache.prvKey,
+                cache.hallOfFame,
+                OWN_CACHE
+            )
+            is UnsolvedCache -> CacheData(
+                cache.title,
+                cache.desc,
+                cache.creator,
+                cache.id,
+                cache.pubKey,
+                null,
+                cache.hallOfFame,
+                UNSOLVED_CACHE
+            )
+            is SolvedCache -> CacheData(
+                cache.title,
+                cache.desc,
+                cache.creator,
+                cache.id,
+                cache.pubKey,
+                cache.prvKey,
+                cache.hallOfFame,
+                SOLVED_CACHE
+            )
+            else -> throw IllegalCacheTypeException()
+        }
     }
 
 

@@ -1,7 +1,7 @@
-package com.example.p2pgeocaching.Caches;
+package com.example.p2pgeocaching.caches
 
-import java.security.PrivateKey;
-import java.security.PublicKey;
+import java.security.PrivateKey
+import java.security.PublicKey
 
 /**
  *  This class represents a complete [Cache], which has been solved.
@@ -19,7 +19,7 @@ class SolvedCache(
 
 
     /**
-     * We only have to initialize [plainTextHOF]
+     * We only have to initialize plainTextHOF
      * (might not be necessary due to the superclass init, but just to be sure)
      */
     init {
