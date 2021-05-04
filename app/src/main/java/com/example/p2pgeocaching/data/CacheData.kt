@@ -1,4 +1,4 @@
-package com.example.p2pgeocaching.caches
+package com.example.p2pgeocaching.data
 
 import java.security.PrivateKey
 import java.security.PublicKey
@@ -17,6 +17,6 @@ data class CacheData(
     var id: Int,
     var pubKey: PublicKey?,
     var prvKey: PrivateKey?,
-    var hallOfFame: MutableSet<ByteArray>?,
+    var hallOfFame: MutableSet<ByteArray>,
     var type: String
 )

@@ -16,7 +16,7 @@ import javax.crypto.Cipher
  * every time the user wants to look at it.
  */
 class OwnCache(title: String, desc: String, creator: String) :
-    Cache(title, desc, creator, -1, null, null, null) {
+    Cache(title, desc, creator, -1, null, null) {
 
 
     /**

@@ -73,12 +73,12 @@ class UnsolvedCache(
         checkForIllegalCharacters(finder)
 
         // Assert that all values are not null
-        if (pubKey == null || hallOfFame == null) {
-            throw ParametersAreNullException();
+        if (pubKey == null) {
+            throw ParametersAreNullException()
         }
 
         // Create the [SolvedCache] object to return
-        var solvedCache = SolvedCache(title, desc, creator, id, pubKey!!, newPrvKey, hallOfFame!!)
+        val solvedCache = SolvedCache(title, desc, creator, id, pubKey!!, newPrvKey, hallOfFame)
 
         // Adds the encrypted name to [hallOfFame], if it is null, creates a new one
         val cipher = Cipher.getInstance("RSA")
