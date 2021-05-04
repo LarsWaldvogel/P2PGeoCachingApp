@@ -23,6 +23,7 @@ const val TRANSFER_CACHE = "TransferCache"
  * The only item contained at initialization is the [creator].
  * To decrypt, the [pubKey] is used.
  * For encrypting, you need the [prvKey], which you receive upon finding the physical cache.
+ * [plainTextHOF] contains the plain text that [hallOfFame] encrypts.
  */
 open class Cache(
     val title: String,
@@ -31,9 +32,9 @@ open class Cache(
     var id: Int,
     var pubKey: PublicKey?,
     var prvKey: PrivateKey?,
-    var hallOfFame: MutableSet<ByteArray>
+    var hallOfFame: MutableSet<ByteArray>,
+    var plainTextHOF: String
 ) {
-    var plainTextHOF: String = ""
 
 
     /**
@@ -46,15 +47,7 @@ open class Cache(
         id: Int,
         pubKey: PublicKey?,
         prvKey: PrivateKey?
-    ) : this(title, desc, creator, id, pubKey, prvKey, mutableSetOf())
-
-
-    /**
-     * Here we only have to initialize plainTextHOF
-     */
-    init {
-        updatePlainTextHOF()
-    }
+    ) : this(title, desc, creator, id, pubKey, prvKey, mutableSetOf(), "")
 
 
     /**
@@ -125,6 +118,6 @@ open class Cache(
     override fun toString(): String {
         return "Title: $title; Description: $desc; Creator: $creator; ID: $id; " +
                 "Public Key: ${pubKey.toString()}; Private key: ${prvKey.toString()}; " +
-                "Hall of Fame: ${hallOfFame};"
+                "Hall of Fame: ${hallOfFame}; Text in Hall of Fame: $plainTextHOF"
     }
 }

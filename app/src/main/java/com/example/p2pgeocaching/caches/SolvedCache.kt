@@ -5,7 +5,7 @@ import java.security.PublicKey
 
 /**
  *  This class represents a complete [Cache], which has been solved.
- *  It initializes the [PlainText
+ *  It does not initialize the [plainTextHOF] again.
  */
 class SolvedCache(
     title: String,
@@ -14,15 +14,6 @@ class SolvedCache(
     id: Int,
     pubKey: PublicKey,
     prvKey: PrivateKey,
-    hallOfFame: MutableSet<ByteArray>
-) : Cache(title, desc, creator, id, pubKey, prvKey, hallOfFame) {
-
-
-    /**
-     * We only have to initialize plainTextHOF
-     * (might not be necessary due to the superclass init, but just to be sure)
-     */
-    init {
-        updatePlainTextHOF()
-    }
-}
+    hallOfFame: MutableSet<ByteArray>,
+    plainTextHOF: String
+) : Cache(title, desc, creator, id, pubKey, prvKey, hallOfFame, plainTextHOF)

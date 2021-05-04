@@ -22,7 +22,7 @@ class CacheDataParser {
                 OWN_CACHE -> dataToOwnCache(data)
                 SOLVED_CACHE -> dataToSolvedCache(data)
                 UNSOLVED_CACHE -> dataToUnsolvedCache(data)
-                TRANSFER_CACHE -> dataToUnsolvedCache(data) // used when transferring caches
+                TRANSFER_CACHE -> dataTransferToUnsolvedCache(data)
                 else -> throw CacheDataTypeNotDefinedException()
             }
         }
@@ -31,24 +31,17 @@ class CacheDataParser {
         /**
          * Simple function that makes a [OwnCache] from a [CacheData] object [data].
          */
-        private fun dataToOwnCache(data: CacheData): Cache {
-            return OwnCache(data.title, data.desc, data.creator)
-        }
-
-
-        /**
-         * Simple function that makes a [SolvedCache] from a [CacheData] object [data].
-         */
-        private fun dataToSolvedCache(data: CacheData): Cache {
+        private fun dataToOwnCache(data: CacheData): OwnCache {
             if (data.pubKey != null && data.prvKey != null) {
-                return SolvedCache(
+                return OwnCache(
                     data.title,
                     data.desc,
                     data.creator,
                     data.id,
                     data.pubKey!!,
                     data.prvKey!!,
-                    data.hallOfFame
+                    data.hallOfFame,
+                    data.plainTextHOF
                 )
             } else {
                 throw ParametersAreNullException()
@@ -57,9 +50,51 @@ class CacheDataParser {
 
 
         /**
-         * Simple function that makes a [UnsolvedCache] from a [CacheData] object [data].
+         * Simple function that makes a [SolvedCache] from a [CacheData] object [data].
          */
-        private fun dataToUnsolvedCache(data: CacheData): Cache {
+        private fun dataToSolvedCache(data: CacheData): SolvedCache {
+            if (data.pubKey != null && data.prvKey != null) {
+                return SolvedCache(
+                    data.title,
+                    data.desc,
+                    data.creator,
+                    data.id,
+                    data.pubKey!!,
+                    data.prvKey!!,
+                    data.hallOfFame,
+                    data.plainTextHOF
+                )
+            } else {
+                throw ParametersAreNullException()
+            }
+        }
+
+
+        /**
+         * Simple function that makes an [UnsolvedCache] from a [CacheData] object [data].
+         */
+        private fun dataToUnsolvedCache(data: CacheData): UnsolvedCache {
+            if (data.pubKey != null) {
+                return UnsolvedCache(
+                    data.title,
+                    data.desc,
+                    data.creator,
+                    data.id,
+                    data.pubKey!!,
+                    data.hallOfFame,
+                    data.plainTextHOF,
+                )
+            } else {
+                throw ParametersAreNullException()
+            }
+        }
+
+
+        /**
+         * Simple function that makes an [UnsolvedCache] from a [CacheData] object [data] when used
+         * to transfer data.
+         */
+        private fun dataTransferToUnsolvedCache(data: CacheData) : UnsolvedCache {
             if (data.pubKey != null) {
                 return UnsolvedCache(
                     data.title,
@@ -76,7 +111,7 @@ class CacheDataParser {
 
 
         /**
-         * This function takes a [Cache] [cache] and transforms it into a [CacheData] object.
+        * This function takes a [Cache] [cache] and transforms it into a [CacheData] object.
          */
         fun cacheToData(cache: Cache): CacheData {
             return when (cache) {

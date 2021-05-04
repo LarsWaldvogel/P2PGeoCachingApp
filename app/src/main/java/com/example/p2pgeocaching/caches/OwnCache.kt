@@ -2,29 +2,42 @@ package com.example.p2pgeocaching.caches
 
 import android.security.keystore.KeyProperties
 import com.example.p2pgeocaching.InputValidator.Companion.checkForIllegalCharacters
-import java.security.KeyPair
-import java.security.KeyPairGenerator
-import java.security.SecureRandom
+import java.security.*
 import java.util.Objects.hash
 import javax.crypto.Cipher
 
 /**
  * [OwnCache] is the [Cache] subclass used when creating one's own [Cache].
  * For details on the inputs, see [Cache].
- * It is not shown in this file, but [OwnCache] inherits the [plainTextHOF] from its parent.
- * This is used to store a plain text of [hallOfFame], so it does not need to be decrypted
- * every time the user wants to look at it.
  */
-class OwnCache(title: String, desc: String, creator: String) :
-    Cache(title, desc, creator, -1, null, null) {
+class OwnCache(
+    title: String,
+    desc: String,
+    creator: String,
+    id: Int,
+    pubKey: PublicKey?,
+    prvKey: PrivateKey?,
+    hallOfFame: MutableSet<ByteArray>,
+    plainTextHOF: String
+) : Cache(title, desc, creator, id, pubKey, prvKey, hallOfFame, plainTextHOF) {
 
 
     /**
      * Here, with the inputs provided, we set the rest of the fields.
+     * Used to generate new caches.
      */
-    init {
+    constructor(title: String, desc: String, creator: String) : this(
+        title,
+        desc,
+        creator,
+        -1,
+        null,
+        null,
+        mutableSetOf<ByteArray>(),
+        ""
+    ) {
         // This checks if the arguments contain an illegal character, which it should not
-        val argList: ArrayList<String> = arrayListOf(title, desc, creator)
+        val argList: List<String> = listOf(title, desc, creator)
         checkForIllegalCharacters(argList)
 
         // Here we fabricate the string we want to hash by concatenating [title], ';' and [desc]

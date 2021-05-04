@@ -13,7 +13,6 @@ import javax.crypto.Cipher
  * [UnsolvedCache] is the subclass of [Cache] which is used when the user receives a new [Cache]
  * from somebody else.
  * It does not contain a [pubKey] yet.
- * Also, the inherited [plainTextHOF] is not shown in this class.
  * For further documentation, see [Cache].
  */
 class UnsolvedCache(
@@ -22,15 +21,25 @@ class UnsolvedCache(
     creator: String,
     id: Int,
     pubKey: PublicKey,
-    hallOfFame: MutableSet<ByteArray>
-) : Cache(title, desc, creator, id, pubKey, null, hallOfFame) {
+    hallOfFame: MutableSet<ByteArray>,
+    plainTextHOF: String
+) : Cache(title, desc, creator, id, pubKey, null, hallOfFame, plainTextHOF) {
 
 
     /**
-     * Here we check if the entries are all legal, and if the creator is contained in the
-     * hallOfFame, and then the hallOfFame is decrypted and saved in plainTextHOF
+     * Called when entering new caches that have been transferred from another device.
+     * Here we check if the entries are all legal and if the creator is contained in the
+     * [hallOfFame]. Then the [hallOfFame] is decrypted and saved in [plainTextHOF].
      */
-    init {
+    constructor(
+        title: String,
+        desc: String,
+        creator: String,
+        id: Int,
+        pubKey: PublicKey,
+        hallOfFame: MutableSet<ByteArray>
+    ) : this(title, desc, creator, id, pubKey, hallOfFame, "") {
+
         // This checks if the arguments contain an illegal character, which it should not
         val argList: ArrayList<String> = arrayListOf(title, desc, creator)
         checkForIllegalCharacters(argList)
@@ -78,7 +87,8 @@ class UnsolvedCache(
         }
 
         // Create the [SolvedCache] object to return
-        val solvedCache = SolvedCache(title, desc, creator, id, pubKey!!, newPrvKey, hallOfFame)
+        val solvedCache =
+            SolvedCache(title, desc, creator, id, pubKey!!, newPrvKey, hallOfFame, plainTextHOF)
 
         // Adds the encrypted name to [hallOfFame], if it is null, creates a new one
         val cipher = Cipher.getInstance("RSA")

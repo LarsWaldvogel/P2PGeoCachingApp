@@ -2,16 +2,23 @@ package com.example.p2pgeocaching
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import java.io.File
 
 // TODO add manifest to get bluetooth permissions
 // TODO add user interface
 // TODO add bluetooth transfer function
 class MainActivity : AppCompatActivity() {
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        val file = File(context.filesDir, filename)
         setContentView(R.layout.activity_main)
     }
 }
+
+
+
+
 
 // TODO: user interface needs the following screens:
 //  - when first opened: "what is your name?" screen which saves username
