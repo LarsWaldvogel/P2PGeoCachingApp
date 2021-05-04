@@ -12,6 +12,11 @@ class CacheDataParser {
 
     companion object {
 
+        private const val OWN_CACHE = "OwnCache"
+        private const val UNSOLVED_CACHE = "UnsolvedCache"
+        private const val SOLVED_CACHE = "SolvedCache"
+        private const val TRANSFER_CACHE = "TransferCache"
+
 
         /**
          * This is used to create a [Cache] from a [CacheData] object.

@@ -4,10 +4,7 @@ import java.security.PrivateKey
 import java.security.PublicKey
 import javax.crypto.Cipher
 
-const val OWN_CACHE = "OwnCache"
-const val UNSOLVED_CACHE = "UnsolvedCache"
-const val SOLVED_CACHE = "SolvedCache"
-const val TRANSFER_CACHE = "TransferCache"
+
 
 // TODO: cache should update with bluetooth connection transfer
 /**
