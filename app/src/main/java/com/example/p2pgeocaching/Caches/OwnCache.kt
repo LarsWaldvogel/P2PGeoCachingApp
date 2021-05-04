@@ -39,17 +39,15 @@ class OwnCache(title: String, desc: String, creator: String) :
         prvKey = keyPair.private
 
         // TODO: make encrypt/decrypt their own functions
-        // Here we encrypt [creator] and add it to [hallOfFame]
+        // Here we encrypt [creator] and add it to [hallOfFame] and update [plainTextHOF]
         val cipher = Cipher.getInstance("RSA")
         cipher.init(Cipher.ENCRYPT_MODE, prvKey)
         val encryptedCreator: ByteArray = cipher.doFinal(creator.toByteArray())
-        if (hallOfFame == null) {
-            hallOfFame = ArrayList()
-        }
-        hallOfFame!!.add(encryptedCreator)
 
-        plainTextHOF = hallToString()
+        // This is where the updates and inserts happen
+        addPersonToHOF(encryptedCreator)
     }
+
 
     /**
      * This function generates a RSA key pair, which it returns.

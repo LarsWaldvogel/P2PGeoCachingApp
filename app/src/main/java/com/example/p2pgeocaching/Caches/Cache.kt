@@ -1,8 +1,5 @@
 package com.example.p2pgeocaching.Caches
 
-import com.example.p2pgeocaching.InputValidator.Companion.checkForIllegalCharacters
-import com.example.p2pgeocaching.p2pexceptions.CreatorNotInHallOfFameException
-import com.example.p2pgeocaching.p2pexceptions.KeysDoNotMatchException
 import java.security.PrivateKey
 import java.security.PublicKey
 import javax.crypto.Cipher
@@ -23,38 +20,23 @@ import javax.crypto.Cipher
  * For encrypting, you need the [prvKey], which you receive upon finding the physical cache.
  */
 open class Cache(
-    private val title: String,
-    private val desc: String,
-    private val creator: String,
+    protected val title: String,
+    protected val desc: String,
+    protected val creator: String,
     protected var id: Int,
     protected var pubKey: PublicKey?,
     protected var prvKey: PrivateKey?,
-    protected var hallOfFame: MutableList<ByteArray>?
+    protected var hallOfFame: MutableSet<ByteArray>?
 ) {
     protected var plainTextHOF: String = ""
 
+
     /**
-     * Constructor for saving existing cache.
-     * This assumes, all information of the cache is known, except for the [prvKey].
+     * Here we only have to initialize [plainTextHOF]
      */
-    constructor(
-        title: String,
-        desc: String,
-        creator: String,
-        id: Int,
-        pubKey: PublicKey,
-        hallOfFame: MutableList<ByteArray>?
-    ) : this(title, desc, creator, id, pubKey, null, hallOfFame) {
-        // This checks if the arguments contain an illegal character, which it should not
-        val argList: ArrayList<String> = arrayListOf(title, desc, creator)
-        checkForIllegalCharacters(argList)
-
-        // This checks if the creator is in the [hallOfFame] list
-        checkCreatorInHOF()
+    init {
+        updatePlainTextHOF()
     }
-
-
-
 
 
     /**
@@ -92,70 +74,35 @@ open class Cache(
 
 
     /**
-     * This function takes the name of the [finder] and the [newPrvKey] that was found at the cache.
-     * It checks if the [newPrvKey] is correct, then adds it to the cache.
-     * With the [prvKey], it adds the [finder] to the [hallOfFame].
-     * Throws keysDoNotMatchException and stringContainsIllegalCharacterException.
+     * A simple function which updates the [plainTextHOF] parameter with the current [hallOfFame].
      */
-    fun solveCache(finder: String, newPrvKey: PrivateKey) {
-        // Check if keys match
-        if (isValidKeypair(newPrvKey, pubKey)) {
-            prvKey = newPrvKey
-        } else {
-            throw KeysDoNotMatchException()
-        }
+    protected fun updatePlainTextHOF() {
+        plainTextHOF = hallToString()
+    }
 
-        // Finder cannot contain any illegal characters
-        checkForIllegalCharacters(finder)
 
-        // Adds the encrypted name to [hallOfFame], if it is null, creates a new one
-        val cipher = Cipher.getInstance("RSA")
-        cipher.init(Cipher.ENCRYPT_MODE, prvKey)
-        val encryptedFinder: ByteArray = cipher.doFinal(finder.toByteArray())
+    /**
+     * This function is used to add any number of people to the list
+     */
+    fun addPeopleToHOF(people: Set<ByteArray>) {
+        // Add the people to HOF
         if (hallOfFame == null) {
-            hallOfFame = ArrayList()
+            hallOfFame = people.toMutableSet()
+        } else {
+            for (person in people) {
+                hallOfFame!!.add(person)
+            }
         }
-        hallOfFame!!.add(encryptedFinder)
+        updatePlainTextHOF()
     }
 
-
+    
     /**
-     * This function checks if the two keys [prv] and [pub] belong to one another.
-     * If they do, returns true, else false.
-     * It does this by checking if encrypting, then decrypting, does not change the sample string.
+     * Simple function that calls the addPeopleToHOF() function, with its input cast to a set.
      */
-    protected fun isValidKeypair(prv: PrivateKey, pub: PublicKey?): Boolean {
-        val str = "some String"
+    fun addPersonToHOF(person: ByteArray) {
+        addPeopleToHOF(setOf(person))
 
-        // Encrypt the String
-        val encrypter: Cipher = Cipher.getInstance("RSA")
-        encrypter.init(Cipher.ENCRYPT_MODE, prv)
-        val cipherStr: ByteArray = encrypter.doFinal(str.toByteArray())
-
-        // Decrypt the String
-        val decrypter: Cipher = Cipher.getInstance("RSA")
-        decrypter.init(Cipher.DECRYPT_MODE, pub)
-        val plainStr: ByteArray = decrypter.doFinal(cipherStr)
-
-        // Check if equal
-        return str == plainStr.toString()
-    }
-
-
-
-
-
-
-
-    /**
-     * Simple function that checks if the [creator] is in the [hallOfFame].
-     * If [creator] is not contained, throws CreatorNotInHallOfFameException.
-     */
-    private fun checkCreatorInHOF() {
-        val stringHOF: String = hallToString()
-        if (!stringHOF.contains(creator)) {
-            throw CreatorNotInHallOfFameException()
-        }
     }
 
 
@@ -165,7 +112,8 @@ open class Cache(
      */
     override fun toString(): String {
         return "Title: $title; Description: $desc; Creator: $creator; ID: $id; " +
-                "Public Key: $pubKey; Private key: $prvKey; Hall of Fame: $hallOfFame;"
+                "Public Key: ${pubKey.toString()}; Private key: ${prvKey.toString()}; " +
+                "Hall of Fame: ${hallOfFame.toString()};"
     }
 
 

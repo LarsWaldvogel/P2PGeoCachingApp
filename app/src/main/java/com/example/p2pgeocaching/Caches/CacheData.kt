@@ -8,6 +8,7 @@ import java.security.*
 import java.util.Objects.hash
 import javax.crypto.Cipher
 
+// TODO: make this a legal Data class
 // TODO: cache should update with bluetooth connection transfer
 /**
  * This class saves all the data related to a cache.
