@@ -1,11 +1,10 @@
 package com.example.p2pgeocaching.Caches
 
-import android.security.keystore.KeyProperties
+import com.example.p2pgeocaching.InputValidator.Companion.checkForIllegalCharacters
 import com.example.p2pgeocaching.p2pexceptions.CreatorNotInHallOfFameException
 import com.example.p2pgeocaching.p2pexceptions.KeysDoNotMatchException
-import com.example.p2pgeocaching.p2pexceptions.StringContainsIllegalCharacterException
-import java.security.*
-import java.util.Objects.hash
+import java.security.PrivateKey
+import java.security.PublicKey
 import javax.crypto.Cipher
 
 // TODO: cache should update with bluetooth connection transfer
@@ -27,53 +26,12 @@ open class Cache(
     private val title: String,
     private val desc: String,
     private val creator: String,
-    private var id: Int,
-    private var pubKey: PublicKey?,
-    private var prvKey: PrivateKey?,
-    private var hallOfFame: MutableList<ByteArray>?
+    protected var id: Int,
+    protected var pubKey: PublicKey?,
+    protected var prvKey: PrivateKey?,
+    protected var hallOfFame: MutableList<ByteArray>?
 ) {
-    private lateinit var plainTextHOF: String // TODO implement this
-
-
-    /**
-     * Constructor for creating a new cache.
-     * Here, we only give it the [title], the [desc] and the [creator]. The rest is derived from it.
-     */
-    constructor(title: String, desc: String, creator: String) : this(
-        title,
-        desc,
-        creator,
-        -1,
-        null,
-        null,
-        null
-    ) {
-        // This checks if the arguments contain an illegal character, which it should not
-        val argList: ArrayList<String> = arrayListOf(title, desc, creator)
-        checkForIllegalCharacters(argList)
-
-        // Here we fabricate the string we want to hash by concatenating [title], ';' and [desc]
-        val stringToHash = "$title;$desc"
-
-        // The hash is saved to [id], which serves as the unique identifier of the cache
-        id = hash(stringToHash)
-
-        // The key pair is created and saved to [pubKey] and [prvKey]
-        val keyPair: KeyPair = generateKeyPair()
-        pubKey = keyPair.public
-        prvKey = keyPair.private
-
-        // TODO: make encrypt/decrypt their own functions
-        // Here we encrypt [creator] and add it to [hallOfFame]
-        val cipher = Cipher.getInstance("RSA")
-        cipher.init(Cipher.ENCRYPT_MODE, prvKey)
-        val encryptedCreator: ByteArray = cipher.doFinal(creator.toByteArray())
-        if (hallOfFame == null) {
-            hallOfFame = ArrayList()
-        }
-        hallOfFame!!.add(encryptedCreator)
-    }
-
+    protected var plainTextHOF: String = ""
 
     /**
      * Constructor for saving existing cache.
@@ -96,21 +54,7 @@ open class Cache(
     }
 
 
-    /**
-     * This function generates a RSA key pair, which it returns.
-     * The key is not generated with the [id] as initializer, because that could be replicated.
-     */
-    private fun generateKeyPair(): KeyPair {
-        // This creates an object capable of
-        val generator = KeyPairGenerator.getInstance(KeyProperties.KEY_ALGORITHM_RSA)
 
-        // The generator is initialized with a key length of 2048 bit and a random number
-        generator.initialize(2048, SecureRandom())
-
-        // Key pair is created and returned
-        return generator.genKeyPair()
-
-    }
 
 
     /**
@@ -153,7 +97,7 @@ open class Cache(
      * With the [prvKey], it adds the [finder] to the [hallOfFame].
      * Throws keysDoNotMatchException and stringContainsIllegalCharacterException.
      */
-    fun foundCache(finder: String, newPrvKey: PrivateKey) {
+    fun solveCache(finder: String, newPrvKey: PrivateKey) {
         // Check if keys match
         if (isValidKeypair(newPrvKey, pubKey)) {
             prvKey = newPrvKey
@@ -180,7 +124,7 @@ open class Cache(
      * If they do, returns true, else false.
      * It does this by checking if encrypting, then decrypting, does not change the sample string.
      */
-    private fun isValidKeypair(prv: PrivateKey, pub: PublicKey?): Boolean {
+    protected fun isValidKeypair(prv: PrivateKey, pub: PublicKey?): Boolean {
         val str = "some String"
 
         // Encrypt the String
