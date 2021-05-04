@@ -10,6 +10,7 @@ import javax.crypto.Cipher
 const val OWN_CACHE = "OwnCache"
 const val UNSOLVED_CACHE = "UnsolvedCache"
 const val SOLVED_CACHE = "SolvedCache"
+const val TRANSFER_CACHE = "TransferCache"
 
 // TODO: cache should update with bluetooth connection transfer
 /**
@@ -30,10 +31,10 @@ open class Cache(
     protected val title: String,
     protected val desc: String,
     protected val creator: String,
-    protected var id: Int,
+    var id: Int,
     protected var pubKey: PublicKey?,
     protected var prvKey: PrivateKey?,
-    protected var hallOfFame: MutableSet<ByteArray>?
+    var hallOfFame: MutableSet<ByteArray>?
 ) {
     protected var plainTextHOF: String = ""
 
@@ -133,6 +134,7 @@ open class Cache(
             OWN_CACHE -> dataToOwnCache(data)
             SOLVED_CACHE -> dataToSolvedCache(data)
             UNSOLVED_CACHE -> dataToUnsolvedCache(data)
+            TRANSFER_CACHE -> dataToUnsolvedCache(data) // used when transferring caches
             else -> throw CacheDataTypeNotDefinedException()
         }
     }
@@ -184,6 +186,7 @@ open class Cache(
         }
     }
 
+
     /**
      * This function takes a [Cache] [cache] and transforms it into a [CacheData] object.
      */
@@ -221,6 +224,25 @@ open class Cache(
             )
             else -> throw IllegalCacheTypeException()
         }
+    }
+
+
+    /**
+     * This function is used when creating [CacheData] objects to transfer caches from one device
+     * to another. It is effectively equivalent to the object created when using cacheToData
+     * with an [UnsolvedCache].
+     */
+    fun cacheToTransfer(cache: Cache): CacheData {
+        return CacheData(
+            cache.title,
+            cache.desc,
+            cache.creator,
+            cache.id,
+            cache.pubKey,
+            null,
+            cache.hallOfFame,
+            TRANSFER_CACHE
+        )
     }
 
 
