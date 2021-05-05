@@ -24,6 +24,8 @@ class UserNameActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        title = getString(R.string.user_name_title)
+
         Log.d(TAG, "UserNameActivity was opened successfully.")
 
         binding = ActivityUserNameBinding.inflate(layoutInflater)

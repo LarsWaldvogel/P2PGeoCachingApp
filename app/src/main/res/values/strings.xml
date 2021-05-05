@@ -8,4 +8,7 @@
     <string name="welcome_message">Hello %s!</string>
     <string name="empty_list_prompt">Create your own cache or connect to other people to receive their list of caches!</string>
     <string name="change_username_button_text">Change username</string>
+    <string name="create_cache_button_text">Create cache</string>
+    <string name="connect_button_text">Connect</string>
+    <string name="user_name_title">Username</string>
 </resources>
