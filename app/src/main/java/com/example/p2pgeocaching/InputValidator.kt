@@ -4,6 +4,8 @@ import com.example.p2pgeocaching.p2pexceptions.StringContainsIllegalCharacterExc
 
 class InputValidator {
 
+    // TODO change, so it contains only a-z, A-Z, " ", 0-9
+
     companion object {
         val illegalCharacters: List<Char> = listOf(';', '{', '}', '"')
 
