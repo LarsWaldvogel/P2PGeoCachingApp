@@ -5,7 +5,9 @@ import java.security.PublicKey
 import javax.crypto.Cipher
 
 
-
+// TODO: hallOfFame should contain a set of strings. Replace ByteArrays with strings.
+// TODO: pubKey/prvKey should be String
+// TODO: use emmanuel's RSA
 // TODO: cache should update with bluetooth connection transfer
 /**
  * This class saves all the data related to a cache.

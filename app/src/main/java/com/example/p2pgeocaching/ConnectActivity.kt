@@ -1,11 +1,11 @@
 package com.example.p2pgeocaching
 
 import android.os.Bundle
-import android.os.PersistableBundle
 import androidx.appcompat.app.AppCompatActivity
 import com.example.p2pgeocaching.databinding.ActivityConnectBinding
 import java.io.File
 
+// TODO: list of people in area
 class ConnectActivity : AppCompatActivity() {
 
     companion object {
