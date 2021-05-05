@@ -18,7 +18,7 @@
         app:layout_constraintTop_toTopOf="parent">
 
         <com.google.android.material.textfield.TextInputEditText
-            android:id="@+id/cost_of_service_edit_text"
+            android:id="@+id/user_name_edit_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:inputType="text"
@@ -37,5 +37,18 @@
         app:layout_constraintEnd_toEndOf="@id/user_name_input"
         app:layout_constraintStart_toStartOf="@id/user_name_input"
         app:layout_constraintTop_toBottomOf="@id/user_name_input" />
+
+    <TextView
+        android:id="@+id/error_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="32dp"
+        android:text=""
+        android:textAppearance="@style/TextAppearance.AppCompat.Medium"
+        android:textColor="@color/red"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/user_name_button"
+        tools:text="Error Message" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

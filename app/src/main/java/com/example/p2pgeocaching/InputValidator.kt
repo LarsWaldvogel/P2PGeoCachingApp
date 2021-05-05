@@ -5,7 +5,7 @@ import com.example.p2pgeocaching.p2pexceptions.StringContainsIllegalCharacterExc
 class InputValidator {
 
     companion object {
-        private val illegalCharacters: List<Char> = listOf(';', '{', '}', '"')
+        val illegalCharacters: List<Char> = listOf(';', '{', '}', '"')
 
         /**
          * Simple function that checks if any of the Strings provided in [arguments] contains an illegal

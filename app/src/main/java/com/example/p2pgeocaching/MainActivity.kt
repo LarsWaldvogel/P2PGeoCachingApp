@@ -21,6 +21,12 @@ class MainActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityMainBinding
 
+    /**
+     * This method reads the files.
+     * Also, prompts the user for a name if there is none saved.
+     * Offers some buttons for different options.
+     *
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -44,19 +50,61 @@ class MainActivity : AppCompatActivity() {
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK) // Better alternative?
             context.startActivity(intent)
 
-        } // Username is now selected
+        } else { // Username has been selected, show it in title
+            var userName = userNameFile.readLines().toString()
+            userName = userName.substring(1, userName.length - 1)
+            Log.d(TAG, userName)
+            title = getString(R.string.welcome_message, userName)
+        }
 
-        // cacheList is empty -> show empty screen with option to create a Cache
-        if (!cacheListFile.exists()) {
+        // Show cache list and remove "empty" message
+        if (cacheListFile.exists()) {
+            // TODO show list
+        }
 
-        } // caches now exist
 
+        // Opens rename activity when pressed
+        binding.changeUserNameButton.setOnClickListener {
+            val intent = Intent(context, UserNameActivity::class.java)
+            intent.putExtra(U_NAME_FILE, userNameFile)
+            Log.d(TAG, "Made it past putExtra")
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK) // Better alternative?
+            context.startActivity(intent)
+
+        }
+
+        // Opens activity to connect to others
+        binding.connectButton.setOnClickListener {
+            // TODO implement
+        }
+
+        // Opens activity to create caches
+        binding.createCacheButton.setOnClickListener {
+            // TODO implement
+        }
 
     }
+
+
+    /**
+     * When coming back from another activity, update the title.
+     */
+    override fun onRestart() {
+        super.onRestart()
+
+        // Gets context and file
+        val context = applicationContext
+        val userNameFile = File(context.filesDir, U_NAME_FILE)
+
+        // Updates title
+        if (userNameFile.exists()) {
+            var userName = userNameFile.readLines().toString()
+            userName = userName.substring(1, userName.length - 1)
+            Log.d(TAG, userName)
+            title = getString(R.string.welcome_message, userName)
+        }
+    }
 }
-
-
-
 
 
 // TODO: user interface needs the following screens:

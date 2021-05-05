@@ -11,6 +11,7 @@
         android:theme="@style/Theme.P2PGeocaching">
         <activity
             android:name=".UserNameActivity"
+            android:noHistory="true"
             android:parentActivityName=".MainActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>
