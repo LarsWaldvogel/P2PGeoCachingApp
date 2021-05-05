@@ -12,11 +12,14 @@ import com.example.p2pgeocaching.p2pexceptions.StringContainsIllegalCharacterExc
 import java.io.File
 
 
+/**
+ * This activity enables the user to add their name to the system.
+ */
 class UserNameActivity : AppCompatActivity() {
 
     companion object {
         const val U_NAME_FILE = "userName"
-        const val TAG = "MainActivity"
+        const val TAG = "UserNameActivity"
     }
 
     private lateinit var binding: ActivityUserNameBinding

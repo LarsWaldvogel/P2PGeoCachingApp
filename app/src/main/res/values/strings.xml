@@ -11,4 +11,8 @@
     <string name="create_cache_button_text">Create cache</string>
     <string name="connect_button_text">Connect</string>
     <string name="user_name_title">Username</string>
+    <string name="transfer_button_text">Transfer</string>
+    <string name="connect_prompt">Click on the button to start transferring your caches via bluetooth:</string>
+    <string name="cache_name_prompt">Cache name:</string>
+    <string name="new_cache_desc_edit_text">Description:</string>
 </resources>

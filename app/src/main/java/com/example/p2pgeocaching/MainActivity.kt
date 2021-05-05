@@ -11,6 +11,11 @@ import java.io.File
 // TODO add manifest to get bluetooth permissions
 // TODO add user interface
 // TODO add bluetooth transfer function
+/**
+ * This activity serves as the center of the app.
+ * From here, we can change our name, create a new cache, look at our caches and transfer caches
+ * with others.
+ */
 class MainActivity : AppCompatActivity() {
 
     companion object {
@@ -75,12 +80,18 @@ class MainActivity : AppCompatActivity() {
 
         // Opens activity to connect to others
         binding.connectButton.setOnClickListener {
-            // TODO implement
+            val intent = Intent(context, ConnectActivity::class.java)
+            intent.putExtra(U_NAME_FILE, userNameFile)
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK) // Better alternative?
+            context.startActivity(intent)
         }
 
         // Opens activity to create caches
         binding.createCacheButton.setOnClickListener {
-            // TODO implement
+            val intent = Intent(context, NewCacheActivity::class.java)
+            intent.putExtra(U_NAME_FILE, userNameFile)
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK) // Better alternative?
+            context.startActivity(intent)
         }
 
     }
@@ -108,9 +119,7 @@ class MainActivity : AppCompatActivity() {
 
 
 // TODO: user interface needs the following screens:
-//  - when first opened: "what is your name?" screen which saves username
 //  - list of all caches with button to "create cache" and "connect to others" (main menu)
-//  (when empty show "connect or create"-message)
 //  - forms to create cache (with input validation)
 //  - page that shows the private key of owned cache
 //  - cache detail view with hallOfFame and "found it" button

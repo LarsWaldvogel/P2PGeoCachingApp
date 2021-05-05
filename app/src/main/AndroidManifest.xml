@@ -10,6 +10,12 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.P2PGeocaching">
         <activity
+            android:name=".ConnectActivity"
+            android:parentActivityName=".MainActivity" />
+        <activity
+            android:name=".NewCacheActivity"
+            android:parentActivityName=".MainActivity" />
+        <activity
             android:name=".UserNameActivity"
             android:noHistory="true"
             android:parentActivityName=".MainActivity" />
