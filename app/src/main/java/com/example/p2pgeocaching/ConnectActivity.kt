@@ -16,8 +16,8 @@ class ConnectActivity : AppCompatActivity() {
 
     private lateinit var binding: ActivityConnectBinding
 
-    override fun onCreate(savedInstanceState: Bundle?, persistentState: PersistableBundle?) {
-        super.onCreate(savedInstanceState, persistentState)
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
 
         title = "Connect"
 

@@ -8,9 +8,10 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/new_cache_name_input"
-        android:layout_width="160dp"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
         android:hint="@string/cache_name_prompt"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent">
@@ -26,9 +27,10 @@
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/new_cache_desc_input"
-        android:layout_width="160dp"
-        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        android:layout_height="400dp"
         android:layout_marginStart="16dp"
+        android:layout_marginEnd="16dp"
         android:hint="@string/new_cache_desc_edit_text"
         app:layout_constraintTop_toBottomOf="@id/new_cache_name_input"
         app:layout_constraintStart_toStartOf="parent">
@@ -36,11 +38,24 @@
         <com.google.android.material.textfield.TextInputEditText
             android:id="@+id/new_cache_desc_edit_text"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:inputType="text"
+            android:layout_height="match_parent"
+            android:inputType="textMultiLine"
+            
             tools:text="Description....." />
 
     </com.google.android.material.textfield.TextInputLayout>
+
+    <Button
+        android:id="@+id/save_cache_button_text"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/new_cache_button_text"
+        app:layout_constraintTop_toBottomOf="@id/new_cache_desc_input"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        />
+
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>
