@@ -25,7 +25,7 @@ class MainActivity : AppCompatActivity() {
         const val TAG = "MainActivity"
     }
 
-
+    // TODO transfer cacheList between activities
     public lateinit var cacheList: CacheList
     private lateinit var binding: ActivityMainBinding
 
