@@ -4,6 +4,9 @@ import com.example.p2pgeocaching.caches.Cache
 import com.example.p2pgeocaching.caches.CacheList
 import java.io.File
 
+/**
+ * This class is used to transform data to [CacheList] and vice versa. Also writes to file.
+ */
 class CacheListDataParser {
 
     companion object {
