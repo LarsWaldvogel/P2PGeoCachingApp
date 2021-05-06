@@ -11,6 +11,8 @@ import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
 import com.example.p2pgeocaching.caches.Cache
 import com.example.p2pgeocaching.caches.CacheList
+import com.example.p2pgeocaching.data.CacheData
+import com.example.p2pgeocaching.data.CacheDataParser
 
 /**
  * This class serves as the link between the recyclerView and the cacheList
@@ -50,8 +52,8 @@ class CacheAdapter(val cacheList: CacheList) :
      */
     override fun onBindViewHolder(holder: CacheViewHolder, position: Int) {
 
-        // Saves the cache to item in the button
-        val item: Cache = cacheList.list[position]
+        // Saves the cache to item as data in the button
+        val item: CacheData = CacheDataParser.cacheToData(cacheList.list[position])
 
         // What to do when clicked
         holder.button.setOnClickListener {
