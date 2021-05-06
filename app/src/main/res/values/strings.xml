@@ -16,4 +16,5 @@
     <string name="cache_name_prompt">Cache name:</string>
     <string name="new_cache_desc_edit_text">Description:</string>
     <string name="new_cache_button_text">Save</string>
+    <string name="look_up_cache_detail">Show details of cache</string>
 </resources>
