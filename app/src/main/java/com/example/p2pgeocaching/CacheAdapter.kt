@@ -24,6 +24,9 @@ class CacheAdapter(val cacheList: CacheList) :
      * Contains reference on how to display the items in the list
      */
     class CacheViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
+        val title: String = view.findViewById(R.id.cache_title)
+        val desc: String = view.findViewById(R.id.cache_desc)
+        val type: String = view.findViewById(R.id.cache_type)
         val button: Button = view.findViewById(R.id.button_item) // TODO: create button_item in XML
     }
 
