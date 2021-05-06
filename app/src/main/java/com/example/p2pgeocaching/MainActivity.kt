@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import com.example.p2pgeocaching.caches.CacheList
 import com.example.p2pgeocaching.databinding.ActivityMainBinding
 import java.io.File
 
@@ -24,6 +25,8 @@ class MainActivity : AppCompatActivity() {
         const val TAG = "MainActivity"
     }
 
+
+    public lateinit var cacheList: CacheList
     private lateinit var binding: ActivityMainBinding
 
     /**
