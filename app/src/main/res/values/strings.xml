@@ -4,7 +4,7 @@
     <string name="user_name_hint">Username</string>
     <string name="user_name_button_text">Submit</string>
     <string name="warning_empty_user_name">Your username cannot be empty.</string>
-    <string name="warning_illegal_characters_user_name">Your text contains illegal characters: %s</string>
+    <string name="warning_illegal_characters_user_name">Your name may only contain letters, numbers and spaces.</string>
     <string name="welcome_message">Hello %s!</string>
     <string name="empty_list_prompt">Create your own cache or connect to other people to receive their list of caches!</string>
     <string name="change_username_button_text">Change username</string>
