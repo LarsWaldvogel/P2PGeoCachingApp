@@ -25,10 +25,7 @@ class CacheAdapter(val cacheList: CacheList) :
      * Contains reference on how to display the items in the list
      */
     class CacheViewHolder(val view: View) : RecyclerView.ViewHolder(view) {
-        val title: String = view.findViewById(R.id.cache_title)
-        val desc: String = view.findViewById(R.id.cache_desc)
-        val type: String = view.findViewById(R.id.cache_type)
-        val button: Button = view.findViewById(R.id.button_item) // TODO: create button_item in XML
+        val button: Button = view.findViewById(R.id.cache_list_item)
     }
 
     /**
@@ -44,7 +41,7 @@ class CacheAdapter(val cacheList: CacheList) :
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CacheViewHolder {
         val layout = LayoutInflater
             .from(parent.context)
-            .inflate(R.layout.item_view, parent, false) // TODO: create item_view in XML
+            .inflate(R.layout.cache_list_item, parent, false)
 
         // Setup custom accessibility delegate to set the text read
         layout.accessibilityDelegate = Accessibility
@@ -63,9 +60,10 @@ class CacheAdapter(val cacheList: CacheList) :
         holder.button.setOnClickListener {
             val context = holder.view.context
             val intent = Intent(context, DetailActivity::class.java) // TODO: create DetailActivity
+            // TODO: make a switch depending on type of cache
 
             // Transfer Cache to other activity
-            intent.putExtra(DetailActivity.CACHE, item) // TODO: Do I have to transfer CacheData?
+            intent.putExtra(DetailActivity.CACHE, item)
 
             // Start DetailActivity
             context.startActivity(intent)
