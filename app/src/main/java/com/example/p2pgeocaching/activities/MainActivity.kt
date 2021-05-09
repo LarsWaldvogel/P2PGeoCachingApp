@@ -13,6 +13,7 @@ import java.io.File
 // TODO add manifest to get bluetooth permissions
 // TODO add user interface
 // TODO add bluetooth transfer function
+// TODO add the RecyclerList
 /**
  * This activity serves as the center of the app.
  * From here, we can change our name, create a new cache, look at our caches and transfer caches
@@ -114,6 +115,8 @@ class MainActivity : AppCompatActivity() {
         // Updates title
         if (userNameFile.exists()) {
             var userName = userNameFile.readLines().toString()
+
+            // Remove the first and last characters (which are not needed)
             userName = userName.substring(1, userName.length - 1)
             Log.d(TAG, userName)
             title = getString(R.string.welcome_message, userName)
