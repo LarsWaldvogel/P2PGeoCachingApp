@@ -1,4 +1,4 @@
-package com.example.p2pgeocaching
+package com.example.p2pgeocaching.inputValidator
 
 import com.example.p2pgeocaching.p2pexceptions.StringContainsIllegalCharacterException
 

@@ -1,7 +1,7 @@
 package com.example.p2pgeocaching.caches
 
 import android.security.keystore.KeyProperties
-import com.example.p2pgeocaching.InputValidator.Companion.checkUserNameForIllegalCharacters
+import com.example.p2pgeocaching.inputValidator.InputValidator.Companion.checkUserNameForIllegalCharacters
 import java.security.*
 import java.util.Objects.hash
 import javax.crypto.Cipher

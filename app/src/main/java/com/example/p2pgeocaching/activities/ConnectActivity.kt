@@ -1,4 +1,4 @@
-package com.example.p2pgeocaching
+package com.example.p2pgeocaching.activities
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity

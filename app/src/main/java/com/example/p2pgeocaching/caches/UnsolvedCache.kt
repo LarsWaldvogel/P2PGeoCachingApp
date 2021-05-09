@@ -1,6 +1,6 @@
 package com.example.p2pgeocaching.caches
 
-import com.example.p2pgeocaching.InputValidator.Companion.checkForIllegalCharacters
+import com.example.p2pgeocaching.inputValidator.InputValidator.Companion.checkForIllegalCharacters
 import com.example.p2pgeocaching.p2pexceptions.CreatorNotInHallOfFameException
 import com.example.p2pgeocaching.p2pexceptions.KeysDoNotMatchException
 import com.example.p2pgeocaching.p2pexceptions.ParametersAreNullException
@@ -42,6 +42,7 @@ class UnsolvedCache(
 
         // This checks if the arguments contain an illegal character, which it should not
         val argList: ArrayList<String> = arrayListOf(title, desc, creator)
+
         checkForIllegalCharacters(argList)
 
         // This checks if the creator is in the [hallOfFame] list
@@ -91,7 +92,7 @@ class UnsolvedCache(
             SolvedCache(title, desc, creator, id, pubKey!!, newPrvKey, hallOfFame, plainTextHOF)
 
         // Adds the encrypted name to [hallOfFame], if it is null, creates a new one
-        val cipher = Cipher.getInstance("RSA")
+        val cipher = Cipher.getInstance("com.example.p2pgeocaching.RSA.RSA")
         cipher.init(Cipher.ENCRYPT_MODE, prvKey)
         val encryptedFinder: String = cipher.doFinal(finder.toByteArray()).toString()
 
@@ -111,12 +112,12 @@ class UnsolvedCache(
         val str = "some String"
 
         // Encrypt the String
-        val encrypter: Cipher = Cipher.getInstance("RSA")
+        val encrypter: Cipher = Cipher.getInstance("com.example.p2pgeocaching.RSA.RSA")
         encrypter.init(Cipher.ENCRYPT_MODE, prv)
         val cipherByteArray: ByteArray = encrypter.doFinal(str.toByteArray())
 
         // Decrypt the String
-        val decrypter: Cipher = Cipher.getInstance("RSA")
+        val decrypter: Cipher = Cipher.getInstance("com.example.p2pgeocaching.RSA.RSA")
         decrypter.init(Cipher.DECRYPT_MODE, pub)
         val plainStr: String = decrypter.doFinal(cipherByteArray).toString()
 

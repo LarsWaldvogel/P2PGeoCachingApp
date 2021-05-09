@@ -1,9 +1,10 @@
-package com.example.p2pgeocaching
+package com.example.p2pgeocaching.activities
 
 import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import com.example.p2pgeocaching.R
 import com.example.p2pgeocaching.caches.CacheList
 import com.example.p2pgeocaching.databinding.ActivityMainBinding
 import java.io.File

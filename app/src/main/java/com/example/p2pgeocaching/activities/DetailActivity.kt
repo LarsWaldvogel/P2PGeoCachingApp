@@ -1,9 +1,7 @@
-package com.example.p2pgeocaching
+package com.example.p2pgeocaching.activities
 
 import android.os.Bundle
-import android.os.PersistableBundle
 import androidx.appcompat.app.AppCompatActivity
-import androidx.constraintlayout.solver.Cache
 import com.example.p2pgeocaching.data.CacheData
 import com.example.p2pgeocaching.data.CacheDataParser
 import com.example.p2pgeocaching.databinding.ActivityMainBinding
