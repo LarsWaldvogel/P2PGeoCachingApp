@@ -4,25 +4,24 @@ import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.example.p2pgeocaching.data.CacheData
 import com.example.p2pgeocaching.data.CacheDataParser
-import com.example.p2pgeocaching.databinding.ActivityMainBinding
+import com.example.p2pgeocaching.databinding.ActivityUnsolvedCacheDetailBinding
 
-// TODO: split into multiple activities
 /**
  * This class is used when viewing the details of a Cache
  */
-class DetailActivity : AppCompatActivity() {
+class UnsolvedCacheDetailActivity : AppCompatActivity() {
 
     companion object {
         const val CACHE = "cache"
     }
 
-    private lateinit var binding: ActivityDetailBinding // TODO create activity_detail.xml
+    private lateinit var binding: ActivityUnsolvedCacheDetailBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
         // Initialize binding object
-        binding = ActivityMainBinding.inflate(layoutInflater)
+        binding = ActivityUnsolvedCacheDetailBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         // Check if a CacheData object was given
