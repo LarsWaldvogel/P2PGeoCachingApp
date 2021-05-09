@@ -15,10 +15,10 @@ class CacheDataParser {
 
     companion object {
 
-        private const val OWN_CACHE = "OwnCache"
-        private const val UNSOLVED_CACHE = "UnsolvedCache"
-        private const val SOLVED_CACHE = "SolvedCache"
-        private const val TRANSFER_CACHE = "TransferCache"
+        const val OWN_CACHE = "OwnCache"
+        const val UNSOLVED_CACHE = "UnsolvedCache"
+        const val SOLVED_CACHE = "SolvedCache"
+        const val TRANSFER_CACHE = "TransferCache"
 
 
         /**
