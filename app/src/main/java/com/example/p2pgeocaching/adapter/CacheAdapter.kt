@@ -67,6 +67,8 @@ class CacheAdapter(val cacheList: CacheList) :
         // What to do when clicked
         holder.button.setOnClickListener {
             val context = holder.view.context
+
+            // Set intent to the type of cache to open
             var intent: Intent
             if (item.type == OWN_CACHE) {
                 intent = Intent(context, OwnCacheDetailActivity::class.java)
