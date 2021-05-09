@@ -10,16 +10,21 @@ import android.widget.Button
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
 import com.example.p2pgeocaching.R
-import com.example.p2pgeocaching.activities.DetailActivity
+import com.example.p2pgeocaching.activities.OwnCacheDetailActivity
+import com.example.p2pgeocaching.activities.SolvedCacheDetailActivity
+import com.example.p2pgeocaching.activities.UnsolvedCacheDetailActivity
 import com.example.p2pgeocaching.caches.CacheList
 import com.example.p2pgeocaching.data.CacheData
 import com.example.p2pgeocaching.data.CacheDataParser
+import com.example.p2pgeocaching.data.CacheDataParser.Companion.OWN_CACHE
+import com.example.p2pgeocaching.data.CacheDataParser.Companion.UNSOLVED_CACHE
 
 /**
  * This class serves as the link between the recyclerView and the cacheList
  */
 class CacheAdapter(val cacheList: CacheList) :
     RecyclerView.Adapter<CacheAdapter.CacheViewHolder>() {
+
 
     /**
      * Contains reference on how to display the items in the list
@@ -28,12 +33,14 @@ class CacheAdapter(val cacheList: CacheList) :
         val button: Button = view.findViewById(R.id.cache_list_item)
     }
 
+
     /**
      * Returns the number of items in the list
      */
     override fun getItemCount(): Int {
         return cacheList.list.size
     }
+
 
     /**
      * Creates a new view with R.layout.item_view as its layout
@@ -48,6 +55,7 @@ class CacheAdapter(val cacheList: CacheList) :
         return CacheViewHolder(layout)
     }
 
+
     /**
      * Replaces the content of an existing view with new data
      */
@@ -59,11 +67,17 @@ class CacheAdapter(val cacheList: CacheList) :
         // What to do when clicked
         holder.button.setOnClickListener {
             val context = holder.view.context
-            val intent = Intent(context, DetailActivity::class.java) // TODO: create DetailActivity
-            // TODO: make a switch depending on type of cache
-
-            // Transfer Cache to other activity
-            intent.putExtra(DetailActivity.CACHE, item)
+            var intent: Intent
+            if (item.type == OWN_CACHE) {
+                intent = Intent(context, OwnCacheDetailActivity::class.java)
+                intent.putExtra(OwnCacheDetailActivity.CACHE, item)
+            } else if (item.type == UNSOLVED_CACHE) {
+                intent = Intent(context, UnsolvedCacheDetailActivity::class.java)
+                intent.putExtra(UnsolvedCacheDetailActivity.CACHE, item)
+            } else { // Solved Cache
+                intent = Intent(context, SolvedCacheDetailActivity::class.java)
+                intent.putExtra(SolvedCacheDetailActivity.CACHE, item)
+            }
 
             // Start DetailActivity
             context.startActivity(intent)
