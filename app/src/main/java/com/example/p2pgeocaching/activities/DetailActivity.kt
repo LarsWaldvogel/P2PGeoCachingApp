@@ -6,6 +6,7 @@ import com.example.p2pgeocaching.data.CacheData
 import com.example.p2pgeocaching.data.CacheDataParser
 import com.example.p2pgeocaching.databinding.ActivityMainBinding
 
+// TODO: split into multiple activities
 /**
  * This class is used when viewing the details of a Cache
  */
@@ -26,11 +27,7 @@ class DetailActivity : AppCompatActivity() {
 
         // Check if a CacheData object was given
         // If no CachedData object was given, return to previous activity
-        val cacheData = intent?.extras?.getSerializable(CACHE)
-        // TODO: cast from Serializable to CacheData
-        if (cacheData == null || cacheData !is CacheData) {
-            finish()
-        }
+        val cacheData: CacheData = intent?.extras?.getSerializable(CACHE) as CacheData
 
         // If a cache was given, parse it to
         val cache = CacheDataParser.dataToCache(cacheData)

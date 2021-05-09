@@ -71,7 +71,7 @@ class UnsolvedCache(
      * Throws keysDoNotMatchException and stringContainsIllegalCharacterException.
      */
     fun solveCache(finder: String, newPrvKey: PrivateKey): SolvedCache {
-        
+
         // Check if keys match
         if (isValidKeypair(newPrvKey, pubKey)) {
             prvKey = newPrvKey
