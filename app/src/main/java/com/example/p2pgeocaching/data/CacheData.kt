@@ -1,5 +1,6 @@
 package com.example.p2pgeocaching.data
 
+import java.io.Serializable
 import java.security.PrivateKey
 import java.security.PublicKey
 
@@ -20,7 +21,7 @@ data class CacheData(
     var hallOfFame: MutableSet<String>,
     var plainTextHOF: String,
     var type: String
-) {
+) : Serializable {
     /**
      * This constructor is used when creating transfer files.
      */
