@@ -3,9 +3,7 @@ package com.example.p2pgeocaching
 import com.example.p2pgeocaching.p2pexceptions.StringContainsIllegalCharacterException
 
 class InputValidator {
-
-    // TODO change, so it contains only a-z, A-Z, " ", 0-9
-
+    
     companion object {
         private val legalCharacters: List<Char> = generateLegalCharacters()
 
