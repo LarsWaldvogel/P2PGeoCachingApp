@@ -100,7 +100,7 @@ class InputValidator {
          * This function generates a list of all the legal characters for text and returns it.
          * The legal characters are the letters a-z, A-Z, the numbers 0-9
          */
-        private fun generateIllegalCharactersForText(arguments: List<String>): List<Char> {
+        private fun generateIllegalCharactersForText(): List<Char> {
             // Create list with some characters illegal in texts in it and return it
             return listOf('{', '}', ';')
         }
