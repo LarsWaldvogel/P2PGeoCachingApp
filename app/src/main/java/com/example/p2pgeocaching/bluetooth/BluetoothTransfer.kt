@@ -1,4 +1,4 @@
-package com.example.p2pgeocaching
+package com.example.p2pgeocaching.bluetooth
 
 /**
  * Sends list of all caches to other device and receives the other device's list of caches

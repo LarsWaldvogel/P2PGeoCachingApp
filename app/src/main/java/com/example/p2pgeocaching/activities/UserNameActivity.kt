@@ -1,4 +1,4 @@
-package com.example.p2pgeocaching
+package com.example.p2pgeocaching.activities
 
 import android.content.Context
 import android.os.Bundle
@@ -7,7 +7,9 @@ import android.view.KeyEvent
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
+import com.example.p2pgeocaching.R
 import com.example.p2pgeocaching.databinding.ActivityUserNameBinding
+import com.example.p2pgeocaching.inputValidator.InputValidator
 import com.example.p2pgeocaching.p2pexceptions.StringContainsIllegalCharacterException
 import java.io.File
 
@@ -71,16 +73,14 @@ class UserNameActivity : AppCompatActivity() {
         } else { // Username is not empty
             var hasIllegalCharacters = false
             try {
-                InputValidator.checkForIllegalCharacters(userNameString)
+                InputValidator.checkUserNameForIllegalCharacters(userNameString)
             } catch (e: StringContainsIllegalCharacterException) {
                 Log.d(TAG, "String contains illegal characters")
 
                 // Contains illegal characters
                 hasIllegalCharacters = true
-                val text = getString(R.string.warning_illegal_characters_user_name)
-                val illegalCharString = InputValidator.illegalCharacters.joinToString()
                 binding.errorText.text =
-                    getString(R.string.warning_illegal_characters_user_name, illegalCharString)
+                    getString(R.string.warning_illegal_characters_user_name)
             }
 
             // Everything is correct, write to file, go back

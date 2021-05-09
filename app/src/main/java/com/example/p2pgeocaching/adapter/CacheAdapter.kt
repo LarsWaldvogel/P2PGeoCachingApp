@@ -1,4 +1,4 @@
-package com.example.p2pgeocaching
+package com.example.p2pgeocaching.activities
 
 import android.content.Intent
 import android.os.Build
@@ -9,7 +9,7 @@ import android.view.accessibility.AccessibilityNodeInfo
 import android.widget.Button
 import androidx.annotation.RequiresApi
 import androidx.recyclerview.widget.RecyclerView
-import com.example.p2pgeocaching.caches.Cache
+import com.example.p2pgeocaching.R
 import com.example.p2pgeocaching.caches.CacheList
 import com.example.p2pgeocaching.data.CacheData
 import com.example.p2pgeocaching.data.CacheDataParser
