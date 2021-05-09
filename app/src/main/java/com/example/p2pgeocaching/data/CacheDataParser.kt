@@ -102,7 +102,7 @@ class CacheDataParser {
          * Simple function that makes an [UnsolvedCache] from a [CacheData] object [data] when used
          * to transfer data.
          */
-        private fun dataTransferToUnsolvedCache(data: CacheData) : UnsolvedCache {
+        private fun dataTransferToUnsolvedCache(data: CacheData): UnsolvedCache {
             if (data.pubKey != null) {
                 return UnsolvedCache(
                     data.title,
@@ -119,7 +119,7 @@ class CacheDataParser {
 
 
         /**
-        * This function takes a [Cache] [cache] and transforms it into a [CacheData] object.
+         * This function takes a [Cache] [cache] and transforms it into a [CacheData] object.
          */
         fun cacheToData(cache: Cache): CacheData {
             return when (cache) {
