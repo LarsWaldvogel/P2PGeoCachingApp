@@ -1,5 +1,8 @@
-/*public class BaseTable {
-    private static String[][] table = {{"A", "000000"},
+package com.example.p2pgeocaching.RSA;
+
+public class BaseTable {
+    private static String[][] table = {
+            {"A", "000000"},
             {"B", "000001"},
             {"C", "000010"},
             {"D", "000011"},
@@ -62,7 +65,8 @@
             {"8", "111100"},
             {"9", "111101"},
             {" ", "111110"}};
-    public static String getBinValue(String letter){
+
+    public static String getBinValue(String letter) {
         for (int i = 0; i < table.length; i++) {
             if (table[i][0].compareTo(letter) == 0) {
                 return table[i][1];
@@ -70,7 +74,8 @@
         }
         return "";
     }
-    public static String getLetter(String binValue){
+
+    public static String getLetter(String binValue) {
         for (int i = 0; i < table.length; i++) {
             if (table[i][1].compareTo(binValue) == 0) {
                 return table[i][0];
@@ -79,4 +84,3 @@
         return "";
     }
 }
-*/

@@ -1,14 +1,17 @@
-/*import java.math.BigInteger;
-import java.util.*;
-import java.com.example.p2pgeocaching.BaseTable;
-import java.io.*;
-import java.util.Scanner;
+package com.example.p2pgeocaching.RSA;
+
+import java.io.File;
+import java.io.FileNotFoundException;
+import java.io.IOException;
+import java.math.BigInteger;
 import java.nio.file.Files;
-import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.util.stream.*;
+import java.util.Random;
+import java.util.Scanner;
+import java.util.stream.Stream;
 
 public class RSA {
+    /*
     public static void main (String [] args) {
         String key = generateKeys();
         System.out.println("Generated Keys.");
@@ -21,25 +24,27 @@ public class RSA {
         String decodedMessage = decode(encodedMessage, publicKey);
         System.out.println("Decoded Message: "+decodedMessage);
     }
+    */
     private static int getRandomPrime() {
         Random random = new Random();
-        int randomRow = random.nextInt(filelen());
-        String line = "";
+        int randomRow = random.nextInt(fileLen());
+        String line;
         int prime = 0;
         try (Stream<String> lines = Files.lines(Paths.get("primeNumbers.txt"))) {
             line = lines.skip(randomRow).findFirst().get();
             prime = Integer.parseInt(line);
-        } catch(IOException e){
+        } catch (IOException e) {
             System.out.println("Problem");
         }
         return prime;
     }
-    private static int filelen() {
+
+    private static int fileLen() {
         int count = 0;
         try {
-            File file=new File("primeNumbers.txt");
+            File file = new File("primeNumbers.txt");
             Scanner sc = new Scanner(file);
-            while(sc.hasNextLine()) {
+            while (sc.hasNextLine()) {
                 sc.nextLine();
                 count++;
             }
@@ -49,12 +54,13 @@ public class RSA {
         }
         return count;
     }
+
     private static BigInteger ggT(BigInteger a, BigInteger b) {
         BigInteger min = a;
-        if (a.compareTo(b) == 1) {
+        if (a.compareTo(b) > 0) {
             min = b;
         }
-        for (BigInteger i = min; i.compareTo(BigInteger.ONE) == 1; i = i.subtract(BigInteger.ONE)) {
+        for (BigInteger i = min; i.compareTo(BigInteger.ONE) > 0; i = i.subtract(BigInteger.ONE)) {
             if ((a.mod(i)).compareTo(BigInteger.ZERO) == 0 && (b.mod(i)).compareTo(BigInteger.ZERO) == 0) {
                 return i;
             }
@@ -70,7 +76,7 @@ public class RSA {
         BigInteger c, d, e, f;
         e = BigInteger.ZERO;
         f = BigInteger.ONE;
-        while (a.compareTo(BigInteger.ONE) == 1) {
+        while (a.compareTo(BigInteger.ONE) > 0) {
             c = a.divide(b);
             d = b;
             b = a.mod(b);
@@ -84,6 +90,7 @@ public class RSA {
         }
         return f;
     }
+
     private static BigInteger getRandomBigInteger(BigInteger phi) {
         Random random = new Random();
         BigInteger e;
@@ -92,6 +99,7 @@ public class RSA {
         } while (e.compareTo(phi) >= 0);
         return e;
     }
+
     public static String generateKeys() {
         int p = 0;
         int q = 0;
@@ -105,8 +113,8 @@ public class RSA {
             bigQ = BigInteger.valueOf(q);
             n = bigP.multiply(bigQ);
         }
-        Integer intP = Integer.valueOf(p);
-        Integer intQ = Integer.valueOf(q);
+        Integer intP = p;
+        Integer intQ = q;
 
         BigInteger phi = (bigP.subtract(BigInteger.ONE)).multiply(bigQ.subtract(BigInteger.ONE));
 
@@ -120,9 +128,9 @@ public class RSA {
         if (d.compareTo(BigInteger.ZERO) <= 0 || e.compareTo(BigInteger.ZERO) <= 0 || n.compareTo(BigInteger.ZERO) <= 0) {
             return generateKeys();
         }
-        String keyAsString = d.toString() + "_" + n.toString() + ":" + e.toString() + "_" + n.toString();
-        return keyAsString;
+        return d.toString() + "_" + n.toString() + ":" + e.toString() + "_" + n.toString();
     }
+
     private static BigInteger pow(BigInteger base, BigInteger exponent) {
         BigInteger result = BigInteger.ONE;
         while (exponent.signum() > 0) {
@@ -134,14 +142,16 @@ public class RSA {
         }
         return result;
     }
+
     private static String getRandomBinValue() {
-        String randomBin = "";
+        StringBuilder randomBin = new StringBuilder();
         Random random = new Random();
         for (int i = 0; i < 12; i++) {
-            randomBin = randomBin + random.nextInt(2);
+            randomBin.append(random.nextInt(2));
         }
-        return randomBin;
+        return randomBin.toString();
     }
+
     public static String encode(String message, String privateKey) {
         String[] parts = privateKey.split("_");
         BigInteger d = new BigInteger(parts[0]);
@@ -162,9 +172,9 @@ public class RSA {
         }
         block = new BigInteger[letters.length / 2];
         for (int i = 0; i < block.length; i++) {
-            String binaryBlock1 = BaseTable.getBinValue(letters[i*2]);
-            String binaryBlock2 = BaseTable.getBinValue(letters[i*2 + 1]);
-            if (binaryBlock2 == "") {
+            String binaryBlock1 = BaseTable.getBinValue(letters[i * 2]);
+            String binaryBlock2 = BaseTable.getBinValue(letters[i * 2 + 1]);
+            if (binaryBlock2.equals("")) {
                 binaryBlock2 = "111111";
             }
             block[i] = new BigInteger(binaryBlock1 + binaryBlock2, 2);
@@ -175,19 +185,20 @@ public class RSA {
             encodedValues[0] = pow(block[0], d).mod(n);
         } else {
             encodedValues = new BigInteger[block.length + 1];
-            BigInteger randomBigInt = new BigInteger(getRandomBinValue(),2);
+            BigInteger randomBigInt = new BigInteger(getRandomBinValue(), 2);
             encodedValues[0] = pow(randomBigInt, d).mod(n);
             for (int i = 1; i < encodedValues.length; i++) {
-                encodedValues[i] = pow(encodedValues[i-1].xor(block[i-1]), d).mod(n);
+                encodedValues[i] = pow(encodedValues[i - 1].xor(block[i - 1]), d).mod(n);
             }
         }
-        String encodedMessage = encodedValues[0].toString();
+        StringBuilder encodedMessage = new StringBuilder(encodedValues[0].toString());
         for (int i = 1; i < encodedValues.length; i++) {
-            encodedMessage = encodedMessage + " " + encodedValues[i].toString();
+            encodedMessage.append(" ").append(encodedValues[i].toString());
         }
-        return encodedMessage;
+        return encodedMessage.toString();
     }
-    public static String decode(String encodedMessageAsText, String publicKey){
+
+    public static String decode(String encodedMessageAsText, String publicKey) {
         String[] parts = publicKey.split("_");
         BigInteger e = new BigInteger(parts[0]);
         BigInteger n = new BigInteger(parts[1]);
@@ -196,53 +207,55 @@ public class RSA {
         for (int i = 0; i < encodedMessage.length; i++) {
             encodedMessage[i] = new BigInteger(partsOfText[i]);
         }
-        String message = "";
+        StringBuilder message = new StringBuilder();
         BigInteger support;
         String binaryValue;
         String m, t, s;
         if (encodedMessage.length == 1) {
             support = pow(encodedMessage[0], e).mod(n);
-            binaryValue = String.format("%12s",support.toString(2)).replace(' ', '0');
-            m = binaryValue.substring(0,6);
-            t = binaryValue.substring(6,12);
+            binaryValue = String.format("%12s", support.toString(2)).replace(' ', '0');
+            m = binaryValue.substring(0, 6);
+            t = binaryValue.substring(6, 12);
             m = BaseTable.getLetter(m);
             t = BaseTable.getLetter(t);
-            message = message + m;
+            message.append(m);
             if (t.compareTo("") != 0) {
-                message = message + t;
+                message.append(t);
             }
         } else {
-            BigInteger[] decodedInt = new BigInteger[encodedMessage.length-1];
-            for (int i = encodedMessage.length-1; i >= 1; i--) {
+            BigInteger[] decodedInt = new BigInteger[encodedMessage.length - 1];
+            for (int i = encodedMessage.length - 1; i >= 1; i--) {
                 support = pow(encodedMessage[i], e).mod(n);
-                decodedInt[i-1] = encodedMessage[i-1].xor(support);
+                decodedInt[i - 1] = encodedMessage[i - 1].xor(support);
             }
 
-            for (int i = 0; i < decodedInt.length; i++) {
-                binaryValue = String.format("%12s", decodedInt[i].toString(2)).replace(' ', '0');
-                m = binaryValue.substring(0,6);
-                t = binaryValue.substring(6,12);
+            for (BigInteger bigInteger : decodedInt) {
+                binaryValue = String.format("%12s", bigInteger.toString(2)).replace(' ', '0');
+                m = binaryValue.substring(0, 6);
+                t = binaryValue.substring(6, 12);
                 m = BaseTable.getLetter(m);
                 t = BaseTable.getLetter(t);
-                message = message + m;
+                message.append(m);
                 if (t.compareTo("") != 0) {
-                    message = message + t;
+                    message.append(t);
                 }
             }
         }
-        return message;
+        return message.toString();
     }
+
     public static String getPrivateKey(String key) {
         String[] keys = key.split(":");
         return keys[0];
     }
+
     public static String getPublicKey(String key) {
         String[] keys = key.split(":");
         return keys[1];
     }
-    public static String createPrivateKey (String privateKey, String publicKey) {
+
+    public static String createPrivateKey(String privateKey, String publicKey) {
         String[] parts = publicKey.split("_");
-        String key = privateKey + parts[1];
-        return key;
+        return privateKey + parts[1];
     }
-}*/
+}
