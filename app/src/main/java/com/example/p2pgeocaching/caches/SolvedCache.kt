@@ -14,6 +14,6 @@ class SolvedCache(
     id: Int,
     pubKey: PublicKey,
     prvKey: PrivateKey,
-    hallOfFame: MutableSet<ByteArray>,
+    hallOfFame: MutableSet<String>,
     plainTextHOF: String
 ) : Cache(title, desc, creator, id, pubKey, prvKey, hallOfFame, plainTextHOF)

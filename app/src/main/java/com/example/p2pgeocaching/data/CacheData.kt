@@ -17,7 +17,7 @@ data class CacheData(
     var id: Int,
     var pubKey: PublicKey?,
     var prvKey: PrivateKey?,
-    var hallOfFame: MutableSet<ByteArray>,
+    var hallOfFame: MutableSet<String>,
     var plainTextHOF: String,
     var type: String
 ) {
@@ -31,7 +31,7 @@ data class CacheData(
         id: Int,
         pubKey: PublicKey?,
         prvKey: PrivateKey?,
-        hallOfFame: MutableSet<ByteArray>,
+        hallOfFame: MutableSet<String>,
         type: String
     ) : this(title, desc, creator, id, pubKey, prvKey, hallOfFame, "", type)
 }

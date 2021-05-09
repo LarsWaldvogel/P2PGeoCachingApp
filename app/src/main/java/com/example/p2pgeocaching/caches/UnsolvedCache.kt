@@ -21,7 +21,7 @@ class UnsolvedCache(
     creator: String,
     id: Int,
     pubKey: PublicKey,
-    hallOfFame: MutableSet<ByteArray>,
+    hallOfFame: MutableSet<String>,
     plainTextHOF: String
 ) : Cache(title, desc, creator, id, pubKey, null, hallOfFame, plainTextHOF) {
 
@@ -37,7 +37,7 @@ class UnsolvedCache(
         creator: String,
         id: Int,
         pubKey: PublicKey,
-        hallOfFame: MutableSet<ByteArray>
+        hallOfFame: MutableSet<String>
     ) : this(title, desc, creator, id, pubKey, hallOfFame, "") {
 
         // This checks if the arguments contain an illegal character, which it should not
@@ -93,7 +93,7 @@ class UnsolvedCache(
         // Adds the encrypted name to [hallOfFame], if it is null, creates a new one
         val cipher = Cipher.getInstance("RSA")
         cipher.init(Cipher.ENCRYPT_MODE, prvKey)
-        val encryptedFinder: ByteArray = cipher.doFinal(finder.toByteArray())
+        val encryptedFinder: String = cipher.doFinal(finder.toByteArray()).toString()
 
         // Here it is inserted into the new solvedCache object
         solvedCache.addPersonToHOF(encryptedFinder)
@@ -113,15 +113,15 @@ class UnsolvedCache(
         // Encrypt the String
         val encrypter: Cipher = Cipher.getInstance("RSA")
         encrypter.init(Cipher.ENCRYPT_MODE, prv)
-        val cipherStr: ByteArray = encrypter.doFinal(str.toByteArray())
+        val cipherByteArray: ByteArray = encrypter.doFinal(str.toByteArray())
 
         // Decrypt the String
         val decrypter: Cipher = Cipher.getInstance("RSA")
         decrypter.init(Cipher.DECRYPT_MODE, pub)
-        val plainStr: ByteArray = decrypter.doFinal(cipherStr)
+        val plainStr: String = decrypter.doFinal(cipherByteArray).toString()
 
         // Check if equal
-        return str == plainStr.toString()
+        return str == plainStr
     }
 
 

@@ -17,7 +17,7 @@ class OwnCache(
     id: Int,
     pubKey: PublicKey?,
     prvKey: PrivateKey?,
-    hallOfFame: MutableSet<ByteArray>,
+    hallOfFame: MutableSet<String>,
     plainTextHOF: String
 ) : Cache(title, desc, creator, id, pubKey, prvKey, hallOfFame, plainTextHOF) {
 
@@ -33,7 +33,7 @@ class OwnCache(
         -1,
         null,
         null,
-        mutableSetOf<ByteArray>(),
+        mutableSetOf<String>(),
         ""
     ) {
         // This checks if the arguments contain an illegal character, which it should not
@@ -55,7 +55,7 @@ class OwnCache(
         // Here we encrypt [creator] and add it to [hallOfFame] and update [plainTextHOF]
         val cipher = Cipher.getInstance("RSA")
         cipher.init(Cipher.ENCRYPT_MODE, prvKey)
-        val encryptedCreator: ByteArray = cipher.doFinal(creator.toByteArray())
+        val encryptedCreator: String = cipher.doFinal(creator.toByteArray()).toString()
 
         // This is where the updates and inserts happen
         addPersonToHOF(encryptedCreator)
