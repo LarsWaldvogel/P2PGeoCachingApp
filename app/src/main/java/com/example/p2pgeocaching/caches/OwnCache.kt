@@ -1,7 +1,7 @@
 package com.example.p2pgeocaching.caches
 
 import android.security.keystore.KeyProperties
-import com.example.p2pgeocaching.InputValidator.Companion.checkForIllegalCharacters
+import com.example.p2pgeocaching.InputValidator.Companion.checkUserNameForIllegalCharacters
 import java.security.*
 import java.util.Objects.hash
 import javax.crypto.Cipher
@@ -38,7 +38,7 @@ class OwnCache(
     ) {
         // This checks if the arguments contain an illegal character, which it should not
         val argList: List<String> = listOf(title, desc, creator)
-        checkForIllegalCharacters(argList)
+        checkUserNameForIllegalCharacters(creator)
 
         // Here we fabricate the string we want to hash by concatenating [title], ';' and [desc]
         val stringToHash = "$title;$desc"

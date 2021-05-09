@@ -17,4 +17,10 @@
     <string name="new_cache_desc_edit_text">Description:</string>
     <string name="new_cache_button_text">Save</string>
     <string name="look_up_cache_detail">Show details of cache</string>
+    <string name="own_cache_type_text">This is one of your own caches.</string>
+    <string name="unsolved_cache_type_text">This is an unsolved cache.</string>
+    <string name="solved_cache_type_text">You have solved this cache!</string>
+    <string name="private_key_button_text">Show private key</string>
+    <string name="solve_button_text">Solve</string>
+    <string name="hall_of_fame_title_text">Hall of Fame:</string>
 </resources>
