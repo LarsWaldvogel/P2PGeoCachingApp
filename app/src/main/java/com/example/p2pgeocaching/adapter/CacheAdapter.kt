@@ -68,17 +68,21 @@ class CacheAdapter(val cacheList: CacheList) :
         holder.button.setOnClickListener {
             val context = holder.view.context
 
-            // Set intent to the type of cache to open
-            var intent: Intent
-            if (item.type == OWN_CACHE) {
-                intent = Intent(context, OwnCacheDetailActivity::class.java)
-                intent.putExtra(OwnCacheDetailActivity.CACHE, item)
-            } else if (item.type == UNSOLVED_CACHE) {
-                intent = Intent(context, UnsolvedCacheDetailActivity::class.java)
-                intent.putExtra(UnsolvedCacheDetailActivity.CACHE, item)
-            } else { // Solved Cache
-                intent = Intent(context, SolvedCacheDetailActivity::class.java)
-                intent.putExtra(SolvedCacheDetailActivity.CACHE, item)
+            // Set intent to the type of cache to open, and add cache to extras
+            val intent: Intent
+            when (item.type) {
+                OWN_CACHE -> {
+                    intent = Intent(context, OwnCacheDetailActivity::class.java)
+                    intent.putExtra(OwnCacheDetailActivity.CACHE, item)
+                }
+                UNSOLVED_CACHE -> {
+                    intent = Intent(context, UnsolvedCacheDetailActivity::class.java)
+                    intent.putExtra(UnsolvedCacheDetailActivity.CACHE, item)
+                }
+                else -> { // Solved cache
+                    intent = Intent(context, SolvedCacheDetailActivity::class.java)
+                    intent.putExtra(SolvedCacheDetailActivity.CACHE, item)
+                }
             }
 
             // Start DetailActivity
