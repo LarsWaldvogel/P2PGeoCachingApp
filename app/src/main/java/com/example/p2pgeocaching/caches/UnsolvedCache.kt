@@ -1,6 +1,6 @@
 package com.example.p2pgeocaching.caches
 
-import com.example.p2pgeocaching.inputValidator.InputValidator.Companion.checkForIllegalCharacters
+import com.example.p2pgeocaching.inputValidator.InputValidator
 import com.example.p2pgeocaching.p2pexceptions.CreatorNotInHallOfFameException
 import com.example.p2pgeocaching.p2pexceptions.KeysDoNotMatchException
 import com.example.p2pgeocaching.p2pexceptions.ParametersAreNullException
@@ -41,9 +41,8 @@ class UnsolvedCache(
     ) : this(title, desc, creator, id, pubKey, hallOfFame, "") {
 
         // This checks if the arguments contain an illegal character, which it should not
-        val argList: ArrayList<String> = arrayListOf(title, desc, creator)
-
-        checkForIllegalCharacters(argList)
+        InputValidator.checkUserNameForIllegalCharacters(creator)
+        InputValidator.checkTextForIllegalCharacters(listOf(title, desc))
 
         // This checks if the creator is in the [hallOfFame] list
         checkCreatorInHOF()
@@ -72,6 +71,7 @@ class UnsolvedCache(
      * Throws keysDoNotMatchException and stringContainsIllegalCharacterException.
      */
     fun solveCache(finder: String, newPrvKey: PrivateKey): SolvedCache {
+        
         // Check if keys match
         if (isValidKeypair(newPrvKey, pubKey)) {
             prvKey = newPrvKey
@@ -80,7 +80,7 @@ class UnsolvedCache(
         }
 
         // Finder cannot contain any illegal characters
-        checkForIllegalCharacters(finder)
+        InputValidator.checkUserNameForIllegalCharacters(finder)
 
         // Assert that all values are not null
         if (pubKey == null) {
