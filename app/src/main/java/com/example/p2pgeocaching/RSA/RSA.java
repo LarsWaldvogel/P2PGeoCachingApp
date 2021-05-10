@@ -350,18 +350,40 @@ public class RSA {
         return message.toString();
     }
 
+    /**
+     * This method takes the keys and returns the private key
+     * @param key key in the format "d_n:e_n"
+     * @return private key in the format "d_n"
+     */
     public static String getPrivateKey(String key) {
+        // split key at the position ":"
         String[] keys = key.split(":");
+        // return first part "d_n"
         return keys[0];
     }
 
+    /**
+     * This method takes the keys and returns the public key
+     * @param key key in the format "d_n:e_n"
+     * @return private key in the format "e_n"
+     */
     public static String getPublicKey(String key) {
+        // split key at the position ":"
         String[] keys = key.split(":");
+        // return second part "e_n"
         return keys[1];
     }
 
+    /**
+     * This method is used to create private key String
+     * @param privateKey d value of private key
+     * @param publicKey format: "e_n"
+     * @return privateKey as String in the format "d_n"
+     */
     public static String createPrivateKey(String privateKey, String publicKey) {
+        // split publicKey at the position "_" to get n
         String[] parts = publicKey.split("_");
-        return privateKey + parts[1];
+        // return "d_n"
+        return privateKey + "_" + parts[1];
     }
 }
