@@ -191,6 +191,13 @@ public class RSA {
         return d.toString() + "_" + n.toString() + ":" + e.toString() + "_" + n.toString();
     }
 
+    /**
+     * This method is used to calculate the pow between base and exponent
+     * which are both BigInteger values
+     * @param base base value as BigInteger
+     * @param exponent exponent values as BigInteger
+     * @return BigInteger value base^exponent
+     */
     private static BigInteger pow(BigInteger base, BigInteger exponent) {
         BigInteger result = BigInteger.ONE;
         while (exponent.signum() > 0) {
@@ -203,55 +210,94 @@ public class RSA {
         return result;
     }
 
+    /**
+     * This method is used to generate a random binary value with length of 12 bits
+     * @return String containing a binary value with length 12 bits
+     */
     private static String getRandomBinValue() {
         StringBuilder randomBin = new StringBuilder();
         Random random = new Random();
         for (int i = 0; i < 12; i++) {
+            // append either 0 or 1 to the string
             randomBin.append(random.nextInt(2));
         }
         return randomBin.toString();
     }
 
+    /**
+     * This method is used to encode a message with the given privateKey
+     * @param message message which should be encoded with private Key in RSA
+     * @param privateKey String which contains d an n in the format d_n
+     * @return String containing the given message encoded in rsa
+     */
     public static String encode(String message, String privateKey) {
+        // split private key at "_". This is due to the fact that the privateKey
+        // is in the format "d_n".
         String[] parts = privateKey.split("_");
+        // transform the parts into BigInteger values
         BigInteger d = new BigInteger(parts[0]);
         BigInteger n = new BigInteger(parts[1]);
         String[] letters;
         BigInteger[] block;
+        // if message length even then we don't have to pad
         if (message.length() % 2 == 0) {
             letters = new String[message.length()];
         } else {
+            // padding necessary. Last array element is reserved for the binary
+            // value 111111 (later). This serves as indicator for the decoding method,
+            // that this element only served for padding
             letters = new String[message.length() + 1];
         }
+        // get all characters in the message and save them in array letters
         for (int i = 0; i < message.length(); i++) {
             letters[i] = Character.toString(message.charAt(i));
-            System.out.println(letters[i]);
+            //System.out.println(letters[i]);
         }
+        // If last array element is null then message is not even. This element
+        // was reserved for the padding indicator
         if (letters[letters.length - 1] == null) {
             letters[letters.length - 1] = "";
         }
+        // We transform all letters into base64 encoding and save them as 2-letter-blocks
+        // That is the reasen, why block has only half of the length of array letters
         block = new BigInteger[letters.length / 2];
         for (int i = 0; i < block.length; i++) {
+            // get base64 encoding of letter through class BaseTable
             String binaryBlock1 = BaseTable.getBinValue(letters[i * 2]);
             String binaryBlock2 = BaseTable.getBinValue(letters[i * 2 + 1]);
+            // if second block is a empty string this means that this block is only
+            // used for padding. Save there the binary value 111111
             if (binaryBlock2.equals("")) {
                 binaryBlock2 = "111111";
             }
+            // save 2-block-binary values in array
             block[i] = new BigInteger(binaryBlock1 + binaryBlock2, 2);
         }
         BigInteger[] encodedValues;
+        // If we only have one block: use RSA directly
         if (block.length == 1) {
             encodedValues = new BigInteger[1];
             encodedValues[0] = pow(block[0], d).mod(n);
         } else {
+            // If we have multiple block, than apply CBC. Generate an initalizing
+            // vector with the length of 12 bits. Save the RSA encoding of it in the
+            // first position of the array. Take this value and calculate XOR between it and
+            // the first block. Apply RSA and save the value in array. Take that value and
+            // calculate XOR with the second block etc.
             encodedValues = new BigInteger[block.length + 1];
+            // calculate a random binary value of length of 12 bits and get the BigInteger value
+            // of it. This servers as initializing vector
             BigInteger randomBigInt = new BigInteger(getRandomBinValue(), 2);
+            // save RSA encoding of the initializing vector
             encodedValues[0] = pow(randomBigInt, d).mod(n);
             for (int i = 1; i < encodedValues.length; i++) {
+                // get encoded block and calculate XOR with next block, get the RSA
+                // encoding of XOR and save it in the array
                 encodedValues[i] = pow(encodedValues[i - 1].xor(block[i - 1]), d).mod(n);
             }
         }
         StringBuilder encodedMessage = new StringBuilder(encodedValues[0].toString());
+        // append all RSA encodings in a string
         for (int i = 1; i < encodedValues.length; i++) {
             encodedMessage.append(" ").append(encodedValues[i].toString());
         }
