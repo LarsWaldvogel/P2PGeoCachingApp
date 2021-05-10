@@ -39,6 +39,7 @@ class NewCacheActivity: AppCompatActivity() {
             try {
                 // Throws StringContainsIllegalCharacterException if one of the inputs is not legal
                 saveInputToCacheList(userNameFile, cacheListFile)
+                finish()
             } catch (e: Throwable) {
                 Log.d(TAG, "Created cache contained illegal characters or was empty")
             }
