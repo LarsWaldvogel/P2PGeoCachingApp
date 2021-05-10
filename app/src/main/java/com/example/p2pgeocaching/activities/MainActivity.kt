@@ -4,7 +4,10 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.example.p2pgeocaching.R
+import com.example.p2pgeocaching.adapter.CacheAdapter
 import com.example.p2pgeocaching.caches.CacheList
 import com.example.p2pgeocaching.databinding.ActivityMainBinding
 import java.io.File
@@ -21,6 +24,7 @@ import java.io.File
  */
 class MainActivity : AppCompatActivity() {
 
+
     companion object {
         const val U_NAME_FILE = "userName"
         const val CACHE_LIST_FILE = "cacheList"
@@ -28,8 +32,10 @@ class MainActivity : AppCompatActivity() {
     }
 
     // TODO transfer cacheList between activities
-    public lateinit var cacheList: CacheList
+    lateinit var cacheList: CacheList
     private lateinit var binding: ActivityMainBinding
+    private lateinit var recyclerView: RecyclerView
+
 
     /**
      * This method reads the files.
@@ -67,10 +73,22 @@ class MainActivity : AppCompatActivity() {
             title = getString(R.string.welcome_message, userName)
         }
 
-        // Show cache list and remove "empty" message
+        // Show initialize the CacheList field
         if (cacheListFile.exists()) {
-            // TODO show list
+            // TODO initialize list
+        } else { // File is empty
+            cacheList = CacheList(mutableListOf())
         }
+
+        // Update recyclerView to show list (if it is not empty)
+        recyclerView = binding.recyclerView
+        recyclerView.layoutManager = LinearLayoutManager(this)
+        recyclerView.adapter = CacheAdapter(cacheList)
+
+        // TODO if cacheList is empty, hide recyclerView
+        //  else hide message
+        //  also do this in onRestart()
+
 
 
         // Opens rename activity when pressed
