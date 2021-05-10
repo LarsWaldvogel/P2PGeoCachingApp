@@ -70,7 +70,7 @@ class MainActivity : AppCompatActivity() {
         } else { // Username has been selected, show it in title
             var userName = userNameFile.readLines().toString()
             userName = userName.substring(1, userName.length - 1)
-            Log.d(TAG, userName)
+            Log.d(TAG, "User name: $userName")
             title = getString(R.string.welcome_message, userName)
         }
 

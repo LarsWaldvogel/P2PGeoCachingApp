@@ -16,15 +16,19 @@ class Serializer {
 
         /**
          * Given the file [cacheListFile] containing the serialized version of the cache list, returns
-         * the object encoded in it.
+         * the object encoded in it. If the file is empty, return empty list.
          */
         fun deserializeCacheList(cacheListFile: File): CacheList {
 
-            // Read file, deserialize it, assign it to cacheList
-            val cacheListDataString = cacheListFile.readBytes().toString()
-            Log.d(TAG, "Read the following from file:\n$cacheListDataString")
-            val cacheListData = Json.decodeFromString<CacheListData>(cacheListDataString)
-            return CacheListDataParser.dataToList(cacheListData)
+            return if (cacheListFile.exists()) {
+                // Read file, deserialize it, assign it to cacheList
+                val cacheListDataString = cacheListFile.readBytes().toString()
+                Log.d(TAG, "Read the following from file:\n$cacheListDataString")
+                val cacheListData = Json.decodeFromString<CacheListData>(cacheListDataString)
+                CacheListDataParser.dataToList(cacheListData)
+            } else { // CacheListFile has not been created yet, return empty list
+                CacheList(mutableListOf())
+            }
         }
 
 

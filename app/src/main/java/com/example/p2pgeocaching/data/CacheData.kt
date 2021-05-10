@@ -11,6 +11,7 @@ import java.security.PublicKey
  * "TransferCache" is used, when we use the [CacheData] to transfer from one device to another,
  * it is equivalent to "UnsolvedCache", except the [plainTextHOF] will be reevaluated.
  */
+@kotlinx.serialization.Serializable
 data class CacheData(
     val title: String,
     val desc: String,
