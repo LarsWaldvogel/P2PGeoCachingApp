@@ -57,8 +57,15 @@ public class RSA {
         return Integer.parseInt(line);
     }
 
+    /**
+     * This method is used to get the total amount of lines of the file
+     * "raw/primeNumbers.txt".
+     * @param sc Scanner which is used to scan over the lines of file "raw/primeNumbers.txt"
+     * @return total amount of lines as int
+     */
     private static int numOfLines(Scanner sc) {
         int lines = 0;
+        // go through all lines of the file and count the amount of lines
         while (sc.hasNextLine()) {
             sc.nextLine();
             lines++;
@@ -67,19 +74,35 @@ public class RSA {
         return lines;
     }
 
+    /**
+     * This method is used to calculate the greatest common divisor of two BigInteger values
+     * @param a first BigInteger value
+     * @param b second BigInteger value
+     * @return greatest common divisor of the two values a and b
+     */
     private static BigInteger ggT(BigInteger a, BigInteger b) {
         BigInteger min = a;
+        // get the smaller number to avoid longer for-loop
         if (a.compareTo(b) > 0) {
             min = b;
         }
         for (BigInteger i = min; i.compareTo(BigInteger.ONE) > 0; i = i.subtract(BigInteger.ONE)) {
+            // try to get a common divisor
             if ((a.mod(i)).compareTo(BigInteger.ZERO) == 0 && (b.mod(i)).compareTo(BigInteger.ZERO) == 0) {
+                // return greatest common divisor
                 return i;
             }
         }
+        // if no divisor was found, return 1
         return BigInteger.ONE;
     }
 
+    /**
+     * This method is used to get the multiplicative inverse of two BigInteger values
+     * @param a first BigInteger value
+     * @param b second BigInteger value
+     * @return multiplicative inverse as BigInteger
+     */
     private static BigInteger multiplicativeInverse(BigInteger a, BigInteger b) {
         if (a.compareTo(BigInteger.ZERO) == 0) {
             return BigInteger.ZERO;
@@ -103,9 +126,16 @@ public class RSA {
         return f;
     }
 
+    /**
+     * This method is used to get a random BigInteger value with the condition
+     * that it must be smaller than the given parameter phi
+     * @param phi represents the limit of the random value
+     * @return random BigInteger value
+     */
     private static BigInteger getRandomBigInteger(BigInteger phi) {
         Random random = new Random();
         BigInteger e;
+        // e must be strictly lower than phi
         do {
             e = new BigInteger(phi.bitLength(), random);
         } while (e.compareTo(phi) >= 0);
