@@ -30,7 +30,7 @@ data class CacheData(
         creator: String,
         id: Int,
         pubKey: String,
-        prvKey: String,
+        prvKey: String?,
         hallOfFame: MutableSet<String>,
         type: String
     ) : this(title, desc, creator, id, pubKey, prvKey, hallOfFame, "", type)

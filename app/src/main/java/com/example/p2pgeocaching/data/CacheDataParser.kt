@@ -128,8 +128,8 @@ class CacheDataParser {
                     cache.desc,
                     cache.creator,
                     cache.id,
-                    cache.pubKey,
-                    cache.prvKey,
+                    cache.pubKey!!,
+                    cache.prvKey!!,
                     cache.hallOfFame,
                     OWN_CACHE
                 )
@@ -138,7 +138,7 @@ class CacheDataParser {
                     cache.desc,
                     cache.creator,
                     cache.id,
-                    cache.pubKey,
+                    cache.pubKey!!,
                     null,
                     cache.hallOfFame,
                     UNSOLVED_CACHE
@@ -148,8 +148,8 @@ class CacheDataParser {
                     cache.desc,
                     cache.creator,
                     cache.id,
-                    cache.pubKey,
-                    cache.prvKey,
+                    cache.pubKey!!,
+                    cache.prvKey!!,
                     cache.hallOfFame,
                     SOLVED_CACHE
                 )
@@ -169,7 +169,7 @@ class CacheDataParser {
                 cache.desc,
                 cache.creator,
                 cache.id,
-                cache.pubKey,
+                cache.pubKey!!,
                 null,
                 cache.hallOfFame,
                 TRANSFER_CACHE
