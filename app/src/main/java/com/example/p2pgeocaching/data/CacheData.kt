@@ -1,8 +1,6 @@
 package com.example.p2pgeocaching.data
 
 import java.io.Serializable
-import java.security.PrivateKey
-import java.security.PublicKey
 
 /**
  * This cache saves the Data in a Cache.
@@ -17,8 +15,8 @@ data class CacheData(
     val desc: String,
     val creator: String,
     var id: Int,
-    var pubKey: PublicKey?,
-    var prvKey: PrivateKey?,
+    var pubKey: String?,
+    var prvKey: String?,
     var hallOfFame: MutableSet<String>,
     var plainTextHOF: String,
     var type: String
@@ -31,8 +29,8 @@ data class CacheData(
         desc: String,
         creator: String,
         id: Int,
-        pubKey: PublicKey?,
-        prvKey: PrivateKey?,
+        pubKey: String,
+        prvKey: String,
         hallOfFame: MutableSet<String>,
         type: String
     ) : this(title, desc, creator, id, pubKey, prvKey, hallOfFame, "", type)

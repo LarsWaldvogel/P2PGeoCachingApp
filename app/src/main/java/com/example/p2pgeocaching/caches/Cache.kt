@@ -1,8 +1,6 @@
 package com.example.p2pgeocaching.caches
 
-import java.security.PrivateKey
-import java.security.PublicKey
-import javax.crypto.Cipher
+import com.example.p2pgeocaching.RSA.RSA
 
 
 // TODO: pubKey/prvKey should be String
@@ -28,8 +26,8 @@ open class Cache(
     val desc: String,
     val creator: String,
     var id: Int,
-    var pubKey: PublicKey?,
-    var prvKey: PrivateKey?,
+    var pubKey: String?,
+    var prvKey: String?,
     var hallOfFame: MutableSet<String>,
     var plainTextHOF: String
 ) {
@@ -43,8 +41,8 @@ open class Cache(
         desc: String,
         creator: String,
         id: Int,
-        pubKey: PublicKey?,
-        prvKey: PrivateKey?
+        pubKey: String?,
+        prvKey: String?
     ) : this(title, desc, creator, id, pubKey, prvKey, mutableSetOf(), "")
 
 
@@ -52,15 +50,10 @@ open class Cache(
      * This function takes an String containing a cipher text [cipherText] as input
      * It returns the plain text as a String.
      * This decryption is done using the public key.
+     *
      */
     private fun decryptToString(cipherText: String): String {
-        // Setting up the object to decrypt
-        val cipher = Cipher.getInstance("RSA")
-        cipher.init(Cipher.DECRYPT_MODE, pubKey)
-
-        // Here we actually decrypt the message and return it as a String
-        val bytePlain = cipher.doFinal(cipherText.toByteArray())
-        return bytePlain.toString()
+        return RSA.decode(cipherText, pubKey)
     }
 
 

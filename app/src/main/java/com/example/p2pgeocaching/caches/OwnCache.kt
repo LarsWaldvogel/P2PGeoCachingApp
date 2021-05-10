@@ -1,10 +1,8 @@
 package com.example.p2pgeocaching.caches
 
-import android.security.keystore.KeyProperties
+import com.example.p2pgeocaching.RSA.RSA
 import com.example.p2pgeocaching.inputValidator.InputValidator.Companion.checkUserNameForIllegalCharacters
-import java.security.*
 import java.util.Objects.hash
-import javax.crypto.Cipher
 
 /**
  * [OwnCache] is the [Cache] subclass used when creating one's own [Cache].
@@ -15,8 +13,8 @@ class OwnCache(
     desc: String,
     creator: String,
     id: Int,
-    pubKey: PublicKey?,
-    prvKey: PrivateKey?,
+    pubKey: String?,
+    prvKey: String?,
     hallOfFame: MutableSet<String>,
     plainTextHOF: String
 ) : Cache(title, desc, creator, id, pubKey, prvKey, hallOfFame, plainTextHOF) {
@@ -47,34 +45,14 @@ class OwnCache(
         id = hash(stringToHash)
 
         // The key pair is created and saved to [pubKey] and [prvKey]
-        val keyPair: KeyPair = generateKeyPair()
-        pubKey = keyPair.public
-        prvKey = keyPair.private
+        val keyPair: String = RSA.generateKeys()
+        pubKey = RSA.getPublicKey(keyPair)
+        prvKey = RSA.getPrivateKey(keyPair)
 
-        // TODO: make encrypt/decrypt their own functions
         // Here we encrypt [creator] and add it to [hallOfFame] and update [plainTextHOF]
-        val cipher = Cipher.getInstance("RSA")
-        cipher.init(Cipher.ENCRYPT_MODE, prvKey)
-        val encryptedCreator: String = cipher.doFinal(creator.toByteArray()).toString()
+        val encryptedCreator: String = RSA.encode(creator, prvKey)
 
         // This is where the updates and inserts happen
         addPersonToHOF(encryptedCreator)
     }
-
-
-    /**
-     * This function generates a RSA key pair, which it returns.
-     * The key is not generated with the [id] as initializer, because that could be replicated.
-     */
-    private fun generateKeyPair(): KeyPair {
-        // This creates an object capable of
-        val generator = KeyPairGenerator.getInstance(KeyProperties.KEY_ALGORITHM_RSA)
-
-        // The generator is initialized with a key length of 2048 bit and a random number
-        generator.initialize(2048, SecureRandom())
-
-        // Key pair is created and returned
-        return generator.genKeyPair()
-    }
-
 }
