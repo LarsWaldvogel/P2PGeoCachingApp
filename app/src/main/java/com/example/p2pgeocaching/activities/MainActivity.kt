@@ -9,7 +9,11 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.p2pgeocaching.R
 import com.example.p2pgeocaching.adapter.CacheAdapter
 import com.example.p2pgeocaching.caches.CacheList
+import com.example.p2pgeocaching.data.CacheListData
+import com.example.p2pgeocaching.data.CacheListDataParser
 import com.example.p2pgeocaching.databinding.ActivityMainBinding
+import kotlinx.serialization.decodeFromString
+import kotlinx.serialization.json.Json
 import java.io.File
 
 
@@ -73,21 +77,10 @@ class MainActivity : AppCompatActivity() {
             title = getString(R.string.welcome_message, userName)
         }
 
-        // Show initialize the CacheList field
-        if (cacheListFile.exists()) {
-            // TODO initialize list
-        } else { // File is empty
-            cacheList = CacheList(mutableListOf())
-        }
-
-        // Update recyclerView to show list (if it is not empty)
-        recyclerView = binding.recyclerView
-        recyclerView.layoutManager = LinearLayoutManager(this)
-        recyclerView.adapter = CacheAdapter(cacheList)
-
-        // TODO if cacheList is empty, hide recyclerView
-        //  else hide message
-        //  also do this in onRestart()
+        // This function sets the recyclerView to the current cacheList written in the file.
+        // Also removes the background text.
+        // If it is empty, shows background text, and the recycler view is hidden.
+        updateCacheList(cacheListFile)
 
 
 
@@ -121,7 +114,7 @@ class MainActivity : AppCompatActivity() {
 
 
     /**
-     * When coming back from another activity, update the title.
+     * When coming back from another activity, update the title and the list of caches.
      */
     override fun onRestart() {
         super.onRestart()
@@ -129,6 +122,7 @@ class MainActivity : AppCompatActivity() {
         // Gets context and file
         val context = applicationContext
         val userNameFile = File(context.filesDir, U_NAME_FILE)
+        val cacheListFile = File(context.filesDir, CACHE_LIST_FILE)
 
         // Updates title
         if (userNameFile.exists()) {
@@ -138,6 +132,57 @@ class MainActivity : AppCompatActivity() {
             userName = userName.substring(1, userName.length - 1)
             Log.d(TAG, userName)
             title = getString(R.string.welcome_message, userName)
+        }
+
+        // Update the list of caches
+        updateCacheList(cacheListFile)
+
+
+    }
+
+
+    /**
+     * Given the file [cacheListFile] containing the serialized version of the cache list, returns
+     * the object encoded in it.
+     */
+    private fun deserializeCacheList(cacheListFile: File): CacheList {
+
+        // Read file, deserialize it, assign it to cacheList
+        val cacheListDataString = cacheListFile.readBytes().toString()
+        val cacheListData = Json.decodeFromString<CacheListData>(cacheListDataString)
+        return CacheListDataParser.dataToList(cacheListData)
+    }
+
+
+    /**
+     * This function updates the [cacheList] and the text shown in background.
+     * If [cacheList] is empty, show prompt to get caches.
+     * If it contains something, show it in the [recyclerView].
+     * [cacheListFile] is the file containing the serialized [CacheList] object.
+     */
+    private fun updateCacheList(cacheListFile: File) {
+
+        // Initialize the CacheList field with the file contents
+        if (cacheListFile.exists()) {
+
+            // Deserialize the file and get the object
+            cacheList = deserializeCacheList(cacheListFile)
+
+            // Update recyclerView to show list (if it is not empty)
+            recyclerView = binding.recyclerView
+            recyclerView.layoutManager = LinearLayoutManager(this)
+            recyclerView.adapter = CacheAdapter(cacheList)
+
+            // Remove the text prompt to "get or create caches"
+            binding.emptyCacheListPromptText.text = ""
+
+        } else { // File is empty
+
+            // Initialize empty list
+            cacheList = CacheList(mutableListOf())
+
+            // Set text prompt to "get or create caches"
+            binding.emptyCacheListPromptText.text = getString(R.string.empty_list_prompt)
         }
     }
 }
