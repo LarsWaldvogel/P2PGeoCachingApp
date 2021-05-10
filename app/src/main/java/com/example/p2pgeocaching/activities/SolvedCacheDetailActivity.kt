@@ -30,6 +30,11 @@ class SolvedCacheDetailActivity : AppCompatActivity() {
 
         // If a cache was given, parse it to
         val cache = CacheDataParser.dataToCache(cacheData)
+
+        // Initialize the fields of the UI
+        binding.cacheTitle.text = cache.title
+        binding.cacheDesc.text = cache.desc
+        binding.hallOfFameText.text = cache.plainTextHOF
         // TODO: initialize the fields in the UI
         //  Contents: Show title, desc, creator, plainTextHOF
         //  if it is a ownCache: show privateKey when asked
