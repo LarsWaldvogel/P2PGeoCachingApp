@@ -142,34 +142,52 @@ public class RSA {
         return e;
     }
 
+    /**
+     * This method is used to generate private and public keys
+     * @param c Context which is used to reach file "raw/primeNumbers.txt"
+     * @return String which contains private and public Key in the format:
+     * d_n:e_n
+     */
     public static String generateKeys(Context c) {
         int p = 0;
         int q = 0;
         BigInteger bigP = BigInteger.ZERO;
         BigInteger bigQ = BigInteger.ZERO;
         BigInteger n = BigInteger.ZERO;
+        // search after two prime values p and q which are not equall to each other
+        // and produce n with a bit length between 12 and 18 bits.
+        // If the bit length exceeds this limit, the calculation would take much longer
         while (p == q || n.bitLength() < 12 || n.bitLength() > 18) {
+            // get p and q through the method getRandomPrime
             p = getRandomPrime(c);
             q = getRandomPrime(c);
+            // transform p and q to BigInteger values
             bigP = BigInteger.valueOf(p);
             bigQ = BigInteger.valueOf(q);
+            // calculate n with n = p * q
             n = bigP.multiply(bigQ);
         }
-        Integer intP = p;
-        Integer intQ = q;
-
+        // calculate phi with phi = (p-1) * (q-1)
         BigInteger phi = (bigP.subtract(BigInteger.ONE)).multiply(bigQ.subtract(BigInteger.ONE));
 
         BigInteger e = BigInteger.ZERO;
         BigInteger ggt = BigInteger.ZERO;
+        // Try to calculate a which is bigger than zero and smaller than phi with the condition, that e and phi
+        // don't share any other greatest common divisor than 1
         while (e.compareTo(BigInteger.ONE) <= 0 || e.compareTo(phi) >= 0 || ggt.compareTo(BigInteger.ONE) != 0) {
+            // get e with the method getRandomBigInteger
             e = getRandomBigInteger(phi);
+            // calculate greates common divisor of e and phi with the method ggT
             ggt = ggT(e, phi);
         }
+        // Calculate the multiplicative inverse d of e and phi so that e * d == 1 mod phi
+        // d is calculated with the method multiplicativeInverse
         BigInteger d = multiplicativeInverse(e, phi);
+        // check whether all conditions are correct: d, e and n must be bigger than 0 (safety check)
         if (d.compareTo(BigInteger.ZERO) <= 0 || e.compareTo(BigInteger.ZERO) <= 0 || n.compareTo(BigInteger.ZERO) <= 0) {
             return generateKeys(c);
         }
+        // return keys in the format "d_n:e_n"
         return d.toString() + "_" + n.toString() + ":" + e.toString() + "_" + n.toString();
     }
 
