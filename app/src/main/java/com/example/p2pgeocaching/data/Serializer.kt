@@ -22,6 +22,7 @@ class Serializer {
 
             return if (cacheListFile.exists()) {
                 // Read file, deserialize it, assign it to cacheList
+
                 val cacheListDataString = cacheListFile.readBytes().toString()
                 Log.d(TAG, "Read the following from file:\n$cacheListDataString")
                 val cacheListData = Json.decodeFromString<CacheListData>(cacheListDataString)

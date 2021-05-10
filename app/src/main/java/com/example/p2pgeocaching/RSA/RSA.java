@@ -1,14 +1,15 @@
 package com.example.p2pgeocaching.RSA;
 
-import java.io.File;
-import java.io.FileNotFoundException;
+import android.content.Context;
+import android.content.res.AssetManager;
+import android.util.Log;
+
 import java.io.IOException;
+import java.io.InputStream;
 import java.math.BigInteger;
-import java.nio.file.Files;
-import java.nio.file.Paths;
+import java.util.Arrays;
 import java.util.Random;
 import java.util.Scanner;
-import java.util.stream.Stream;
 
 public class RSA {
     /*
@@ -25,34 +26,45 @@ public class RSA {
         System.out.println("Decoded Message: "+decodedMessage);
     }
     */
-    private static int getRandomPrime() {
+    private final static String TAG = "RSA";
+    private final static String FILE_PATH = "raw/primeNumbers.txt";
+
+    private static int getRandomPrime(Context c) {
         Random random = new Random();
-        int randomRow = random.nextInt(fileLen());
-        String line;
-        int prime = 0;
-        try (Stream<String> lines = Files.lines(Paths.get("primeNumbers.txt"))) {
-            line = lines.skip(randomRow).findFirst().get();
-            prime = Integer.parseInt(line);
-        } catch (IOException e) {
-            System.out.println("Problem");
+        AssetManager assetManager = c.getAssets();
+        InputStream inputStream = null;
+        while (inputStream == null) {
+            try {
+                inputStream = assetManager.open(FILE_PATH);
+            } catch (IOException e) {
+                Log.d(TAG, "IOException when generating primes, could not open primesFile.");
+                try {
+                    Log.d(TAG, "List of assets: " + Arrays.toString(assetManager.list("")));
+                } catch (IOException i) {}
+            }
         }
-        return prime;
+        Scanner scanner = new Scanner(inputStream);
+        int randomRow = random.nextInt(numOfLines(scanner));
+        String line = "";
+        try {
+            scanner = new Scanner(assetManager.open(FILE_PATH));
+        } catch (IOException e) {}
+        for (int i = 0; i < randomRow; i++) {
+            scanner.nextLine();
+        }
+        line = scanner.nextLine();
+
+        return Integer.parseInt(line);
     }
 
-    private static int fileLen() {
-        int count = 0;
-        try {
-            File file = new File("primeNumbers.txt");
-            Scanner sc = new Scanner(file);
-            while (sc.hasNextLine()) {
-                sc.nextLine();
-                count++;
-            }
-            sc.close();
-        } catch (FileNotFoundException e) {
-            return -1;
+    private static int numOfLines(Scanner sc) {
+        int lines = 0;
+        while (sc.hasNextLine()) {
+            sc.nextLine();
+            lines++;
         }
-        return count;
+        sc.close();
+        return lines;
     }
 
     private static BigInteger ggT(BigInteger a, BigInteger b) {
@@ -100,15 +112,15 @@ public class RSA {
         return e;
     }
 
-    public static String generateKeys() {
+    public static String generateKeys(Context c) {
         int p = 0;
         int q = 0;
         BigInteger bigP = BigInteger.ZERO;
         BigInteger bigQ = BigInteger.ZERO;
         BigInteger n = BigInteger.ZERO;
         while (p == q || n.bitLength() < 12 || n.bitLength() > 18) {
-            p = getRandomPrime();
-            q = getRandomPrime();
+            p = getRandomPrime(c);
+            q = getRandomPrime(c);
             bigP = BigInteger.valueOf(p);
             bigQ = BigInteger.valueOf(q);
             n = bigP.multiply(bigQ);
@@ -126,7 +138,7 @@ public class RSA {
         }
         BigInteger d = multiplicativeInverse(e, phi);
         if (d.compareTo(BigInteger.ZERO) <= 0 || e.compareTo(BigInteger.ZERO) <= 0 || n.compareTo(BigInteger.ZERO) <= 0) {
-            return generateKeys();
+            return generateKeys(c);
         }
         return d.toString() + "_" + n.toString() + ":" + e.toString() + "_" + n.toString();
     }

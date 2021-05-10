@@ -1,5 +1,6 @@
 package com.example.p2pgeocaching.caches
 
+import android.content.Context
 import com.example.p2pgeocaching.RSA.RSA
 import com.example.p2pgeocaching.inputValidator.InputValidator.Companion.checkUserNameForIllegalCharacters
 import java.util.Objects.hash
@@ -24,7 +25,7 @@ class OwnCache(
      * Here, with the inputs provided, we set the rest of the fields.
      * Used to generate new caches.
      */
-    constructor(title: String, desc: String, creator: String) : this(
+    constructor(title: String, desc: String, creator: String, context: Context) : this(
         title,
         desc,
         creator,
@@ -45,7 +46,7 @@ class OwnCache(
         id = hash(stringToHash)
 
         // The key pair is created and saved to [pubKey] and [prvKey]
-        val keyPair: String = RSA.generateKeys()
+        val keyPair: String = RSA.generateKeys(context)
         pubKey = RSA.getPublicKey(keyPair)
         prvKey = RSA.getPrivateKey(keyPair)
 

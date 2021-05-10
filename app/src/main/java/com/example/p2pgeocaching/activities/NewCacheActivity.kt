@@ -8,7 +8,7 @@ import com.example.p2pgeocaching.caches.OwnCache
 import com.example.p2pgeocaching.data.Serializer
 import com.example.p2pgeocaching.databinding.ActivityNewCacheBinding
 import com.example.p2pgeocaching.inputValidator.InputValidator
-import com.example.p2pgeocaching.p2pexceptions.StringContainsIllegalCharacterException
+import com.example.p2pgeocaching.p2pexceptions.InputIsEmptyException
 import java.io.File
 
 class NewCacheActivity: AppCompatActivity() {
@@ -39,8 +39,8 @@ class NewCacheActivity: AppCompatActivity() {
             try {
                 // Throws StringContainsIllegalCharacterException if one of the inputs is not legal
                 saveInputToCacheList(userNameFile, cacheListFile)
-            } catch (e: StringContainsIllegalCharacterException) {
-                Log.d(TAG, "Created cache contained illegal characters")
+            } catch (e: Throwable) {
+                Log.d(TAG, "Created cache contained illegal characters or was empty")
             }
         }
     }
@@ -52,7 +52,6 @@ class NewCacheActivity: AppCompatActivity() {
      * Also needs the [userNameFile] to get the creator's name.
      */
     private fun saveInputToCacheList(userNameFile: File, cacheListFile: File) {
-
         // Save input to variables
         val cacheTitle = binding.newCacheNameEditText.text.toString()
         val cacheDesc = binding.newCacheDescEditText.text.toString()
@@ -61,10 +60,13 @@ class NewCacheActivity: AppCompatActivity() {
         Log.d(TAG, "Title: $cacheTitle\nDesc: $cacheDesc\nCreator: $creator")
 
         // Validate input, throw exception if illegal
+        if (cacheTitle == "" || cacheDesc == "") {
+            throw InputIsEmptyException()
+        }
         InputValidator.checkTextForIllegalCharacters(listOf(cacheTitle, cacheDesc))
 
         // Create the new Cache and add it to the cacheList
-        val newCache = OwnCache(cacheTitle, cacheDesc, creator)
+        val newCache = OwnCache(cacheTitle, cacheDesc, creator, this)
         cacheList.add(newCache)
 
         // Save the new list to file
