@@ -63,6 +63,7 @@ class CacheAdapter(val cacheList: CacheList) :
 
         // Saves the cache to item as data in the button
         val item: CacheData = CacheDataParser.cacheToData(cacheList.list[position])
+        holder.button.text = item.title
 
         // What to do when clicked
         holder.button.setOnClickListener {
