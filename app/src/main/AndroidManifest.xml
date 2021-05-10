@@ -16,6 +16,15 @@
             android:name=".activities.NewCacheActivity"
             android:parentActivityName=".activities.MainActivity" />
         <activity
+            android:name=".activities.OwnCacheDetailActivity"
+            android:parentActivityName=".activities.MainActivity" />
+        <activity
+            android:name=".activities.UnsolvedCacheDetailActivity"
+            android:parentActivityName=".activities.MainActivity" />
+        <activity
+            android:name=".activities.SolvedCacheDetailActivity"
+            android:parentActivityName=".activities.MainActivity" />
+        <activity
             android:name=".activities.UserNameActivity"
             android:noHistory="true"
             android:parentActivityName=".activities.MainActivity" />
