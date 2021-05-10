@@ -36,7 +36,6 @@ class OwnCache(
         ""
     ) {
         // This checks if the arguments contain an illegal character, which it should not
-        val argList: List<String> = listOf(title, desc, creator)
         checkUserNameForIllegalCharacters(creator)
 
         // Here we fabricate the string we want to hash by concatenating [title], ';' and [desc]

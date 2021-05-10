@@ -131,6 +131,7 @@ class CacheDataParser {
                     cache.pubKey!!,
                     cache.prvKey!!,
                     cache.hallOfFame,
+                    cache.plainTextHOF,
                     OWN_CACHE
                 )
                 is UnsolvedCache -> CacheData(

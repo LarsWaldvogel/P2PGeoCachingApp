@@ -1,10 +1,9 @@
 package com.example.p2pgeocaching.caches
 
+import android.util.Log
 import com.example.p2pgeocaching.RSA.RSA
 
 
-// TODO: pubKey/prvKey should be String
-// TODO: use emmanuel's RSA
 // TODO: cache should update with bluetooth connection transfer
 /**
  * This class saves all the data related to a cache.
@@ -31,6 +30,10 @@ open class Cache(
     var hallOfFame: MutableSet<String>,
     var plainTextHOF: String
 ) {
+
+    companion object {
+        const val TAG = "Cache"
+    }
 
 
     /**
@@ -59,15 +62,16 @@ open class Cache(
 
     /**
      * This function decrypts the [hallOfFame] and returns it as a String.
-     * Each entry of [hallOfFame] is separated by a ";" in the final String.
+     * Each entry of [hallOfFame] is separated by a new line in the final String.
      * If [hallOfFame] is null, an empty string is returned.
      */
     fun hallToString(): String {
         var hofString = ""
         return run {
             for (cipherEntry in hallOfFame) {
-                hofString += decryptToString(cipherEntry) + ";"
+                hofString += decryptToString(cipherEntry) + "\n"
             }
+            Log.d(TAG, "The hall of fame string is: $hofString")
             hofString
         }
     }

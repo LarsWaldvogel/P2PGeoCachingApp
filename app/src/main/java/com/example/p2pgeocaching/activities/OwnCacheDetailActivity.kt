@@ -35,8 +35,7 @@ class OwnCacheDetailActivity : AppCompatActivity() {
         binding.cacheTitle.text = cache.title
         binding.cacheDesc.text = cache.desc
         binding.hallOfFameText.text = cache.plainTextHOF
-        // TODO: initialize the fields in the UI
-        //  Contents: Show title, desc, creator, plainTextHOF
+        // TODO:
         //  if it is a ownCache: show privateKey when asked
         //  if it is a unsolvedCache: show button to solve cache, which leads to own activity
         //  if it is a solvedCache: show a "Solved!" text
