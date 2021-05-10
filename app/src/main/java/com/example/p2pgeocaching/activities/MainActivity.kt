@@ -9,11 +9,8 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.p2pgeocaching.R
 import com.example.p2pgeocaching.adapter.CacheAdapter
 import com.example.p2pgeocaching.caches.CacheList
-import com.example.p2pgeocaching.data.CacheListData
-import com.example.p2pgeocaching.data.CacheListDataParser
+import com.example.p2pgeocaching.data.Serializer.Companion.deserializeCacheList
 import com.example.p2pgeocaching.databinding.ActivityMainBinding
-import kotlinx.serialization.decodeFromString
-import kotlinx.serialization.json.Json
 import java.io.File
 
 
@@ -82,8 +79,6 @@ class MainActivity : AppCompatActivity() {
         // If it is empty, shows background text, and the recycler view is hidden.
         updateCacheList(cacheListFile)
 
-
-
         // Opens rename activity when pressed
         binding.changeUserNameButton.setOnClickListener {
             val intent = Intent(context, UserNameActivity::class.java)
@@ -136,21 +131,6 @@ class MainActivity : AppCompatActivity() {
 
         // Update the list of caches
         updateCacheList(cacheListFile)
-
-
-    }
-
-
-    /**
-     * Given the file [cacheListFile] containing the serialized version of the cache list, returns
-     * the object encoded in it.
-     */
-    private fun deserializeCacheList(cacheListFile: File): CacheList {
-
-        // Read file, deserialize it, assign it to cacheList
-        val cacheListDataString = cacheListFile.readBytes().toString()
-        val cacheListData = Json.decodeFromString<CacheListData>(cacheListDataString)
-        return CacheListDataParser.dataToList(cacheListData)
     }
 
 
