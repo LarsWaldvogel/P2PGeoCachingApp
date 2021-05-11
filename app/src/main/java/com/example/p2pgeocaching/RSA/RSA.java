@@ -396,4 +396,20 @@ public class RSA {
         }
         return binaryString;
     }
+
+    private static BigInteger binToBigInteger (String binaryString) {
+        BigInteger intValue = BigInteger.ZERO;
+        BigInteger support = BigInteger.ZERO;
+        BigInteger bit = BigInteger.ZERO;
+        String[] binaryArray = binaryString.split("");
+        BigInteger potenz = BigInteger.ZERO;
+        BigInteger two = new BigInteger("2");
+        for (int i = binaryArray.length - 1; i >= 0; i--) {
+            bit = new BigInteger(binaryArray[i]);
+            support = bit.multiply(pow(two, potenz));
+            intValue = intValue.add(support);
+            potenz = potenz.add(BigInteger.ONE);
+        }
+        return intValue;
+    }
 }
