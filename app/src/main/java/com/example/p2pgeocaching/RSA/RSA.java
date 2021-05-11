@@ -386,4 +386,14 @@ public class RSA {
         // return "d_n"
         return privateKey + "_" + parts[1];
     }
+
+    private static String getRandomBinWithLengthN (int n) {
+        String binaryString = "";
+        int j;
+        Random random = new Random();
+        for (int i = 0; i < n; i++) {
+            binaryString = binaryString + random.nextInt(2);
+        }
+        return binaryString;
+    }
 }
