@@ -13,7 +13,7 @@ import android.os.Bundle
  * Sends list of all caches to other device and receives the other device's list of caches
  * Uses byte stream to transfer JSON files of the CacheList objects
  */
-// TODO turn this class into main class for all Bluetooth Setup and communication
+
 class BluetoothTransfer: Activity() {
 
     lateinit var bluetoothAdapter: BluetoothAdapter
