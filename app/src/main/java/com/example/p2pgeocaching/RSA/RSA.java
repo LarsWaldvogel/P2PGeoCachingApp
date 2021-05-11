@@ -386,4 +386,40 @@ public class RSA {
         // return "d_n"
         return privateKey + "_" + parts[1];
     }
+
+    private static String getRandomBinWithLengthN (int n) {
+        String binaryString = "";
+        int j;
+        Random random = new Random();
+        for (int i = 0; i < n; i++) {
+            binaryString = binaryString + random.nextInt(2);
+        }
+        return binaryString;
+    }
+
+    private static BigInteger binToBigInteger (String binaryString) {
+        BigInteger intValue = BigInteger.ZERO;
+        BigInteger support = BigInteger.ZERO;
+        BigInteger bit = BigInteger.ZERO;
+        String[] binaryArray = binaryString.split("");
+        BigInteger potenz = BigInteger.ZERO;
+        BigInteger two = new BigInteger("2");
+        for (int i = binaryArray.length - 1; i >= 0; i--) {
+            bit = new BigInteger(binaryArray[i]);
+            support = bit.multiply(pow(two, potenz));
+            intValue = intValue.add(support);
+            potenz = potenz.add(BigInteger.ONE);
+        }
+        return intValue;
+    }
+
+    private static int getLengthOfBigIntegerAsBin(BigInteger keyValue) {
+        int count = 0;
+        BigInteger two = new BigInteger("2");
+        while (keyValue.compareTo(BigInteger.ZERO) >= 1) {
+            keyValue = keyValue.divide(two);
+            count++;
+        }
+        return count;
+    }
 }
