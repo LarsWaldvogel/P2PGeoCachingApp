@@ -412,4 +412,14 @@ public class RSA {
         }
         return intValue;
     }
+
+    private static int getLengthOfBigIntegerAsBin(BigInteger keyValue) {
+        int count = 0;
+        BigInteger two = new BigInteger("2");
+        while (keyValue.compareTo(BigInteger.ZERO) >= 1) {
+            keyValue = keyValue.divide(two);
+            count++;
+        }
+        return count;
+    }
 }
