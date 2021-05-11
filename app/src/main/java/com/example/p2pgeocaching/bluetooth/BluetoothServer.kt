@@ -17,7 +17,6 @@ class BluetoothServerController(activity: BluetoothTransfer,bluetoothAdapter: Bl
     private var cancelled: Boolean
     private val serverSocket: BluetoothServerSocket?
     private val activity = activity
-    private val device: DetectDevice = DetectDevice()
 
     init {
         val btAdapter = bluetoothAdapter // TODO get adapter from other class (SetUp)
