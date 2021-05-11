@@ -5,17 +5,13 @@ import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothDevice
 import android.bluetooth.BluetoothServerSocket
 import android.bluetooth.BluetoothSocket
-import android.content.*
-import android.os.Bundle
 
 
 import java.lang.Exception
 import java.io.IOException
 import java.util.*
 
-import com.example.p2pgeocaching.bluetooth.BluetoothTransfer
-
-class BluetoothServerController(activity: BluetoothTransfer) : Thread() {
+class BluetoothServerController(activity: BluetoothTransfer,bluetoothAdapter: BluetoothAdapter) : Thread() {
 
     val uuid: UUID = UUID.fromString("P2P-Bluetooth-Connection")
     private var cancelled: Boolean
@@ -24,7 +20,7 @@ class BluetoothServerController(activity: BluetoothTransfer) : Thread() {
     private val device: DetectDevice = DetectDevice()
 
     init {
-        val btAdapter = device.bluetoothAdapter // TODO get adapter from other class (SetUp)
+        val btAdapter = bluetoothAdapter // TODO get adapter from other class (SetUp)
         if (btAdapter != null) {
             this.serverSocket = btAdapter.listenUsingRfcommWithServiceRecord("P2P", uuid)
             this.cancelled = false
@@ -51,7 +47,7 @@ class BluetoothServerController(activity: BluetoothTransfer) : Thread() {
 
             if (!this.cancelled && socket != null) {
                 // Start Server
-                BluetoothServer(this.activity, socket).start()
+                BluetoothServer(activity, socket).start()
             }
         }
     }
