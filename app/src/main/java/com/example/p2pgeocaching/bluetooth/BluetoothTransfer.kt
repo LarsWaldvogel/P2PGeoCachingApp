@@ -8,6 +8,7 @@ import android.content.Context
 import android.content.Intent
 import android.content.IntentFilter
 import android.os.Bundle
+import androidx.core.content.ContextCompat
 
 /**
  * Sends list of all caches to other device and receives the other device's list of caches
@@ -16,7 +17,7 @@ import android.os.Bundle
 
 class BluetoothTransfer: Activity() {
 
-    lateinit var bluetoothAdapter: BluetoothAdapter
+    private lateinit var bluetoothAdapter: BluetoothAdapter
     var listOfDevices: Set<BluetoothDevice>? = null
 
 
@@ -43,7 +44,8 @@ class BluetoothTransfer: Activity() {
                         listOfDevices = listOfDevices?.plus(device)
                         val deviceName = device.name
                         val deviceHardwareAddress = device.address // MAC address
-                        val deviceInfo: String = "$deviceName $deviceHardwareAddress"
+                        val deviceInfo = "$deviceName $deviceHardwareAddress"
+                        println(deviceInfo)
                     }
 
                 }
