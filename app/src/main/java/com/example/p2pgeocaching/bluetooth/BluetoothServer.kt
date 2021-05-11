@@ -13,9 +13,9 @@ import java.lang.Exception
 import java.io.IOException
 import java.util.*
 
-import com.example.p2pgeocaching.MainActivity // TODO change MainActivity class to BluetoothTransfer
+import com.example.p2pgeocaching.bluetooth.BluetoothTransfer
 
-class BluetoothServerController(activity: MainActivity) : Thread() {
+class BluetoothServerController(activity: BluetoothTransfer) : Thread() {
 
     val uuid: UUID = UUID.fromString("P2P-Bluetooth-Connection")
     private var cancelled: Boolean
@@ -62,7 +62,7 @@ class BluetoothServerController(activity: MainActivity) : Thread() {
     }
 }
 
-class BluetoothServer(private val activity: MainActivity, private val socket: BluetoothSocket): Thread() {
+class BluetoothServer(private val activity: BluetoothTransfer, private val socket: BluetoothSocket): Thread() {
     private val inputStream = this.socket.inputStream
     private val outputStream = this.socket.outputStream
 
