@@ -1,3 +1,6 @@
 package com.example.p2pgeocaching.data
 
-data class CacheListData(val dataList: List<CacheData>)
+import java.io.Serializable
+
+@kotlinx.serialization.Serializable
+data class CacheListData(val dataList: List<CacheData>) : Serializable

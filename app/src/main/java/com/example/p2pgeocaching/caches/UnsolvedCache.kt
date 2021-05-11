@@ -1,12 +1,10 @@
 package com.example.p2pgeocaching.caches
 
-import com.example.p2pgeocaching.InputValidator.Companion.checkForIllegalCharacters
+import com.example.p2pgeocaching.RSA.RSA
+import com.example.p2pgeocaching.inputValidator.InputValidator
 import com.example.p2pgeocaching.p2pexceptions.CreatorNotInHallOfFameException
 import com.example.p2pgeocaching.p2pexceptions.KeysDoNotMatchException
 import com.example.p2pgeocaching.p2pexceptions.ParametersAreNullException
-import java.security.PrivateKey
-import java.security.PublicKey
-import javax.crypto.Cipher
 
 
 /**
@@ -20,8 +18,8 @@ class UnsolvedCache(
     desc: String,
     creator: String,
     id: Int,
-    pubKey: PublicKey,
-    hallOfFame: MutableSet<ByteArray>,
+    pubKey: String,
+    hallOfFame: MutableSet<String>,
     plainTextHOF: String
 ) : Cache(title, desc, creator, id, pubKey, null, hallOfFame, plainTextHOF) {
 
@@ -36,13 +34,13 @@ class UnsolvedCache(
         desc: String,
         creator: String,
         id: Int,
-        pubKey: PublicKey,
-        hallOfFame: MutableSet<ByteArray>
+        pubKey: String,
+        hallOfFame: MutableSet<String>
     ) : this(title, desc, creator, id, pubKey, hallOfFame, "") {
 
         // This checks if the arguments contain an illegal character, which it should not
-        val argList: ArrayList<String> = arrayListOf(title, desc, creator)
-        checkForIllegalCharacters(argList)
+        InputValidator.checkUserNameForIllegalCharacters(creator)
+        InputValidator.checkTextForIllegalCharacters(listOf(title, desc))
 
         // This checks if the creator is in the [hallOfFame] list
         checkCreatorInHOF()
@@ -70,16 +68,17 @@ class UnsolvedCache(
      * With the [prvKey], it adds the [finder] to the [hallOfFame].
      * Throws keysDoNotMatchException and stringContainsIllegalCharacterException.
      */
-    fun solveCache(finder: String, newPrvKey: PrivateKey): SolvedCache {
+    fun solveCache(finder: String, newPrvKey: String): SolvedCache {
+
         // Check if keys match
-        if (isValidKeypair(newPrvKey, pubKey)) {
+        if (isValidKeypair(newPrvKey, pubKey!!)) {
             prvKey = newPrvKey
         } else {
             throw KeysDoNotMatchException()
         }
 
-        // Finder cannot contain any illegal characters
-        checkForIllegalCharacters(finder)
+        // Finder cannot contain any illegal characters, can throw exception
+        InputValidator.checkUserNameForIllegalCharacters(finder)
 
         // Assert that all values are not null
         if (pubKey == null) {
@@ -91,9 +90,7 @@ class UnsolvedCache(
             SolvedCache(title, desc, creator, id, pubKey!!, newPrvKey, hallOfFame, plainTextHOF)
 
         // Adds the encrypted name to [hallOfFame], if it is null, creates a new one
-        val cipher = Cipher.getInstance("RSA")
-        cipher.init(Cipher.ENCRYPT_MODE, prvKey)
-        val encryptedFinder: ByteArray = cipher.doFinal(finder.toByteArray())
+        val encryptedFinder = RSA.encode(finder, prvKey)
 
         // Here it is inserted into the new solvedCache object
         solvedCache.addPersonToHOF(encryptedFinder)
@@ -107,21 +104,17 @@ class UnsolvedCache(
      * If they do, returns true, else false.
      * It does this by checking if encrypting, then decrypting, does not change the sample string.
      */
-    private fun isValidKeypair(prv: PrivateKey, pub: PublicKey?): Boolean {
+    private fun isValidKeypair(prv: String, pub: String): Boolean {
         val str = "some String"
 
         // Encrypt the String
-        val encrypter: Cipher = Cipher.getInstance("RSA")
-        encrypter.init(Cipher.ENCRYPT_MODE, prv)
-        val cipherStr: ByteArray = encrypter.doFinal(str.toByteArray())
+        val cipherString = RSA.encode(str, prv)
 
         // Decrypt the String
-        val decrypter: Cipher = Cipher.getInstance("RSA")
-        decrypter.init(Cipher.DECRYPT_MODE, pub)
-        val plainStr: ByteArray = decrypter.doFinal(cipherStr)
+        val plainString = RSA.decode(cipherString, pub)
 
         // Check if equal
-        return str == plainStr.toString()
+        return str == plainString
     }
 
 

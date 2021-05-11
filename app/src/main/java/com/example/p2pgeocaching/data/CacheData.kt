@@ -1,7 +1,6 @@
 package com.example.p2pgeocaching.data
 
-import java.security.PrivateKey
-import java.security.PublicKey
+import java.io.Serializable
 
 /**
  * This cache saves the Data in a Cache.
@@ -10,17 +9,18 @@ import java.security.PublicKey
  * "TransferCache" is used, when we use the [CacheData] to transfer from one device to another,
  * it is equivalent to "UnsolvedCache", except the [plainTextHOF] will be reevaluated.
  */
+@kotlinx.serialization.Serializable
 data class CacheData(
     val title: String,
     val desc: String,
     val creator: String,
     var id: Int,
-    var pubKey: PublicKey?,
-    var prvKey: PrivateKey?,
-    var hallOfFame: MutableSet<ByteArray>,
+    var pubKey: String?,
+    var prvKey: String?,
+    var hallOfFame: MutableSet<String>,
     var plainTextHOF: String,
     var type: String
-) {
+) : Serializable {
     /**
      * This constructor is used when creating transfer files.
      */
@@ -29,9 +29,9 @@ data class CacheData(
         desc: String,
         creator: String,
         id: Int,
-        pubKey: PublicKey?,
-        prvKey: PrivateKey?,
-        hallOfFame: MutableSet<ByteArray>,
+        pubKey: String,
+        prvKey: String?,
+        hallOfFame: MutableSet<String>,
         type: String
     ) : this(title, desc, creator, id, pubKey, prvKey, hallOfFame, "", type)
 }

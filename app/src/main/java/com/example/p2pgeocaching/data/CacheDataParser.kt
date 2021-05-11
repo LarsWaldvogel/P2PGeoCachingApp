@@ -1,6 +1,9 @@
 package com.example.p2pgeocaching.data
 
-import com.example.p2pgeocaching.caches.*
+import com.example.p2pgeocaching.caches.Cache
+import com.example.p2pgeocaching.caches.OwnCache
+import com.example.p2pgeocaching.caches.SolvedCache
+import com.example.p2pgeocaching.caches.UnsolvedCache
 import com.example.p2pgeocaching.p2pexceptions.CacheDataTypeNotDefinedException
 import com.example.p2pgeocaching.p2pexceptions.IllegalCacheTypeException
 import com.example.p2pgeocaching.p2pexceptions.ParametersAreNullException
@@ -12,10 +15,10 @@ class CacheDataParser {
 
     companion object {
 
-        private const val OWN_CACHE = "OwnCache"
-        private const val UNSOLVED_CACHE = "UnsolvedCache"
-        private const val SOLVED_CACHE = "SolvedCache"
-        private const val TRANSFER_CACHE = "TransferCache"
+        const val OWN_CACHE = "OwnCache"
+        const val UNSOLVED_CACHE = "UnsolvedCache"
+        const val SOLVED_CACHE = "SolvedCache"
+        const val TRANSFER_CACHE = "TransferCache"
 
 
         /**
@@ -99,7 +102,7 @@ class CacheDataParser {
          * Simple function that makes an [UnsolvedCache] from a [CacheData] object [data] when used
          * to transfer data.
          */
-        private fun dataTransferToUnsolvedCache(data: CacheData) : UnsolvedCache {
+        private fun dataTransferToUnsolvedCache(data: CacheData): UnsolvedCache {
             if (data.pubKey != null) {
                 return UnsolvedCache(
                     data.title,
@@ -116,7 +119,7 @@ class CacheDataParser {
 
 
         /**
-        * This function takes a [Cache] [cache] and transforms it into a [CacheData] object.
+         * This function takes a [Cache] [cache] and transforms it into a [CacheData] object.
          */
         fun cacheToData(cache: Cache): CacheData {
             return when (cache) {
@@ -125,9 +128,10 @@ class CacheDataParser {
                     cache.desc,
                     cache.creator,
                     cache.id,
-                    cache.pubKey,
-                    cache.prvKey,
+                    cache.pubKey!!,
+                    cache.prvKey!!,
                     cache.hallOfFame,
+                    cache.plainTextHOF,
                     OWN_CACHE
                 )
                 is UnsolvedCache -> CacheData(
@@ -135,7 +139,7 @@ class CacheDataParser {
                     cache.desc,
                     cache.creator,
                     cache.id,
-                    cache.pubKey,
+                    cache.pubKey!!,
                     null,
                     cache.hallOfFame,
                     UNSOLVED_CACHE
@@ -145,8 +149,8 @@ class CacheDataParser {
                     cache.desc,
                     cache.creator,
                     cache.id,
-                    cache.pubKey,
-                    cache.prvKey,
+                    cache.pubKey!!,
+                    cache.prvKey!!,
                     cache.hallOfFame,
                     SOLVED_CACHE
                 )
@@ -166,35 +170,11 @@ class CacheDataParser {
                 cache.desc,
                 cache.creator,
                 cache.id,
-                cache.pubKey,
+                cache.pubKey!!,
                 null,
                 cache.hallOfFame,
                 TRANSFER_CACHE
             )
-        }
-
-
-        /**
-         * Returns a [CacheList] when given a [CacheListData].
-         */
-        fun dataToList(data: CacheListData): CacheList {
-            val list = mutableListOf<Cache>()
-            data.dataList.forEach {
-                list.add(dataToCache(it))
-            }
-            return CacheList(list)
-        }
-
-
-        /**
-         * Creates a [CacheListData] when given a [CacheList].
-         */
-        fun listToData(cacheList: CacheList): CacheListData {
-            val newList = mutableListOf<CacheData>()
-            cacheList.list.forEach {
-                newList.add(cacheToData(it))
-            }
-            return CacheListData(newList)
         }
     }
 }
