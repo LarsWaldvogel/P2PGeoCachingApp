@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.example.p2pgeocaching.R
+import com.example.p2pgeocaching.caches.SolvedCache
 import com.example.p2pgeocaching.data.CacheData
 import com.example.p2pgeocaching.data.CacheDataParser
 import com.example.p2pgeocaching.data.Serializer
@@ -64,6 +65,29 @@ class UnsolvedCacheDetailActivity : AppCompatActivity() {
             intent.putExtra(ID, cache.id)
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK) // Better alternative?
             context.startActivity(intent)
+        }
+    }
+
+
+    override fun onRestart() {
+        super.onRestart()
+
+        // Check if a CacheData object was given
+        // If no CachedData object was given, return to previous activity
+        val cacheData: CacheData = intent?.extras?.getSerializable(CACHE) as CacheData
+        if (cacheData == null) {
+            finish()
+        }
+
+        // If a cache was given, parse it to
+        val cache = CacheDataParser.dataToCache(cacheData)
+
+        // Open cacheList to check if it has been solved, if yes, leave activity
+        val context = applicationContext
+        val cacheListFile = File(context.filesDir, SolveActivity.CACHE_LIST_FILE)
+        val cacheList = Serializer.deserializeCacheList(cacheListFile)
+        if (cacheList.findByID(cache.id) is SolvedCache) {
+            finish()
         }
     }
 }
