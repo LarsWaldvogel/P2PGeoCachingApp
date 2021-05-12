@@ -1,5 +1,6 @@
 package com.example.p2pgeocaching.activities
 
+import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.example.p2pgeocaching.R
@@ -14,6 +15,7 @@ class OwnCacheDetailActivity : AppCompatActivity() {
 
     companion object {
         const val CACHE = "cache"
+        const val PRIVATE_KEY = "private key"
     }
 
     private lateinit var binding: ActivityOwnCacheDetailBinding
@@ -38,10 +40,17 @@ class OwnCacheDetailActivity : AppCompatActivity() {
         binding.cacheDesc.text = cache.desc
         binding.creator.text = getString(R.string.creator_text, cache.creator)
         binding.hallOfFameText.text = cache.plainTextHOF
+
+        // Press the button to get to the private key
+        binding.viewPrivateKeyButton.setOnClickListener {
+            val context = applicationContext
+            val intent = Intent(context, PrivateKeyActivity::class.java)
+            intent.putExtra(PRIVATE_KEY, cache.prvKey)
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK) // Better alternative?
+            context.startActivity(intent)
+        }
         // TODO:
         //  if it is a ownCache: show privateKey when asked
-        //  if it is a unsolvedCache: show button to solve cache, which leads to own activity
-        //  if it is a solvedCache: show a "Solved!" text
 
 
 

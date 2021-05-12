@@ -19,6 +19,9 @@
             android:name=".activities.OwnCacheDetailActivity"
             android:parentActivityName=".activities.MainActivity" />
         <activity
+            android:name=".activities.PrivateKeyActivity"
+            android:parentActivityName=".activities.OwnCacheDetailActivity" />
+        <activity
             android:name=".activities.UnsolvedCacheDetailActivity"
             android:parentActivityName=".activities.MainActivity" />
         <activity

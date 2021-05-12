@@ -27,4 +27,7 @@
     <string name="unsolved_cache_title">Unsolved Cache</string>
     <string name="own_cache_title">Own Cache</string>
     <string name="creator_text">Creator: %s</string>
+    <string name="private_key_title">Private Key</string>
+    <string name="private_key_headline">Private Key:\n%s</string>
+    <string name="private_key_hint_text">You should hide this key in your cache so other people can solve it.</string>
 </resources>
