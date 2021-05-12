@@ -49,12 +49,6 @@ class OwnCacheDetailActivity : AppCompatActivity() {
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK) // Better alternative?
             context.startActivity(intent)
         }
-        // TODO:
-        //  if it is a ownCache: show privateKey when asked
-
-
-
-
     }
 
 }

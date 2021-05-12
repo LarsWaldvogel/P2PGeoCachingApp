@@ -3,6 +3,7 @@ package com.example.p2pgeocaching.activities
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import com.example.p2pgeocaching.R
 import com.example.p2pgeocaching.caches.CacheList
 import com.example.p2pgeocaching.caches.OwnCache
 import com.example.p2pgeocaching.data.Serializer
@@ -64,7 +65,14 @@ class NewCacheActivity: AppCompatActivity() {
         if (cacheTitle == "" || cacheDesc == "") {
             throw InputIsEmptyException()
         }
-        InputValidator.checkTextForIllegalCharacters(listOf(cacheTitle, cacheDesc))
+
+        // If illegal input is detected, do not save
+        try {
+            InputValidator.checkTextForIllegalCharacters(listOf(cacheTitle, cacheDesc))
+        } catch (e: Exception) {
+            binding.newCacheErrorText.text = getString(R.string.new_cache_error)
+            return
+        }
 
         // Create the new Cache and add it to the cacheList
         val newCache = OwnCache(cacheTitle, cacheDesc, creator, this)

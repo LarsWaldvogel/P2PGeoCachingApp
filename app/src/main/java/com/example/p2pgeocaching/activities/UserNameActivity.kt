@@ -68,7 +68,7 @@ class UserNameActivity : AppCompatActivity() {
         // Username is empty
         if (userNameString == "") {
             Log.d(TAG, "Empty username detected")
-            binding.errorText.text = getString(R.string.warning_empty_user_name)
+            binding.userNameErrorText.text = getString(R.string.warning_empty_user_name)
 
         } else { // Username is not empty
             var hasIllegalCharacters = false
@@ -79,7 +79,7 @@ class UserNameActivity : AppCompatActivity() {
 
                 // Contains illegal characters
                 hasIllegalCharacters = true
-                binding.errorText.text =
+                binding.userNameErrorText.text =
                     getString(R.string.warning_illegal_characters_user_name)
             }
 
@@ -98,7 +98,7 @@ class UserNameActivity : AppCompatActivity() {
                             inputStream.bufferedReader().use { it.readText() }.toString()
                 )
                 */
-                binding.errorText.text = ""
+                binding.userNameErrorText.text = ""
 
                 // Go back to original screen
                 /*

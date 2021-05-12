@@ -15,9 +15,7 @@ import java.io.File
 
 
 // TODO add manifest to get bluetooth permissions
-// TODO add user interface
 // TODO add bluetooth transfer function
-// TODO add the RecyclerList
 /**
  * This activity serves as the center of the app.
  * From here, we can change our name, create a new cache, look at our caches and transfer caches
@@ -32,7 +30,6 @@ class MainActivity : AppCompatActivity() {
         const val TAG = "MainActivity"
     }
 
-    // TODO transfer cacheList between activities
     lateinit var cacheList: CacheList
     private lateinit var binding: ActivityMainBinding
     private lateinit var recyclerView: RecyclerView
@@ -169,9 +166,4 @@ class MainActivity : AppCompatActivity() {
 
 
 // TODO: user interface needs the following screens:
-//  - list of all caches with button to "create cache" and "connect to others" (main menu)
-//  - forms to create cache (with input validation)
-//  - page that shows the private key of owned cache
-//  - cache detail view with hallOfFame and "found it" button
 //  - form to enter found private key
-//  - screen for bluetooth transfer

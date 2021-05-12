@@ -25,6 +25,9 @@
             android:name=".activities.UnsolvedCacheDetailActivity"
             android:parentActivityName=".activities.MainActivity" />
         <activity
+            android:name=".activities.SolveActivity"
+            android:parentActivityName=".activities.UnsolvedCacheDetailActivity" />
+        <activity
             android:name=".activities.SolvedCacheDetailActivity"
             android:parentActivityName=".activities.MainActivity" />
         <activity

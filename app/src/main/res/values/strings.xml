@@ -30,4 +30,9 @@
     <string name="private_key_title">Private Key</string>
     <string name="private_key_headline">Private Key:\n%s</string>
     <string name="private_key_hint_text">You should hide this key in your cache so other people can solve it.</string>
+    <string name="solve_prompt">Private Key:</string>
+    <string name="submit_private_key_button_text">Submit</string>
+    <string name="solve_title">Solve cache</string>
+    <string name="new_cache_error">Error: one of the fields contains illegal characters\nThe following are illegal characters: \'{\', \'}\', \';\'.</string>
+    <string name="solve_cache_error">Error: entered key does not match public key.</string>
 </resources>
