@@ -2,6 +2,7 @@ package com.example.p2pgeocaching.activities
 
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import com.example.p2pgeocaching.R
 import com.example.p2pgeocaching.data.CacheData
 import com.example.p2pgeocaching.data.CacheDataParser
 import com.example.p2pgeocaching.databinding.ActivityOwnCacheDetailBinding
@@ -32,8 +33,10 @@ class OwnCacheDetailActivity : AppCompatActivity() {
         val cache = CacheDataParser.dataToCache(cacheData)
 
         // Initialize the fields of the UI
+        title = getString(R.string.own_cache_title)
         binding.cacheTitle.text = cache.title
         binding.cacheDesc.text = cache.desc
+        binding.creator.text = getString(R.string.creator_text, cache.creator)
         binding.hallOfFameText.text = cache.plainTextHOF
         // TODO:
         //  if it is a ownCache: show privateKey when asked

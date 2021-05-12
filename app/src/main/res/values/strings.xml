@@ -23,4 +23,8 @@
     <string name="private_key_button_text">Show private key</string>
     <string name="solve_button_text">Solve</string>
     <string name="hall_of_fame_title_text">Hall of Fame:</string>
+    <string name="solved_cache_title">Solved Cache</string>
+    <string name="unsolved_cache_title">Unsolved Cache</string>
+    <string name="own_cache_title">Own Cache</string>
+    <string name="creator_text">Creator: %s</string>
 </resources>
