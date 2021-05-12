@@ -8,6 +8,8 @@ import com.example.p2pgeocaching.caches.Cache
 import com.example.p2pgeocaching.caches.UnsolvedCache
 import com.example.p2pgeocaching.data.Serializer
 import com.example.p2pgeocaching.databinding.ActivitySolveBinding
+import com.example.p2pgeocaching.inputValidator.InputValidator
+import com.example.p2pgeocaching.p2pexceptions.KeyIsNotLegalException
 import java.io.File
 
 class SolveActivity : AppCompatActivity() {
@@ -68,7 +70,20 @@ class SolveActivity : AppCompatActivity() {
 
         binding.submitPrivateKeyButton.setOnClickListener {
             val privateKey = binding.privateKeyEditText.text.toString()
-            if (privateKey != "" && isValidKeypair(privateKey, publicKey)) {
+
+            // Check if it is valid input
+            var isValidKey = false
+            try {
+                InputValidator.checkKey(privateKey)
+                isValidKey = true
+            } catch (e: KeyIsNotLegalException) {
+            }
+            if (!isValidKey) {
+                binding.solveErrorText.text = getString(R.string.illegal_key_error)
+            } else {
+
+                // Check that keys match
+                if (privateKey != "" && isValidKeypair(privateKey, publicKey)) {
                     if (cache is UnsolvedCache) {
 
                         // Solves cache, removes unsolved, adds solved, saves
@@ -78,9 +93,10 @@ class SolveActivity : AppCompatActivity() {
                         cacheList.add(solvedCache)
                         Serializer.serializeCacheList(cacheList, cacheListFile)
                     }
-                finish()
-            } else {
-                binding.solveErrorText.text = getString(R.string.solve_cache_error)
+                    finish()
+                } else {
+                    binding.solveErrorText.text = getString(R.string.solve_cache_error)
+                }
             }
         }
     }

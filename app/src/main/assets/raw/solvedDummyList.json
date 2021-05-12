@@ -24,7 +24,7 @@
       "prvKey": "5491_71441",
       "pubKey": "35371_71441",
       "title": "Not so deep below",
-      "type": "SolvedCache"
+      "type": "OwnCache"
     },
     {
       "creator": "Lars",
@@ -34,9 +34,10 @@
       ],
       "id": -1426370931,
       "plainTextHOF": "Lars\n",
+      "prvKey": "20981_64829",
       "pubKey": "51101_64829",
       "title": "Tinguely\u0027s Cache",
-      "type": "UnsolvedCache"
+      "type": "OwnCache"
     }
   ]
 }

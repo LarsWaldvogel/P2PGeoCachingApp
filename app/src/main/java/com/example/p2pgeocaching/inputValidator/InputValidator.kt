@@ -1,5 +1,6 @@
 package com.example.p2pgeocaching.inputValidator
 
+import com.example.p2pgeocaching.p2pexceptions.KeyIsNotLegalException
 import com.example.p2pgeocaching.p2pexceptions.StringContainsIllegalCharacterException
 
 /**
@@ -60,6 +61,38 @@ class InputValidator {
         fun checkTextForIllegalCharacters(argument: String) {
             checkTextForIllegalCharacters(listOf(argument))
         }
+
+
+        /**
+         * This function takes a string and checks if it is a legal key.
+         * Throws [KeyIsNotLegalException].
+         * Keys have the shape of <number>_<number>.
+         */
+        fun checkKey(key: String) {
+            var underScoreHasBeenEncountered = false
+            for (char in key) {
+                if (char.isDigit()) { // Skip
+
+                } else if (char == '_') {
+
+                    // No two underscores
+                    if (underScoreHasBeenEncountered) {
+                        throw KeyIsNotLegalException()
+                    } else {
+                        underScoreHasBeenEncountered = true
+                    }
+
+                } else { // Illegal character
+                    throw KeyIsNotLegalException()
+                }
+            }
+
+            // Exactly one underscore, cannot be last character
+            if (key[key.lastIndex] == '_' || !underScoreHasBeenEncountered) {
+                throw KeyIsNotLegalException()
+            }
+        }
+
 
 
         /**

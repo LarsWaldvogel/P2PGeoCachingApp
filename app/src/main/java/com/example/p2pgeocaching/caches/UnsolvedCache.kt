@@ -82,7 +82,7 @@ class UnsolvedCache(
             SolvedCache(title, desc, creator, id, pubKey!!, newPrvKey, hallOfFame, plainTextHOF)
 
         // Adds the encrypted name to [hallOfFame], if it is null, creates a new one
-        val encryptedFinder = RSA.encode(finder, prvKey)
+        val encryptedFinder = RSA.encode(finder, newPrvKey)
 
         // Here it is inserted into the new solvedCache object
         solvedCache.addPersonToHOF(encryptedFinder)

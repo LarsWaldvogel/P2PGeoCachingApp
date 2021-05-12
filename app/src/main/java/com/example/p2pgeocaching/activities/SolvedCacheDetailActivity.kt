@@ -38,14 +38,5 @@ class SolvedCacheDetailActivity : AppCompatActivity() {
         binding.cacheDesc.text = cache.desc
         binding.creator.text = getString(R.string.creator_text, cache.creator)
         binding.hallOfFameText.text = cache.plainTextHOF
-        // TODO:
-        //  if it is a ownCache: show privateKey when asked
-        //  if it is a unsolvedCache: show button to solve cache, which leads to own activity
-        //  if it is a solvedCache: show a "Solved!" text
-
-
-
-
     }
-
 }

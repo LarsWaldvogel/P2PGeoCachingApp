@@ -184,7 +184,3 @@ class MainActivity : AppCompatActivity() {
         }
     }
 }
-
-
-// TODO: user interface needs the following screens:
-//  - form to enter found private key
