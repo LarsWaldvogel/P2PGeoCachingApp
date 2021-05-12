@@ -1,0 +1,30 @@
+{
+  "dataList": [
+    {
+      "title": "The Eye in the Sky",
+      "desc": "Hidden in the highest (publicly accessible) point of the Münster, you will find something when you face west to the sky.\n\nHint: Look behind the statues.",
+      "creator": "Lars",
+      "id": -1981319511,
+      "pubKey": "33911_220523",
+      "prvKey": "18551_220523",
+      "hallOfFame": [
+        "158343 142408 182430"
+      ],
+      "plainTextHOF": "Lars\n",
+      "type": "OwnCache"
+    },
+    {
+      "title": "Not so deep below",
+      "desc": "Look near the parking entrance from the SBB rail station. The yellow arrow will guide you.",
+      "creator": "Lars",
+      "id": 1998035329,
+      "pubKey": "35371_71441",
+      "prvKey": "5491_71441",
+      "hallOfFame": [
+        "3668 51049 63755"
+      ],
+      "plainTextHOF": "Lars\n",
+      "type": "OwnCache"
+    }
+  ]
+}

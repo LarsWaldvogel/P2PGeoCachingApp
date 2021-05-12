@@ -12,6 +12,7 @@ import com.example.p2pgeocaching.caches.CacheList
 import com.example.p2pgeocaching.data.Serializer.Companion.deserializeCacheList
 import com.example.p2pgeocaching.databinding.ActivityMainBinding
 import java.io.File
+import java.util.*
 
 
 // TODO add manifest to get bluetooth permissions
@@ -28,6 +29,8 @@ class MainActivity : AppCompatActivity() {
         const val U_NAME_FILE = "userName"
         const val CACHE_LIST_FILE = "cacheList"
         const val TAG = "MainActivity"
+        const val USE_DUMMY_LIST = true
+        const val DUMMY_LIST_FILE = "raw/dummyCacheList.json"
     }
 
     lateinit var cacheList: CacheList
@@ -54,6 +57,24 @@ class MainActivity : AppCompatActivity() {
         val userNameFile = File(context.filesDir, U_NAME_FILE)
         val cacheListFile = File(context.filesDir, CACHE_LIST_FILE)
 
+        // For presentation and testing purposes
+        if (USE_DUMMY_LIST) {
+
+            // Open resources
+            val dummyListFile = assets.open(DUMMY_LIST_FILE)
+            val scanner = Scanner(dummyListFile)
+            var dummyListText = ""
+
+            // Read entire file into dummyListText
+            while (scanner.hasNextLine()) {
+                dummyListText += scanner.nextLine() + "\n"
+            }
+            Log.d(TAG, "Read DummyList:\n$dummyListText")
+
+            // Delete old file and replace with new one
+            cacheListFile.delete()
+            cacheListFile.writeText(dummyListText)
+        }
 
         // Username not selected -> open screen to ask for name
         if (!userNameFile.exists()) {
