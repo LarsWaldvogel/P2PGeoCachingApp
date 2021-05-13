@@ -422,4 +422,54 @@ public class RSA {
         }
         return count;
     }
+
+    public static String keySplitting (int n, String privateKey) {
+        BigInteger[] keyList = new BigInteger[n];
+        String binaryString = "";
+        BigInteger intValue, xorValue;
+        String[] parts = privateKey.split("_");
+        BigInteger d = new BigInteger(parts[0]);
+        int binLength = getLengthOfBigIntegerAsBin(d);
+        if (n == 1) {
+            keyList[0] = d;
+        } else {
+            for (int i = 0; i < n-1; i++) {
+                binaryString = getRandomBinWithLengthN(binLength);
+                intValue = binToBigInteger(binaryString);
+                xorValue = intValue.xor(d);
+                keyList[i] = xorValue;
+                d = intValue;
+            }
+            keyList[n-1] = d;
+            for (int i = 0; i < keyList.length; i++) {
+                for (int j = i; j < keyList.length; j++) {
+                    if (keyList[j].compareTo(keyList[i]) == 0 && i != j) {
+                        return keySplitting(n, privateKey);
+                    }
+                }
+            }
+        }
+        String splittedKeys = "";
+        for (int i = 0; i < keyList.length; i++) {
+            if (i != keyList.length-1) {
+                splittedKeys = splittedKeys + keyList[i].toString() + "_";
+            } else {
+                splittedKeys = splittedKeys + keyList[i].toString();
+            }
+        }
+        return splittedKeys;
+    }
+
+    public static String keyRecreating (String keyList) {
+        String[] keyParts = keyList.split("_");
+        int len = keyParts.length;
+        BigInteger d = new BigInteger(keyParts[len-1]);
+        if (keyParts.length == 1) {
+            return d.toString();
+        }
+        for (int i = len - 2; i >= 0; i--) {
+            d = d.xor(new BigInteger(keyParts[i]));
+        }
+        return d.toString();
+    }
 }
