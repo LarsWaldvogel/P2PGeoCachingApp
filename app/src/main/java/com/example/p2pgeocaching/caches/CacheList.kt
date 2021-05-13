@@ -63,10 +63,16 @@ class CacheList(var list: MutableList<Cache>) {
      * if it exists.
      */
     fun removeCacheByID(idToRemove: Int) {
+        var i = -1
         for ((index, cache) in this.list.withIndex()) {
             if (cache.id == idToRemove) {
-                this.list.removeAt(index)
+                i = index
             }
+        }
+
+        // Removal is outside of loop to avoid ConcurrentModificationException
+        if (i != -1) {
+            this.list.removeAt(i)
         }
     }
 
