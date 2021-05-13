@@ -63,6 +63,8 @@ class CacheAdapter(val cacheList: CacheList) :
 
         // Saves the cache to item as data in the button
         val item: CacheData = CacheDataParser.cacheToData(cacheList.list[position])
+
+        // Added title as <title> [<type>]
         val statusText = when (item.type) {
             OWN_CACHE -> "[Own]"
             SOLVED_CACHE -> "[Solved]"
