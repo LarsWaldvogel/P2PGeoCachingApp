@@ -387,18 +387,29 @@ public class RSA {
         return privateKey + "_" + parts[1];
     }
 
+    /**
+     * This method returns a random binary String with length n
+     * @param n length of string
+     * @return the binary value as String
+     */
     private static String getRandomBinWithLengthN (int n) {
         String binaryString = "";
         int j;
         Random random = new Random();
         for (int i = 0; i < n; i++) {
+            // append n-times 0 or 1 to the string
             binaryString = binaryString + random.nextInt(2);
         }
         return binaryString;
     }
 
+    /**
+     * This method is used to transform a binary String into BigInteger
+     * @param binaryString binary value as String which should be transformed into BigInteger
+     * @return BigInteger value of binaryString
+     */
     private static BigInteger binToBigInteger (String binaryString) {
-        BigInteger intValue = BigInteger.ZERO;
+        /*BigInteger intValue = BigInteger.ZERO;
         BigInteger support = BigInteger.ZERO;
         BigInteger bit = BigInteger.ZERO;
         String[] binaryArray = binaryString.split("");
@@ -409,10 +420,16 @@ public class RSA {
             support = bit.multiply(pow(two, potenz));
             intValue = intValue.add(support);
             potenz = potenz.add(BigInteger.ONE);
-        }
-        return intValue;
+        }*/
+        return new BigInteger(binaryString, 2);
     }
 
+    /**
+     * This method is used to get the length of the BigInteger value
+     * in binary format
+     * @param keyValue BigInteger value
+     * @return length of BigInteger value in binary format as int
+     */
     private static int getLengthOfBigIntegerAsBin(BigInteger keyValue) {
         int count = 0;
         BigInteger two = new BigInteger("2");
