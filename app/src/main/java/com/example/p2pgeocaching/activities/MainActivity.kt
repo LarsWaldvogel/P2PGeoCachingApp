@@ -166,13 +166,25 @@ class MainActivity : AppCompatActivity() {
             // Deserialize the file and get the object
             cacheList = deserializeCacheList(cacheListFile)
 
-            // Update recyclerView to show list (if it is not empty)
-            recyclerView = binding.recyclerView
-            recyclerView.layoutManager = LinearLayoutManager(this)
-            recyclerView.adapter = CacheAdapter(cacheList)
+            if (cacheList.list.isEmpty()) {
 
-            // Remove the text prompt to "get or create caches"
-            binding.emptyCacheListPromptText.text = ""
+                // Update recyclerView to show list (if it is not empty)
+                recyclerView = binding.recyclerView
+                recyclerView.layoutManager = LinearLayoutManager(this)
+                recyclerView.adapter = CacheAdapter(cacheList)
+
+                // Set text prompt to "get or create caches"
+                binding.emptyCacheListPromptText.text = getString(R.string.empty_list_prompt)
+            } else {
+
+                // Update recyclerView to show list (if it is not empty)
+                recyclerView = binding.recyclerView
+                recyclerView.layoutManager = LinearLayoutManager(this)
+                recyclerView.adapter = CacheAdapter(cacheList)
+
+                // Remove the text prompt to "get or create caches"
+                binding.emptyCacheListPromptText.text = ""
+            }
 
         } else { // File is empty
 
