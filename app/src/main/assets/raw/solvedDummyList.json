@@ -14,30 +14,29 @@
       "type": "OwnCache"
     },
     {
-      "creator": "Lars",
-      "desc": "Look near the parking entrance from the SBB rail station. The yellow arrow will guide you.",
+      "creator": "Emmanuel",
+      "desc": "On a spot near the Rhine, next to the Tinguely museum, you will find a cache.\nWear shoes though, or the rocks south will dig into your feet!",
       "hallOfFame": [
-        "3668 51049 63755"
+        "91699 2957 14802 59361 95502"
       ],
-      "id": 1998035329,
-      "plainTextHOF": "Lars\n",
-      "prvKey": "5491_71441",
-      "pubKey": "35371_71441",
-      "title": "Not so deep below",
-      "type": "OwnCache"
+      "id": 374125834,
+      "plainTextHOF": "Emmanuel\n",
+      "pubKey": "11093_106499",
+      "title": "Tinguely\u0027s Cache",
+      "type": "UnsolvedCache"
     },
     {
-      "creator": "Lars",
-      "desc": "Overlooking the Rhine, a cache can be found south of the Tinguely museum. Wear shoes, or the stones south of the cache might hurt you!",
+      "creator": "Kapilas",
+      "desc": "Look near the entrance where the parking garage and the SBB rail station are connected.\nThe yellow arrow will guide you.",
       "hallOfFame": [
-        "18070 39811 13479"
+        "1063 15533 5250 8971 8565"
       ],
-      "id": -1426370931,
-      "plainTextHOF": "Lars\n",
-      "prvKey": "20981_64829",
-      "pubKey": "51101_64829",
-      "title": "Tinguely\u0027s Cache",
-      "type": "OwnCache"
+      "id": -166954084,
+      "plainTextHOF": "Kapilas\n",
+      "prvKey": "6151_16397",
+      "pubKey": "11707_16397",
+      "title": "Not so deep below",
+      "type": "UnsolvedCache"
     }
   ]
 }
