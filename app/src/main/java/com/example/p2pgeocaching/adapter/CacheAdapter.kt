@@ -63,7 +63,12 @@ class CacheAdapter(val cacheList: CacheList) :
 
         // Saves the cache to item as data in the button
         val item: CacheData = CacheDataParser.cacheToData(cacheList.list[position])
-        holder.button.text = item.title
+        val statusText = when (item.type) {
+            OWN_CACHE -> "[Own]"
+            SOLVED_CACHE -> "[Solved]"
+            else -> "[Unsolved]"
+        }
+        "${item.title} $statusText".also { holder.button.text = it }
 
         // What to do when clicked
         holder.button.setOnClickListener {
@@ -94,6 +99,10 @@ class CacheAdapter(val cacheList: CacheList) :
     // Setup custom accessibility delegate to set the text read with
     // an accessibility service
     companion object Accessibility : View.AccessibilityDelegate() {
+        const val OWN_CACHE = "OwnCache"
+        const val UNSOLVED_CACHE = "UnsolvedCache"
+        const val SOLVED_CACHE = "SolvedCache"
+
         @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
         override fun onInitializeAccessibilityNodeInfo(
             host: View?,
