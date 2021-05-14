@@ -200,8 +200,8 @@ public class RSA {
         BigInteger n = BigInteger.ZERO;
         BigInteger phi = BigInteger.ZERO;
         while (ggt.compareTo(BigInteger.ONE) != 0) {
-            p = BigInteger.probablePrime(1024, new Random());
-            q = BigInteger.probablePrime(1024, new Random());
+            p = BigInteger.probablePrime(128, new Random());
+            q = BigInteger.probablePrime(128, new Random());
             n = p.multiply(q);
             phi = (p.subtract(BigInteger.ONE)).multiply(q.subtract(BigInteger.ONE));
             ggt = ggT(e, phi);
@@ -337,6 +337,59 @@ public class RSA {
             encodedMessage.append(" ").append(encodedValues[i].toString());
         }
         return encodedMessage.toString();
+    }
+
+    public static String encode128(String message, String privateKey) {
+        String[] parts = privateKey.split("_");
+        BigInteger n = new BigInteger(parts[1]);
+        System.out.println(parts[0]);
+        String[] primeParts = parts[0].split("-");
+        BigInteger d = new BigInteger(primeParts[0]);
+        BigInteger p = new BigInteger(primeParts[1]);
+        BigInteger q = new BigInteger(primeParts[2]);
+        System.out.println(d);
+        System.out.println(p);
+        System.out.println(q);
+        String[] letters;
+        BigInteger[] block;
+        if (message.length() % 2 == 0) {
+            letters = new String[message.length()];
+        } else {
+            letters = new String[message.length() + 1];
+        }
+        for (int i = 0; i < message.length(); i++) {
+            letters[i] = Character.toString(message.charAt(i));
+            System.out.println(letters[i]);
+        }
+        if (letters[letters.length - 1] == null) {
+            letters[letters.length - 1] = "";
+        }
+        block = new BigInteger[letters.length / 2];
+        for (int i = 0; i < block.length; i++) {
+            String binaryBlock1 = BaseTable.getBinValue(letters[i*2]);
+            String binaryBlock2 = BaseTable.getBinValue(letters[i*2 + 1]);
+            if (binaryBlock2 == "") {
+                binaryBlock2 = "111111";
+            }
+            block[i] = new BigInteger(binaryBlock1 + binaryBlock2, 2);
+        }
+        BigInteger[] encodedValues;
+        if (block.length == 1) {
+            encodedValues = new BigInteger[1];
+            encodedValues[0] = crt(block[0], d, p, q);
+        } else {
+            encodedValues = new BigInteger[block.length + 1];
+            BigInteger randomBigInt = new BigInteger(getRandomBinValue(),2);
+            encodedValues[0] = crt(randomBigInt, d, p, q);
+            for (int i = 1; i < encodedValues.length; i++) {
+                encodedValues[i] = crt(encodedValues[i-1].xor(block[i-1]), d, p, q);
+            }
+        }
+        String encodedMessage = encodedValues[0].toString();
+        for (int i = 1; i < encodedValues.length; i++) {
+            encodedMessage = encodedMessage + " " + encodedValues[i].toString();
+        }
+        return encodedMessage;
     }
 
     /**
