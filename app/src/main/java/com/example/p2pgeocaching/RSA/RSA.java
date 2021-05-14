@@ -80,7 +80,7 @@ public class RSA {
      * @param b second BigInteger value
      * @return greatest common divisor of the two values a and b
      */
-    private static BigInteger ggT(BigInteger a, BigInteger b) {
+    public static BigInteger ggT(BigInteger a, BigInteger b) {
         BigInteger min = a;
         // get the smaller number to avoid longer for-loop
         if (a.compareTo(b) > 0) {
@@ -97,7 +97,7 @@ public class RSA {
         return BigInteger.ONE;
     }
 
-    private static BigInteger multiplicativeInverse (BigInteger a, BigInteger N){
+    public static BigInteger multiplicativeInverse (BigInteger a, BigInteger N){
         BigInteger [] result = extendedEuclid(a,N);
         if (result[1].compareTo(BigInteger.ZERO) == 1) {
             return result[1];
