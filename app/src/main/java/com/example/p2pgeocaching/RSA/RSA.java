@@ -97,33 +97,34 @@ public class RSA {
         return BigInteger.ONE;
     }
 
-    /**
-     * This method is used to get the multiplicative inverse of two BigInteger values
-     * @param a first BigInteger value
-     * @param b second BigInteger value
-     * @return multiplicative inverse as BigInteger
-     */
-    private static BigInteger multiplicativeInverse(BigInteger a, BigInteger b) {
-        if (a.compareTo(BigInteger.ZERO) == 0) {
-            return BigInteger.ZERO;
+    private static BigInteger multiplicativeInverse (BigInteger a, BigInteger N){
+        BigInteger [] result = extendedEuclid(a,N);
+        if (result[1].compareTo(BigInteger.ZERO) == 1) {
+            return result[1];
+        } else {
+            return result[1].add(N);
         }
-        BigInteger b0 = b;
-        BigInteger c, d, e, f;
-        e = BigInteger.ZERO;
-        f = BigInteger.ONE;
-        while (a.compareTo(BigInteger.ONE) > 0) {
-            c = a.divide(b);
-            d = b;
-            b = a.mod(b);
-            a = d;
-            d = e;
-            e = f.subtract(c.multiply(e));
-            f = d;
+    }
+
+    private static BigInteger [] extendedEuclid (BigInteger a, BigInteger b){
+        BigInteger [] result = new BigInteger[3];
+        BigInteger a1, b1;
+
+        if (b.equals(BigInteger.ZERO)) {
+            result[0] = a;
+            result[1] = BigInteger.ONE;
+            result[2] = BigInteger.ZERO;
+            return result;
         }
-        if (f.compareTo(BigInteger.ZERO) == 0) {
-            f = f.add(b0);
-        }
-        return f;
+
+        result = extendedEuclid (b, a.mod(b));
+        a1 = result[1];
+        b1 = result[2];
+        result[1] = b1;
+        BigInteger support = a.divide(b);
+        support = b1.multiply(support);
+        result[2] = a1.subtract(support);
+        return result;
     }
 
     /**
