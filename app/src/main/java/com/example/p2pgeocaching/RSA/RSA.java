@@ -192,6 +192,28 @@ public class RSA {
         return d.toString() + "_" + n.toString() + ":" + e.toString() + "_" + n.toString();
     }
 
+    public static String generateKey128() {
+        BigInteger e = new BigInteger("3");
+        BigInteger ggt = BigInteger.ZERO;
+        BigInteger p = BigInteger.ZERO;
+        BigInteger q = BigInteger.ZERO;
+        BigInteger n = BigInteger.ZERO;
+        BigInteger phi = BigInteger.ZERO;
+        while (ggt.compareTo(BigInteger.ONE) != 0) {
+            p = BigInteger.probablePrime(1024, new Random());
+            q = BigInteger.probablePrime(1024, new Random());
+            n = p.multiply(q);
+            phi = (p.subtract(BigInteger.ONE)).multiply(q.subtract(BigInteger.ONE));
+            ggt = ggT(e, phi);
+        }
+        BigInteger d = multiplicativeInverse(e, phi);
+        if (d.compareTo(BigInteger.ZERO) <= 0 || e.compareTo(BigInteger.ZERO) <= 0 || n.compareTo(BigInteger.ZERO) <= 0) {
+            return generateKey128();
+        }
+        String keyAsString = d.toString() + "-" + p.toString() + "-" + q.toString() + "_" + n.toString() + ":" + e.toString() + "_" + n.toString();
+        return keyAsString;
+    }
+
     public static BigInteger crt( BigInteger m, BigInteger d, BigInteger p, BigInteger q){
         BigInteger dP, dQ, qInv, m1, m2, support, s;
         dP = d.mod(p.subtract(BigInteger.ONE));
