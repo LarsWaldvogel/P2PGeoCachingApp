@@ -192,6 +192,18 @@ public class RSA {
         return d.toString() + "_" + n.toString() + ":" + e.toString() + "_" + n.toString();
     }
 
+    public static BigInteger crt( BigInteger m, BigInteger d, BigInteger p, BigInteger q){
+        BigInteger dP, dQ, qInv, m1, m2, support, s;
+        dP = d.mod(p.subtract(BigInteger.ONE));
+        dQ = d.mod(q.subtract(BigInteger.ONE));
+        qInv = multiplicativeInverse(q,p);
+        m1 = m.modPow(dP,p);
+        m2 = m.modPow(dQ,q);
+        support = qInv.multiply(m1.subtract(m2)).mod(p);
+        s = m2.add(support.multiply(q));
+        return s;
+    }
+
     /**
      * This method is used to calculate the pow between base and exponent
      * which are both BigInteger values
