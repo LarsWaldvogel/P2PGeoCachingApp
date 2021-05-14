@@ -304,44 +304,78 @@ public class RSA {
         return encodedMessage.toString();
     }
 
+    /**
+     * This method is used to decode an encoded message with the given public key
+     * @param encodedMessageAsText encoded message that needs to be decoded
+     * @param publicKey public key in the format "e_n"
+     * @return decoded message as String
+     */
     public static String decode(String encodedMessageAsText, String publicKey) {
+        // split public key at "_" to get e and n
         String[] parts = publicKey.split("_");
+        // save e and n separately
         BigInteger e = new BigInteger(parts[0]);
         BigInteger n = new BigInteger(parts[1]);
+        // split the encoded text at " " to get the individual parts. Remember, each block
+        // represents the encoding of two letters in base64 format
         String[] partsOfText = encodedMessageAsText.split(" ");
         BigInteger[] encodedMessage = new BigInteger[partsOfText.length];
         for (int i = 0; i < encodedMessage.length; i++) {
+            // transform string into BigInteger
             encodedMessage[i] = new BigInteger(partsOfText[i]);
         }
         StringBuilder message = new StringBuilder();
         BigInteger support;
         String binaryValue;
         String m, t, s;
+        // If the message only contains one block
         if (encodedMessage.length == 1) {
+            // Decode that block with RSA
             support = pow(encodedMessage[0], e).mod(n);
+            // add zeroes to get 12 bit representation
             binaryValue = String.format("%12s", support.toString(2)).replace(' ', '0');
+            // first 6 bits belongs to first letter in base64 format
             m = binaryValue.substring(0, 6);
+            // last 6 bits belongs to second letter in base64 format
             t = binaryValue.substring(6, 12);
+            // get the correct char letter from the class BaseTable
             m = BaseTable.getLetter(m);
             t = BaseTable.getLetter(t);
             message.append(m);
+            // In the encoding scheme, we use padding. So check whether the last letter only
+            // served for padding services or not. If yout get "", this means that the letter only
+            // served as padding. If not, than append that letter to the message.
             if (t.compareTo("") != 0) {
                 message.append(t);
             }
         } else {
+            // we have multiple blocks
             BigInteger[] decodedInt = new BigInteger[encodedMessage.length - 1];
+            // In the encoding scheme, we used CBC to avoid patterns. As consequence,
+            // we decode last element and calculate the xor with the second last element.
+            // Then we decode second last element and calculate the xor with the
+            // third last element and so on. Through this way, we can get the original
+            // message in base64 encoding.
             for (int i = encodedMessage.length - 1; i >= 1; i--) {
                 support = pow(encodedMessage[i], e).mod(n);
                 decodedInt[i - 1] = encodedMessage[i - 1].xor(support);
             }
 
+            // go through array decodedInt
             for (BigInteger bigInteger : decodedInt) {
+                // fill value with zeroes to get 12 bit format
                 binaryValue = String.format("%12s", bigInteger.toString(2)).replace(' ', '0');
+                // first base64 encoding
                 m = binaryValue.substring(0, 6);
+                // second base64 encoding
                 t = binaryValue.substring(6, 12);
+                // get the two letters
                 m = BaseTable.getLetter(m);
                 t = BaseTable.getLetter(t);
                 message.append(m);
+                // In the encoding scheme, we use padding. So check whether the last letter only
+                // served for padding services or not. If yout get "", this means that the letter only
+                // served as padding. If not, than append that letter to the message.
                 if (t.compareTo("") != 0) {
                     message.append(t);
                 }
