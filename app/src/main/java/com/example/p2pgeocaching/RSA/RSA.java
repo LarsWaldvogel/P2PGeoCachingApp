@@ -290,7 +290,7 @@ public class RSA {
         // If we only have one block: use RSA directly
         if (block.length == 1) {
             encodedValues = new BigInteger[1];
-            encodedValues[0] = pow(block[0], d).mod(n);
+            encodedValues[0] = block[0].modPow(d, n);
         } else {
             // If we have multiple block, than apply CBC. Generate an initalizing
             // vector with the length of 12 bits. Save the RSA encoding of it in the
@@ -302,11 +302,11 @@ public class RSA {
             // of it. This servers as initializing vector
             BigInteger randomBigInt = new BigInteger(getRandomBinValue(), 2);
             // save RSA encoding of the initializing vector
-            encodedValues[0] = pow(randomBigInt, d).mod(n);
+            encodedValues[0] = randomBigInt.modPow(d, n);
             for (int i = 1; i < encodedValues.length; i++) {
                 // get encoded block and calculate XOR with next block, get the RSA
                 // encoding of XOR and save it in the array
-                encodedValues[i] = pow(encodedValues[i - 1].xor(block[i - 1]), d).mod(n);
+                encodedValues[i] = (encodedValues[i-1].xor(block[i-1])).modPow(d, n);;
             }
         }
         StringBuilder encodedMessage = new StringBuilder(encodedValues[0].toString());
@@ -344,7 +344,7 @@ public class RSA {
         // If the message only contains one block
         if (encodedMessage.length == 1) {
             // Decode that block with RSA
-            support = pow(encodedMessage[0], e).mod(n);
+            support = encodedMessage[0].modPow(e,n);
             // add zeroes to get 12 bit representation
             binaryValue = String.format("%12s", support.toString(2)).replace(' ', '0');
             // first 6 bits belongs to first letter in base64 format
@@ -370,7 +370,7 @@ public class RSA {
             // third last element and so on. Through this way, we can get the original
             // message in base64 encoding.
             for (int i = encodedMessage.length - 1; i >= 1; i--) {
-                support = pow(encodedMessage[i], e).mod(n);
+                support = encodedMessage[i].modPow(e, n);
                 decodedInt[i - 1] = encodedMessage[i - 1].xor(support);
             }
 
@@ -456,18 +456,6 @@ public class RSA {
      * @return BigInteger value of binaryString
      */
     private static BigInteger binToBigInteger (String binaryString) {
-        /*BigInteger intValue = BigInteger.ZERO;
-        BigInteger support = BigInteger.ZERO;
-        BigInteger bit = BigInteger.ZERO;
-        String[] binaryArray = binaryString.split("");
-        BigInteger potenz = BigInteger.ZERO;
-        BigInteger two = new BigInteger("2");
-        for (int i = binaryArray.length - 1; i >= 0; i--) {
-            bit = new BigInteger(binaryArray[i]);
-            support = bit.multiply(pow(two, potenz));
-            intValue = intValue.add(support);
-            potenz = potenz.add(BigInteger.ONE);
-        }*/
         return new BigInteger(binaryString, 2);
     }
 
