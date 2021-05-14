@@ -550,24 +550,54 @@ public class RSA {
         return count;
     }
 
+    /**
+     * This method is used to split a private Key (d) into n parts
+     * with XOR.
+     * @param n amount of parts
+     * @param privateKey private Key in format "d_n"
+     * @return String containing the splitted keys
+     */
     public static String keySplitting (int n, String privateKey) {
         BigInteger[] keyList = new BigInteger[n];
         String binaryString = "";
         BigInteger intValue, xorValue;
+        // split private key at "_" to get d and n
         String[] parts = privateKey.split("_");
         BigInteger d = new BigInteger(parts[0]);
+        // get length of d in binary format. This is done with the method
+        // getLengthOfBigIntegerAsBin
         int binLength = getLengthOfBigIntegerAsBin(d);
+        // if n is equal to 1, than a splitting is not performed
+        // As consequence, d will be returned
         if (n == 1) {
             keyList[0] = d;
         } else {
+            // n is not equal to 1
+            // In this implementation, we calculate first a random BigInteger
+            // value Q which has the same length like d in binary format.
+            // Then we calculate the xor between Q and d. After that
+            // we calculate again a new random BigInteger value T. We also
+            // take the XOR between T and Q and so on. The value which was on the
+            // left in one XOR calculation will be on the rigth in the next XOR
+            // calculation
             for (int i = 0; i < n-1; i++) {
+                // calculate a random binary value with the length of
+                // d in binary format
                 binaryString = getRandomBinWithLengthN(binLength);
+                // transform binary value to BigInteger.
                 intValue = binToBigInteger(binaryString);
+                // calculate XOR between random value and previously
+                // calculated random value
                 xorValue = intValue.xor(d);
+                // save xor value
                 keyList[i] = xorValue;
+                // update d
                 d = intValue;
             }
+            // Add last element into array
             keyList[n-1] = d;
+            // check whether two splitted keys are equal to each other
+            // If yes, start the method again
             for (int i = 0; i < keyList.length; i++) {
                 for (int j = i; j < keyList.length; j++) {
                     if (keyList[j].compareTo(keyList[i]) == 0 && i != j) {
@@ -576,6 +606,8 @@ public class RSA {
                 }
             }
         }
+        // Append all splitted keys in an string of the formar:
+        // "key1_key2_...._keyn"
         String splittedKeys = "";
         for (int i = 0; i < keyList.length; i++) {
             if (i != keyList.length-1) {
