@@ -11,6 +11,22 @@ import java.util.Arrays;
 import java.util.Random;
 import java.util.Scanner;
 
+/**
+ * This class is used to access the adjusted RSA implementation.
+ * There is a normal RSA implementation and a RSA-CRT implementation. Through this
+ * class we can encode and decode messages, generate private and public keys,
+ * split private key in n parts and recreate private key through the n parts (only supported
+ * by normal RSA, not by RSA-CRT). In the normal RSA, we use only small n. As consequence
+ * this implementation is not secure and can be broken in very few time. RSA-CRT is more
+ * secure. Here we can work with keys with length of 128, 256, 512 or more bits.
+ * The RSA implementation only serves for our project. It is absolutely not recommended, to use this
+ * implementation in a surrounding, where security is essential!
+ * Important is that we don't encode an entire message with RSA. Instead the message is
+ * splitted in blocks of two letters. To avoid patterns, RSA is also combined with
+ * cipher block chaining. To access the normal RSA, the methods generateKeys() and encode()
+ * can be used. To access RSA-CRT, the methods generateKey128() and encode128() can be accessed.
+ * For decoding, the method decode can be used. Here it doesn't matter whether RSA or RSA-CRT is used.
+ */
 public class RSA {
     /*
     public static void main (String [] args) {
@@ -29,6 +45,13 @@ public class RSA {
     private final static String TAG = "RSA";
     private final static String FILE_PATH = "raw/primeNumbers.txt";
 
+    /**
+     * This method is used to get a random prime value between 2 and 4093
+     * Therefore, the method chooses randomly one line of the given file
+     * "raw/primeNumbers.txt" which contains prime values.
+     * @param c Context with which we can access the file
+     * @return random prime as int
+     */
     private static int getRandomPrime(Context c) {
         Random random = new Random();
         AssetManager assetManager = c.getAssets();
@@ -208,13 +231,22 @@ public class RSA {
         return d.toString() + "_" + n.toString() + ":" + e.toString() + "_" + n.toString();
     }
 
+    /**
+     * This method is used to generate public and private keys with
+     * large lengths. It is called if RSA-CRT is used. The difference between
+     * RSA and RSA-CRT is, that e is fix and that the private key contains also
+     * p and q (prime factorization of n).
+     */
     public static String generateKey128() {
+        // e is fix
         BigInteger e = new BigInteger("3");
         BigInteger ggt = BigInteger.ZERO;
         BigInteger p = BigInteger.ZERO;
         BigInteger q = BigInteger.ZERO;
         BigInteger n = BigInteger.ZERO;
         BigInteger phi = BigInteger.ZERO;
+        // calculate p, q, n and phi so that the greatest common divisor between
+        // e and phi is 1
         while (ggt.compareTo(BigInteger.ONE) != 0) {
             p = BigInteger.probablePrime(128, new Random());
             q = BigInteger.probablePrime(128, new Random());
@@ -222,10 +254,14 @@ public class RSA {
             phi = (p.subtract(BigInteger.ONE)).multiply(q.subtract(BigInteger.ONE));
             ggt = ggT(e, phi);
         }
+        // Calculate the multiplicative inverse d of e and phi so that e * d == 1 mod phi
+        // d is calculated with the method multiplicativeInverse
         BigInteger d = multiplicativeInverse(e, phi);
+        // check whether all conditions are correct: d, e and n must be bigger than 0 (safety check)
         if (d.compareTo(BigInteger.ZERO) <= 0 || e.compareTo(BigInteger.ZERO) <= 0 || n.compareTo(BigInteger.ZERO) <= 0) {
             return generateKey128();
         }
+        // return key in the string format "d-p-q_n:e_n"
         String keyAsString = d.toString() + "-" + p.toString() + "-" + q.toString() + "_" + n.toString() + ":" + e.toString() + "_" + n.toString();
         return keyAsString;
     }
