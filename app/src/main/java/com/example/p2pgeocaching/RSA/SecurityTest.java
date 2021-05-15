@@ -98,6 +98,7 @@ public class SecurityTest {
     private static boolean isPrime(BigInteger a) {
         for (BigInteger i = new BigInteger ("2"); i.compareTo(a) < 0; i = i.add(BigInteger.ONE)) {
             try {
+                // check whether i is a divisor of a
                 if (a.mod(i) == BigInteger.ZERO) {
                     return false;
                 }

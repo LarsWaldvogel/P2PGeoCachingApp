@@ -619,16 +619,36 @@ public class RSA {
         return splittedKeys;
     }
 
+    /**
+     * This method recreates the private key
+     * @param keyList String which contains all splitted keys in
+     * the format "key1_key2_..._keyN"
+     * @return String containing d
+     */
     public static String keyRecreating (String keyList) {
+        // get the individual keys
         String[] keyParts = keyList.split("_");
+        // get the total amount of splitted keys
         int len = keyParts.length;
+        // save last element in d
         BigInteger d = new BigInteger(keyParts[len-1]);
+        // If we only have one key in the array, this means
+        // that it is directly d. If we look at the method
+        // keySplitting, we see that a private key will not be
+        // splitted if n is equal to one!
         if (keyParts.length == 1) {
             return d.toString();
         }
+        // from the right side to the left, calculate the xors
+        // in the beginning, d is equal to the last element.
+        // calculate d XOR with second last element and save it
+        // in d. Then calculate d XOR with third last element and
+        // save it in d and so on. At the end we will get the original
+        // private key d
         for (int i = len - 2; i >= 0; i--) {
             d = d.xor(new BigInteger(keyParts[i]));
         }
+        // return d as string
         return d.toString();
     }
 }
