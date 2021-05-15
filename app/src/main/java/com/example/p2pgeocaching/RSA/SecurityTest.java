@@ -22,6 +22,12 @@ public class SecurityTest {
                     break;
                 }
                 if ((i.multiply(j)).compareTo(n) == 0) {
+                    if (!isPrime(i)) {
+                        break;
+                    }
+                    if (!isPrime(j)) {
+                        continue;
+                    }
                     BigInteger[] array = new BigInteger[2];
                     array[0] = i;
                     array[1] = j;
@@ -50,5 +56,16 @@ public class SecurityTest {
                 break;
             }
         }
+    }
+
+    private static boolean isPrime(BigInteger a) {
+        for (BigInteger i = new BigInteger ("2"); i.compareTo(a) < 0; i = i.add(BigInteger.ONE)) {
+            try {
+                if (a.mod(i) == BigInteger.ZERO) {
+                    return false;
+                }
+            } catch (ArithmeticException e) {}
+        }
+        return true;
     }
 }
