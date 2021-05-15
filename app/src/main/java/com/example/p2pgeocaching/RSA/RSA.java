@@ -339,53 +339,88 @@ public class RSA {
         return encodedMessage.toString();
     }
 
+    /**
+     * This method is used to encode a message with the given privateKey of
+     * the length of large amount of bits. In this encoding scheme, we use
+     * RSA-CRT. This is a method where RSA is combined with the chinese remainder
+     * theory. As consequence, the prime factorization p and q are also considered
+     * in the encoding scheme
+     * @param message message which should be encoded with private Key in RSA -CRT
+     * @param privateKey String which contains d, p, w and n in the format
+     *                   "d-p-q_n"
+     * @return String containing the given message encoded in RSA-CRT
+     */
     public static String encode128(String message, String privateKey) {
+        // split private key at "_" to get d-p-q and n separated
         String[] parts = privateKey.split("_");
+        // save n as BigInteger
         BigInteger n = new BigInteger(parts[1]);
-        System.out.println(parts[0]);
+        // split at "-" to get d, p and q
         String[] primeParts = parts[0].split("-");
+        // save d, p and q
         BigInteger d = new BigInteger(primeParts[0]);
         BigInteger p = new BigInteger(primeParts[1]);
         BigInteger q = new BigInteger(primeParts[2]);
-        System.out.println(d);
-        System.out.println(p);
-        System.out.println(q);
         String[] letters;
         BigInteger[] block;
+        // if message length even then we don't have to pad
         if (message.length() % 2 == 0) {
             letters = new String[message.length()];
         } else {
+            // padding necessary. Last array element is reserved for the binary
+            // value 111111 (later). This serves as indicator for the decoding method,
+            // that this element only served for padding
             letters = new String[message.length() + 1];
         }
+        // get all characters in the message and save them in array letters
         for (int i = 0; i < message.length(); i++) {
             letters[i] = Character.toString(message.charAt(i));
-            System.out.println(letters[i]);
         }
+        // If last array element is null then message is not even. This element
+        // was reserved for the padding indicator
         if (letters[letters.length - 1] == null) {
             letters[letters.length - 1] = "";
         }
+        // We transform all letters into base64 encoding and save them as 2-letter-blocks
+        // That is the reasen, why block has only half of the length of array letters
         block = new BigInteger[letters.length / 2];
         for (int i = 0; i < block.length; i++) {
+            // get base64 encoding of letter through class BaseTable
             String binaryBlock1 = BaseTable.getBinValue(letters[i*2]);
             String binaryBlock2 = BaseTable.getBinValue(letters[i*2 + 1]);
+            // if second block is a empty string this means that this block is only
+            // used for padding. Save there the binary value 111111
             if (binaryBlock2 == "") {
                 binaryBlock2 = "111111";
             }
+            // save 2-block-binary values in array
             block[i] = new BigInteger(binaryBlock1 + binaryBlock2, 2);
         }
         BigInteger[] encodedValues;
+        // If we only have one block: use RSA-CRT directly
         if (block.length == 1) {
             encodedValues = new BigInteger[1];
             encodedValues[0] = crt(block[0], d, p, q);
         } else {
+            // If we have multiple block, than apply CBC. Generate an initalizing
+            // vector with the length of 12 bits. Save the RSA-CRT encoding of it in the
+            // first position of the array. Take this value and calculate XOR between it and
+            // the first block. Apply RSA-CRT and save the value in array. Take that value and
+            // calculate XOR with the second block etc.
             encodedValues = new BigInteger[block.length + 1];
+            // calculate a random binary value of length of 12 bits and get the BigInteger value
+            // of it. This servers as initializing vector
             BigInteger randomBigInt = new BigInteger(getRandomBinValue(),2);
+            // save RSA-CRT encoding of the initializing vector
             encodedValues[0] = crt(randomBigInt, d, p, q);
             for (int i = 1; i < encodedValues.length; i++) {
+                // get encoded block and calculate XOR with next block, get the RSA
+                // encoding of XOR and save it in the array
                 encodedValues[i] = crt(encodedValues[i-1].xor(block[i-1]), d, p, q);
             }
         }
         String encodedMessage = encodedValues[0].toString();
+        // append all RSA encodings in a string
         for (int i = 1; i < encodedValues.length; i++) {
             encodedMessage = encodedMessage + " " + encodedValues[i].toString();
         }
