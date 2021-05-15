@@ -97,15 +97,31 @@ public class RSA {
         return BigInteger.ONE;
     }
 
-    public static BigInteger multiplicativeInverse (BigInteger a, BigInteger N){
-        BigInteger [] result = extendedEuclid(a,N);
+    /**
+     * This method is called to get the multiplicative inverse of two values.
+     * It calls the method extendedEuclid and checks what extendedEuclid returns
+     * and makes dependent on the result a last calculation
+     * @param a first value
+     * @param n second value
+     * @return multiplicative inverse of a and n
+     */
+    public static BigInteger multiplicativeInverse (BigInteger a, BigInteger n){
+        BigInteger [] result = extendedEuclid(a,n);
         if (result[1].compareTo(BigInteger.ZERO) == 1) {
             return result[1];
         } else {
-            return result[1].add(N);
+            return result[1].add(n);
         }
     }
 
+    /**
+     * This method implements the extended euclidian algorithm
+     * which is used to calculate the multiplicative inverse of two
+     * values efficiently
+     * @param a first value
+     * @param b second value
+     * @return euclidian of a and b as BigInteger array
+     */
     private static BigInteger [] extendedEuclid (BigInteger a, BigInteger b){
         BigInteger [] result = new BigInteger[3];
         BigInteger a1, b1;
@@ -214,7 +230,17 @@ public class RSA {
         return keyAsString;
     }
 
-    public static BigInteger crt( BigInteger m, BigInteger d, BigInteger p, BigInteger q){
+    /**
+     * This method implements the chinese remainder theory. It is used for encode128, to
+     * make the encoding calculation faster by splitting the original calculation
+     * m^d mod n into two calculations.
+     * @param m message as BigInteger which should be encoded
+     * @param d private Key d
+     * @param p first value of prime factorization of n
+     * @param q second value of prime factorization of n
+     * @return encoded value as BigInteger
+     */
+    public static BigInteger crt(BigInteger m, BigInteger d, BigInteger p, BigInteger q){
         BigInteger dP, dQ, qInv, m1, m2, support, s;
         dP = d.mod(p.subtract(BigInteger.ONE));
         dQ = d.mod(q.subtract(BigInteger.ONE));
