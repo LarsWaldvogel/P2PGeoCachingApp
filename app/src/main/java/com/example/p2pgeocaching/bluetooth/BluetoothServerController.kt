@@ -14,9 +14,8 @@ class BluetoothServerController(activity: BluetoothTransfer,bluetoothAdapter: Bl
     private val activity = activity
 
     init {
-        val btAdapter = bluetoothAdapter // TODO get adapter from other class (SetUp)
-        if (btAdapter != null) {
-            this.serverSocket = btAdapter.listenUsingRfcommWithServiceRecord("P2P", uuid)
+        if (bluetoothAdapter != null) {
+            this.serverSocket = bluetoothAdapter.listenUsingRfcommWithServiceRecord("P2P", uuid)
             this.cancelled = false
         } else {
             this.serverSocket = null
