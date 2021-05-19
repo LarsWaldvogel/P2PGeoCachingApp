@@ -11,52 +11,6 @@ import java.lang.Exception
 import java.io.IOException
 import java.util.*
 
-class BluetoothServerController(activity: BluetoothTransfer,bluetoothAdapter: BluetoothAdapter) : Thread() {
-
-    val uuid: UUID = UUID.fromString("P2P-Bluetooth-Connection")
-    private var cancelled: Boolean
-    private val serverSocket: BluetoothServerSocket?
-    private val activity = activity
-
-    init {
-        val btAdapter = bluetoothAdapter // TODO get adapter from other class (SetUp)
-        if (btAdapter != null) {
-            this.serverSocket = btAdapter.listenUsingRfcommWithServiceRecord("P2P", uuid)
-            this.cancelled = false
-        } else {
-            this.serverSocket = null
-            this.cancelled = true
-        }
-
-    }
-
-    override fun run() {
-        var socket: BluetoothSocket
-
-        while(true) {
-            if (this.cancelled) {
-                break
-            }
-
-            try {
-                socket = serverSocket!!.accept()
-            } catch(e: IOException) {
-                break
-            }
-
-            if (!this.cancelled && socket != null) {
-                // Start Server
-                BluetoothServer(activity, socket).start()
-            }
-        }
-    }
-
-    fun cancel() {
-        this.cancelled = true
-        this.serverSocket!!.close()
-    }
-}
-
 class BluetoothServer(private val activity: BluetoothTransfer, private val socket: BluetoothSocket): Thread() {
     private val inputStream = this.socket.inputStream
     private val outputStream = this.socket.outputStream
