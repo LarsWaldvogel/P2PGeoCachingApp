@@ -1,7 +1,10 @@
 package com.example.p2pgeocaching.activities
 
+import android.content.Intent
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import com.example.p2pgeocaching.bluetooth.BluetoothTransfer
 import com.example.p2pgeocaching.databinding.ActivityConnectBinding
 import java.io.File
 
@@ -30,6 +33,8 @@ class ConnectActivity : AppCompatActivity() {
         val cacheListFile = File(context.filesDir, MainActivity.CACHE_LIST_FILE)
 
         binding.transferButton.setOnClickListener {
+            val intent = Intent(this, BluetoothTransfer::class.java)
+            startActivity(intent)
             // TODO: implement bluetooth transfer
         }
     }

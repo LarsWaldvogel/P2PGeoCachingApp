@@ -10,7 +10,6 @@ import android.content.IntentFilter
 import android.os.Bundle
 import android.widget.ArrayAdapter
 import androidx.core.content.ContextCompat
-//import android.support.v4.app.DialogFragment
 import com.example.p2pgeocaching.R
 
 /**
@@ -29,9 +28,7 @@ class BluetoothTransfer: Activity() {
         super.onCreate(savedInstanceState)
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
         arrayOfDevices = ArrayAdapter(this,R.layout.bluetooth_select_device)
-        if(bluetoothAdapter == null) {
-            println("bluetooth disabled")
-        } else {
+        if(bluetoothAdapter != null) {
             discoverDevices()
         }
         BluetoothServerController(this, bluetoothAdapter).start()
@@ -70,9 +67,7 @@ class BluetoothTransfer: Activity() {
             arrayOfDevices!!.add((if (device.name != null) device.name else "Unknown") + "\n" + device.address + "\nPaired")
         }
         val client = ChooseClient()
-        // TODO client.show(getSupportFragmentManager(), "client_chosen")
-        //  show fragment doesn't work import android.support.v4.app.DialogFragment doesnt work
-
+        client.show(client.fragmentManager!!, "client_chosen")
 
 /* uncomment if you want to discover devices from inside the app
         if (bluetoothAdapter.isDiscovering) {
@@ -86,7 +81,7 @@ class BluetoothTransfer: Activity() {
 */
     }
 
-override fun onDestroy() {
+    override fun onDestroy() {
         super.onDestroy()
         // bluetoothAdapter.cancelDiscovery()
         // unregisterReceiver(receiver)
