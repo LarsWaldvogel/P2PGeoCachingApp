@@ -2,8 +2,8 @@
 <manifest xmlns:android="http://schemas.android.com/apk/res/android"
     package="com.example.p2pgeocaching">
 
-    <uses-permission android:name="android.permission.BLUETOOTH"/>
-    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN"/>
+    <uses-permission android:name="android.permission.BLUETOOTH" />
+    <uses-permission android:name="android.permission.BLUETOOTH_ADMIN" />
     <uses-permission android:name="android.permission.ACCESS_FINE_LOCATION" />
     <!--<uses-permission android:name="android.permission.ACCESS_BACKGROUND_LOCATION" />-->
 
@@ -40,6 +40,9 @@
             android:name=".activities.UserNameActivity"
             android:noHistory="true"
             android:parentActivityName=".activities.MainActivity" />
+        <activity
+            android:name=".bluetooth.BluetoothTransfer"
+            android:parentActivityName=".activities.ConnectActivity" />
         <activity android:name=".activities.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

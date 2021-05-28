@@ -22,6 +22,8 @@ class ConnectActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
+        Log.d(TAG, "ConnectActivity has been opened.")
+
         title = "Connect"
 
         binding = ActivityConnectBinding.inflate(layoutInflater)
@@ -33,6 +35,7 @@ class ConnectActivity : AppCompatActivity() {
         val cacheListFile = File(context.filesDir, MainActivity.CACHE_LIST_FILE)
 
         binding.transferButton.setOnClickListener {
+            Log.d(TAG, "TransferButton has been pressed.")
             val intent = Intent(this, BluetoothTransfer::class.java)
             startActivity(intent)
             // TODO: implement bluetooth transfer

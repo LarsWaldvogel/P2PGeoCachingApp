@@ -3,13 +3,9 @@ package com.example.p2pgeocaching.bluetooth
 import android.app.Activity
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothDevice
-import android.content.BroadcastReceiver
-import android.content.Context
-import android.content.Intent
-import android.content.IntentFilter
 import android.os.Bundle
+import android.util.Log
 import android.widget.ArrayAdapter
-import androidx.core.content.ContextCompat
 import com.example.p2pgeocaching.R
 
 /**
@@ -18,6 +14,10 @@ import com.example.p2pgeocaching.R
  */
 
 class BluetoothTransfer: Activity() {
+
+    companion object {
+        const val TAG = "BluetoothTransfer"
+    }
 
     private lateinit var bluetoothAdapter: BluetoothAdapter
     var listOfDevices: Set<BluetoothDevice>? = null
@@ -67,6 +67,11 @@ class BluetoothTransfer: Activity() {
             arrayOfDevices!!.add((if (device.name != null) device.name else "Unknown") + "\n" + device.address + "\nPaired")
         }
         val client = ChooseClient()
+
+        Log.d(TAG, "Client is: $client")
+        Log.d(TAG, "FragmentManager is: ${client.fragmentManager.toString()}")
+
+        // FIXME: fragmentManager is null
         client.show(client.fragmentManager!!, "client_chosen")
 
 /* uncomment if you want to discover devices from inside the app

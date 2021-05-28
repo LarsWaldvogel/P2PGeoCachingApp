@@ -78,4 +78,10 @@ class OwnCacheDetailActivity : AppCompatActivity() {
         }
     }
 
+    override fun onRestart() {
+        Log.d(TAG, "onRestart has been called")
+        super.onRestart()
+        // FIXME: keeps on crashing when returning from PrivateKeyActivity
+    }
+
 }
