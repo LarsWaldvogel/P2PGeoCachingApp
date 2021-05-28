@@ -72,6 +72,7 @@ class BluetoothTransfer: Activity() {
         Log.d(TAG, "FragmentManager is: ${client.fragmentManager.toString()}")
 
         // FIXME: fragmentManager is null
+        //  possible error sources: wrong name scheme, no .xml exists
         client.show(client.fragmentManager!!, "client_chosen")
 
 /* uncomment if you want to discover devices from inside the app
