@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import android.view.accessibility.AccessibilityNodeInfo
 import android.widget.Button
 import androidx.annotation.RequiresApi
+import androidx.core.content.res.TypedArrayUtils.getString
 import androidx.recyclerview.widget.RecyclerView
 import com.example.p2pgeocaching.R
 import com.example.p2pgeocaching.activities.OwnCacheDetailActivity
@@ -63,7 +64,14 @@ class CacheAdapter(val cacheList: CacheList) :
 
         // Saves the cache to item as data in the button
         val item: CacheData = CacheDataParser.cacheToData(cacheList.list[position])
-        holder.button.text = item.title
+
+        // Added title as <title> [<type>]
+        val statusText = when (item.type) {
+            OWN_CACHE -> holder.view.context.getString(R.string.own_tag)
+            SOLVED_CACHE -> holder.view.context.getString(R.string.solved_tag)
+            else -> holder.view.context.getString(R.string.unsolved_tag) // UNSOLVED_CACHE
+        }
+        "${item.title} $statusText".also { holder.button.text = it }
 
         // What to do when clicked
         holder.button.setOnClickListener {
@@ -94,6 +102,10 @@ class CacheAdapter(val cacheList: CacheList) :
     // Setup custom accessibility delegate to set the text read with
     // an accessibility service
     companion object Accessibility : View.AccessibilityDelegate() {
+        const val OWN_CACHE = "OwnCache"
+        const val UNSOLVED_CACHE = "UnsolvedCache"
+        const val SOLVED_CACHE = "SolvedCache"
+
         @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
         override fun onInitializeAccessibilityNodeInfo(
             host: View?,

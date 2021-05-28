@@ -3,12 +3,14 @@ package com.example.p2pgeocaching.activities
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import com.example.p2pgeocaching.R
 import com.example.p2pgeocaching.caches.CacheList
 import com.example.p2pgeocaching.caches.OwnCache
 import com.example.p2pgeocaching.data.Serializer
 import com.example.p2pgeocaching.databinding.ActivityNewCacheBinding
 import com.example.p2pgeocaching.inputValidator.InputValidator
 import com.example.p2pgeocaching.p2pexceptions.InputIsEmptyException
+import com.example.p2pgeocaching.p2pexceptions.StringContainsIllegalCharacterException
 import java.io.File
 
 class NewCacheActivity: AppCompatActivity() {
@@ -36,12 +38,16 @@ class NewCacheActivity: AppCompatActivity() {
         cacheList = Serializer.deserializeCacheList(cacheListFile)
 
         binding.saveCacheButtonText.setOnClickListener {
+            var wasAccepted = false
             try {
                 // Throws StringContainsIllegalCharacterException if one of the inputs is not legal
                 saveInputToCacheList(userNameFile, cacheListFile)
-                finish()
-            } catch (e: Throwable) {
+                wasAccepted = true
+            } catch (e: StringContainsIllegalCharacterException) {
                 Log.d(TAG, "Created cache contained illegal characters or was empty")
+            }
+            if (wasAccepted) {
+                finish()
             }
         }
     }
@@ -64,7 +70,14 @@ class NewCacheActivity: AppCompatActivity() {
         if (cacheTitle == "" || cacheDesc == "") {
             throw InputIsEmptyException()
         }
-        InputValidator.checkTextForIllegalCharacters(listOf(cacheTitle, cacheDesc))
+
+        // If illegal input is detected, do not save
+        try {
+            InputValidator.checkTextForIllegalCharacters(listOf(cacheTitle, cacheDesc))
+        } catch (e: Throwable) {
+            binding.newCacheErrorText.text = getString(R.string.new_cache_error)
+            return
+        }
 
         // Create the new Cache and add it to the cacheList
         val newCache = OwnCache(cacheTitle, cacheDesc, creator, this)

@@ -142,6 +142,7 @@ class CacheDataParser {
                     cache.pubKey!!,
                     null,
                     cache.hallOfFame,
+                    cache.plainTextHOF,
                     UNSOLVED_CACHE
                 )
                 is SolvedCache -> CacheData(
@@ -152,6 +153,7 @@ class CacheDataParser {
                     cache.pubKey!!,
                     cache.prvKey!!,
                     cache.hallOfFame,
+                    cache.plainTextHOF,
                     SOLVED_CACHE
                 )
                 else -> throw IllegalCacheTypeException()

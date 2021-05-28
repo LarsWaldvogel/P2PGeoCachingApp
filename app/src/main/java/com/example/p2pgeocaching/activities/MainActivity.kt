@@ -12,12 +12,11 @@ import com.example.p2pgeocaching.caches.CacheList
 import com.example.p2pgeocaching.data.Serializer.Companion.deserializeCacheList
 import com.example.p2pgeocaching.databinding.ActivityMainBinding
 import java.io.File
+import java.util.*
 
 
 // TODO add manifest to get bluetooth permissions
-// TODO add user interface
 // TODO add bluetooth transfer function
-// TODO add the RecyclerList
 /**
  * This activity serves as the center of the app.
  * From here, we can change our name, create a new cache, look at our caches and transfer caches
@@ -30,9 +29,10 @@ class MainActivity : AppCompatActivity() {
         const val U_NAME_FILE = "userName"
         const val CACHE_LIST_FILE = "cacheList"
         const val TAG = "MainActivity"
+        const val USE_DUMMY_LIST = true
+        const val DUMMY_LIST_FILE = "raw/dummyCacheList.json"
     }
 
-    // TODO transfer cacheList between activities
     lateinit var cacheList: CacheList
     private lateinit var binding: ActivityMainBinding
     private lateinit var recyclerView: RecyclerView
@@ -57,6 +57,24 @@ class MainActivity : AppCompatActivity() {
         val userNameFile = File(context.filesDir, U_NAME_FILE)
         val cacheListFile = File(context.filesDir, CACHE_LIST_FILE)
 
+        // For presentation and testing purposes
+        if (USE_DUMMY_LIST) {
+
+            // Open resources
+            val dummyListFile = assets.open(DUMMY_LIST_FILE)
+            val scanner = Scanner(dummyListFile)
+            var dummyListText = ""
+
+            // Read entire file into dummyListText
+            while (scanner.hasNextLine()) {
+                dummyListText += scanner.nextLine() + "\n"
+            }
+            Log.d(TAG, "Read DummyList:\n$dummyListText")
+
+            // Delete old file and replace with new one
+            cacheListFile.delete()
+            cacheListFile.writeText(dummyListText)
+        }
 
         // Username not selected -> open screen to ask for name
         if (!userNameFile.exists()) {
@@ -148,13 +166,25 @@ class MainActivity : AppCompatActivity() {
             // Deserialize the file and get the object
             cacheList = deserializeCacheList(cacheListFile)
 
-            // Update recyclerView to show list (if it is not empty)
-            recyclerView = binding.recyclerView
-            recyclerView.layoutManager = LinearLayoutManager(this)
-            recyclerView.adapter = CacheAdapter(cacheList)
+            if (cacheList.list.isEmpty()) {
 
-            // Remove the text prompt to "get or create caches"
-            binding.emptyCacheListPromptText.text = ""
+                // Update recyclerView to show list (if it is not empty)
+                recyclerView = binding.recyclerView
+                recyclerView.layoutManager = LinearLayoutManager(this)
+                recyclerView.adapter = CacheAdapter(cacheList)
+
+                // Set text prompt to "get or create caches"
+                binding.emptyCacheListPromptText.text = getString(R.string.empty_list_prompt)
+            } else {
+
+                // Update recyclerView to show list (if it is not empty)
+                recyclerView = binding.recyclerView
+                recyclerView.layoutManager = LinearLayoutManager(this)
+                recyclerView.adapter = CacheAdapter(cacheList)
+
+                // Remove the text prompt to "get or create caches"
+                binding.emptyCacheListPromptText.text = ""
+            }
 
         } else { // File is empty
 
@@ -166,12 +196,3 @@ class MainActivity : AppCompatActivity() {
         }
     }
 }
-
-
-// TODO: user interface needs the following screens:
-//  - list of all caches with button to "create cache" and "connect to others" (main menu)
-//  - forms to create cache (with input validation)
-//  - page that shows the private key of owned cache
-//  - cache detail view with hallOfFame and "found it" button
-//  - form to enter found private key
-//  - screen for bluetooth transfer

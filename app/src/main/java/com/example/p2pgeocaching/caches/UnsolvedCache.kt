@@ -3,7 +3,6 @@ package com.example.p2pgeocaching.caches
 import com.example.p2pgeocaching.RSA.RSA
 import com.example.p2pgeocaching.inputValidator.InputValidator
 import com.example.p2pgeocaching.p2pexceptions.CreatorNotInHallOfFameException
-import com.example.p2pgeocaching.p2pexceptions.KeysDoNotMatchException
 import com.example.p2pgeocaching.p2pexceptions.ParametersAreNullException
 
 
@@ -64,18 +63,11 @@ class UnsolvedCache(
 
     /**
      * This function takes the name of the [finder] and the [newPrvKey] that was found at the cache.
-     * It checks if the [newPrvKey] is correct, then adds it to the cache.
+     * The key pair should already be checked!
      * With the [prvKey], it adds the [finder] to the [hallOfFame].
      * Throws keysDoNotMatchException and stringContainsIllegalCharacterException.
      */
     fun solveCache(finder: String, newPrvKey: String): SolvedCache {
-
-        // Check if keys match
-        if (isValidKeypair(newPrvKey, pubKey!!)) {
-            prvKey = newPrvKey
-        } else {
-            throw KeysDoNotMatchException()
-        }
 
         // Finder cannot contain any illegal characters, can throw exception
         InputValidator.checkUserNameForIllegalCharacters(finder)
@@ -90,32 +82,11 @@ class UnsolvedCache(
             SolvedCache(title, desc, creator, id, pubKey!!, newPrvKey, hallOfFame, plainTextHOF)
 
         // Adds the encrypted name to [hallOfFame], if it is null, creates a new one
-        val encryptedFinder = RSA.encode(finder, prvKey)
+        val encryptedFinder = RSA.encode(finder, newPrvKey)
 
         // Here it is inserted into the new solvedCache object
         solvedCache.addPersonToHOF(encryptedFinder)
 
         return solvedCache
     }
-
-
-    /**
-     * This function checks if the two keys [prv] and [pub] belong to one another.
-     * If they do, returns true, else false.
-     * It does this by checking if encrypting, then decrypting, does not change the sample string.
-     */
-    private fun isValidKeypair(prv: String, pub: String): Boolean {
-        val str = "some String"
-
-        // Encrypt the String
-        val cipherString = RSA.encode(str, prv)
-
-        // Decrypt the String
-        val plainString = RSA.decode(cipherString, pub)
-
-        // Check if equal
-        return str == plainString
-    }
-
-
 }

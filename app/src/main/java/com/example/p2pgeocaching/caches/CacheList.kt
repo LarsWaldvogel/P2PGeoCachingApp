@@ -45,4 +45,35 @@ class CacheList(var list: MutableList<Cache>) {
         this.add(listOf(cache))
     }
 
+
+    /**
+     * This function finds the [Cache] with the [idToFind] in the [CacheList] and returns it.
+     */
+    fun findByID(idToFind: Int): Cache? {
+        for (cache in this.list) {
+            if (cache.id == idToFind) {
+                return cache
+            }
+        }
+        return null
+    }
+
+    /**
+     * This function removes the [Cache] in the [CacheList] that matches the [idToRemove],
+     * if it exists.
+     */
+    fun removeCacheByID(idToRemove: Int) {
+        var i = -1
+        for ((index, cache) in this.list.withIndex()) {
+            if (cache.id == idToRemove) {
+                i = index
+            }
+        }
+
+        // Removal is outside of loop to avoid ConcurrentModificationException
+        if (i != -1) {
+            this.list.removeAt(i)
+        }
+    }
+
 }
