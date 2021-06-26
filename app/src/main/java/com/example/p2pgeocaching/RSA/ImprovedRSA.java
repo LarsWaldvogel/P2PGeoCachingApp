@@ -47,6 +47,7 @@ public class ImprovedRSA {
         q = BigInteger.ZERO;
         n = BigInteger.ZERO;
         while (p.compareTo(q) == 0) {
+            // FIXME: The i is not initialized
             p = BigInteger.probablePrime(i, new Random());
             q = BigInteger.probablePrime(i, new Random());
             n = p.multiply(q);
