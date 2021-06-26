@@ -38,7 +38,7 @@
             android:parentActivityName=".activities.MainActivity" />
         <activity
             android:name=".activities.UserNameActivity"
-            android:noHistory="true"
+            android:noHistory="false"
             android:parentActivityName=".activities.MainActivity" />
         <activity
             android:name=".bluetooth.BluetoothTransfer"
