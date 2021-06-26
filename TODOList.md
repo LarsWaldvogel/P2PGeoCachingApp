@@ -1,7 +1,7 @@
 # TODO List:
 
 * Fix bug in app where returning to a cache crashes the app (only when using the in-app back arrow, not when using the android back arrow)
-* Detail: pressing the upper back arrow calls onCreate in MainActivity/crashes the app
+* Detail: pressing the upper back arrow calls onCreate in MainActivity/crashes the app in privateKey and solve
 * Finish the bluetooth connection
 * Write the paper
 * Include the BaCNet-style Feeds
