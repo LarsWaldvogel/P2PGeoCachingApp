@@ -35,7 +35,7 @@ class NewCacheActivity: AppCompatActivity() {
         val cacheListFile = File(context.filesDir, MainActivity.CACHE_LIST_FILE)
         val userNameFile = File(context.filesDir, MainActivity.U_NAME_FILE)
 
-        cacheList = Serializer.deserializeCacheList(cacheListFile)
+        cacheList = Serializer.deserializeCacheListFromFile(cacheListFile)
 
         binding.saveCacheButtonText.setOnClickListener {
             var wasAccepted = false
@@ -84,6 +84,6 @@ class NewCacheActivity: AppCompatActivity() {
         cacheList.add(newCache)
 
         // Save the new list to file
-        Serializer.serializeCacheList(cacheList, cacheListFile)
+        Serializer.serializeCacheListToFile(cacheList, cacheListFile)
     }
 }

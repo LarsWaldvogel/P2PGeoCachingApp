@@ -46,7 +46,7 @@ class OwnCacheDetailActivity : AppCompatActivity() {
         cacheListFile = File(context.filesDir, CACHE_LIST_FILE)
 
         // Get cacheList
-        cacheList = Serializer.deserializeCacheList(cacheListFile)
+        cacheList = Serializer.deserializeCacheListFromFile(cacheListFile)
 
 
         // Check if a CacheData object was given
@@ -80,7 +80,7 @@ class OwnCacheDetailActivity : AppCompatActivity() {
         // Press the delete button to return to the list with the cache removed
         binding.deleteButtonOwn.setOnClickListener {
             cacheList.removeCacheByID(cache.id)
-            Serializer.serializeCacheList(cacheList, cacheListFile)
+            Serializer.serializeCacheListToFile(cacheList, cacheListFile)
             finish()
         }
     }

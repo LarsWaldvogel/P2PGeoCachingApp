@@ -49,7 +49,7 @@ class SolveActivity : AppCompatActivity() {
         }
 
         // Get cache
-        val cacheList = Serializer.deserializeCacheList(cacheListFile)
+        val cacheList = Serializer.deserializeCacheListFromFile(cacheListFile)
         val cacheID = intent?.extras?.getInt(ID)
         if (cacheID == null) {
             finish()
@@ -91,7 +91,7 @@ class SolveActivity : AppCompatActivity() {
                         val solvedCache = unsolvedCache.solveCache(userName, privateKey)
                         cacheList.removeCacheByID(unsolvedCache.id)
                         cacheList.add(solvedCache)
-                        Serializer.serializeCacheList(cacheList, cacheListFile)
+                        Serializer.serializeCacheListToFile(cacheList, cacheListFile)
                     }
                     finish()
                 } else {

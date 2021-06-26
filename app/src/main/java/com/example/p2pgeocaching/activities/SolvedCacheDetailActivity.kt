@@ -42,7 +42,7 @@ class SolvedCacheDetailActivity : AppCompatActivity() {
         cacheListFile = File(context.filesDir, CACHE_LIST_FILE)
 
         // Get cacheList
-        cacheList = Serializer.deserializeCacheList(cacheListFile)
+        cacheList = Serializer.deserializeCacheListFromFile(cacheListFile)
 
         // Check if a CacheData object was given
         // If no CachedData object was given, return to previous activity
@@ -66,7 +66,7 @@ class SolvedCacheDetailActivity : AppCompatActivity() {
         // Press the delete button to return to the list with the cache removed
         binding.deleteButtonSolved.setOnClickListener {
             cacheList.removeCacheByID(cache.id)
-            Serializer.serializeCacheList(cacheList, cacheListFile)
+            Serializer.serializeCacheListToFile(cacheList, cacheListFile)
             finish()
         }
     }

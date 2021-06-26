@@ -9,7 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.p2pgeocaching.R
 import com.example.p2pgeocaching.adapter.CacheAdapter
 import com.example.p2pgeocaching.caches.CacheList
-import com.example.p2pgeocaching.data.Serializer.Companion.deserializeCacheList
+import com.example.p2pgeocaching.data.Serializer.Companion.deserializeCacheListFromFile
 import com.example.p2pgeocaching.databinding.ActivityMainBinding
 import java.io.File
 import java.util.*
@@ -163,7 +163,7 @@ class MainActivity : AppCompatActivity() {
         if (cacheListFile.exists()) {
 
             // Deserialize the file and get the object
-            cacheList = deserializeCacheList(cacheListFile)
+            cacheList = deserializeCacheListFromFile(cacheListFile)
 
             if (cacheList.list.isEmpty()) {
 

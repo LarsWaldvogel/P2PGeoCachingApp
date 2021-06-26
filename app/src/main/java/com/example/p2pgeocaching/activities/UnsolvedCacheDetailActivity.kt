@@ -57,7 +57,7 @@ class UnsolvedCacheDetailActivity : AppCompatActivity() {
         // Open cacheList to check if it is still in there, if not, leave activity
         context = applicationContext
         cacheListFile = File(context.filesDir, SolveActivity.CACHE_LIST_FILE)
-        cacheList = Serializer.deserializeCacheList(cacheListFile)
+        cacheList = Serializer.deserializeCacheListFromFile(cacheListFile)
         if (cacheList.findByID(cache.id) == null) {
             finish()
         }
@@ -81,7 +81,7 @@ class UnsolvedCacheDetailActivity : AppCompatActivity() {
         // Press the delete button to return to the list with the cache removed
         binding.deleteButtonUnsolved.setOnClickListener {
             cacheList.removeCacheByID(cache.id)
-            Serializer.serializeCacheList(cacheList, cacheListFile)
+            Serializer.serializeCacheListToFile(cacheList, cacheListFile)
             finish()
         }
     }
@@ -105,7 +105,7 @@ class UnsolvedCacheDetailActivity : AppCompatActivity() {
 
         // Open cacheList to check if it has been solved, if yes, leave activity
         cacheListFile = File(context.filesDir, SolveActivity.CACHE_LIST_FILE)
-        val cacheList = Serializer.deserializeCacheList(cacheListFile)
+        val cacheList = Serializer.deserializeCacheListFromFile(cacheListFile)
         if (cacheList.findByID(cache.id) is SolvedCache) {
             finish()
         }
