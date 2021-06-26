@@ -12,3 +12,4 @@
 * Created Caches will be saved to one's own feed
 * Entry to fees contain: content, signature of ID of the last entry, ID, time-stamp signature
 * Possible entries are: self-made caches, solved cache (HoF entry), received cache ID (time reference)
+* When the app is started for the first time, publisher, feed etc should be automatically initialized via file
