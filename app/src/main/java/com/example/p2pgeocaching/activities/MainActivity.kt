@@ -46,6 +46,7 @@ class MainActivity : AppCompatActivity() {
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        Log.d(TAG, "onCreate is called")
 
         // Initialize the binding object
         binding = ActivityMainBinding.inflate(layoutInflater)
@@ -76,14 +77,12 @@ class MainActivity : AppCompatActivity() {
             cacheListFile.writeText(dummyListText)
         }
 
-        // Username not selected -> open screen to ask for name
+        // Username not selected -> put NewUser in U_NAME_FILE
         if (!userNameFile.exists()) {
-            Log.d(TAG, "Made it past userNameFile.exists check")
-            val intent = Intent(context, UserNameActivity::class.java)
-            intent.putExtra(U_NAME_FILE, userNameFile)
-            Log.d(TAG, "Made it past putExtra")
-            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK) // Better alternative?
-            context.startActivity(intent)
+            val userNameString = "NewUser"
+            userNameFile.writeText(userNameString)
+            Log.d(TAG, "Written User Name: $userNameString")
+            title = getString(R.string.welcome_message, userNameString)
 
         } else { // Username has been selected, show it in title
             var userName = userNameFile.readLines().toString()

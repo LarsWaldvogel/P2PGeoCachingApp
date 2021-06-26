@@ -25,6 +25,7 @@ class UnsolvedCacheDetailActivity : AppCompatActivity() {
         const val PUBLIC_KEY = "public key"
         const val ID = "id"
         const val CACHE_LIST_FILE = "cacheList"
+        const val TAG = "UnsolvedCacheDetailActivity"
     }
 
     private lateinit var binding: ActivityUnsolvedCacheDetailBinding
@@ -88,10 +89,16 @@ class UnsolvedCacheDetailActivity : AppCompatActivity() {
 
     override fun onRestart() {
         super.onRestart()
+        Log.d(TAG, "onRestart() has been called")
 
         // Check if a CacheData object was given
         // If no CachedData object was given, return to previous activity
-        val cacheData: CacheData = intent?.extras?.getSerializable(CACHE) as CacheData
+        val bundleData = intent?.extras?.getSerializable(OwnCacheDetailActivity.CACHE)
+        if (bundleData == null) {
+            Log.d(OwnCacheDetailActivity.TAG, "Intent did not contain Cache")
+            finish()
+        }
+        val cacheData: CacheData = bundleData as CacheData
 
         // If a cache was given, parse it to
         val cache = CacheDataParser.dataToCache(cacheData)
