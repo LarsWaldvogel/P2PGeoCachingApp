@@ -1,10 +1,10 @@
 package com.example.p2pgeocaching.bacnet
 
 /**
- * This class represents an entry in a feed.
+ * This class represents an entry in a [Feed].
  * It has a [timestamp], which represents when it was created (unix time).
  * The [id] is the number it has in the feed.
- * [signedPreviousID] is the ID of the previous entry, signed with the publisher's private key.
+ * * [signedPreviousSignature] is the signature of the previous signature.
  * The [content] is specific to what kind of Entry it is: CacheEntry, HoFEntry, LogEntry.
  * The type of entry is saved in [type] as plaintext string (see above).
  * [signature] is the signature of the entry: all fields appended, then hashed
@@ -14,8 +14,15 @@ package com.example.p2pgeocaching.bacnet
 open class Entry(
     val timestamp: Long,
     val id: Int,
-    val signedPreviousID: String,
+    val signedPreviousSignature: String,
     val content: String,
     val type: String,
     val signature: String
-)
+) {
+
+    companion object {
+        const val HOF_ENTRY = "HoFEntry"
+        const val CACHE_ENTRY = "CacheEntry"
+        const val LOG_ENTRY = "LogEntry"
+    }
+}

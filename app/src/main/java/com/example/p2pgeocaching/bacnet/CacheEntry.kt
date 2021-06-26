@@ -3,22 +3,22 @@ package com.example.p2pgeocaching.bacnet
 import com.example.p2pgeocaching.caches.OwnCache
 
 /**
- * This subclass of Entry represents a Cache in the BaCNet-Feed.
+ * This subclass of [Entry] represents a [Cache] in the BaCNet-Feed.
+ * Its content is a serialized [Cache] object.
  */
 class CacheEntry(
     timestamp: Long,
     id: Int,
-    signedPreviousID: String,
+    signedPreviousSignature: String,
     content: String,
     signature: String
-) : Entry(timestamp, id, signedPreviousID, CACHE_ENTRY, content, signature) {
+) : Entry(timestamp, id, signedPreviousSignature, CACHE_ENTRY, content, signature) {
 
     companion object {
-        const val CACHE_ENTRY = "CacheEntry"
 
         /**
          * This method lets us create a CacheEntry with an [ownCache] object.
-         * It also needs a [ownFeed] to determine the current
+         * It also needs a [ownFeed] to determine the current position in the feed
          */
         fun newCacheEntry(ownCache: OwnCache, ownFeed: OwnFeed) : CacheEntry {
             val timestamp = System.currentTimeMillis()

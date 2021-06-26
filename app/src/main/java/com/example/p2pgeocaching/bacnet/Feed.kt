@@ -1,7 +1,9 @@
 package com.example.p2pgeocaching.bacnet
 
-
-@kotlinx.serialization.Serializable
-
-open class Feed(list: List<Entry>, publisher: Flow.Publisher, ) {
+/**
+ * This class represents the BaCNet-Feed.
+ * [entries] contains all the entries of the feed, and [publisher] is the person that the feed
+ * belongs to.
+ */
+open class Feed(val entries: List<Entry>, val publisher: Publisher) {
 }
