@@ -1,6 +1,7 @@
 package com.example.p2pgeocaching.data
 
 import android.util.Log
+import com.example.p2pgeocaching.caches.Cache
 import com.example.p2pgeocaching.caches.CacheList
 import com.google.gson.Gson
 import java.io.File
@@ -16,7 +17,7 @@ class Serializer {
          * Given the file [cacheListFile] containing the serialized version of the cache list, returns
          * the object encoded in it. If the file is empty, return empty list.
          */
-        fun deserializeCacheList(cacheListFile: File): CacheList {
+        fun deserializeCacheListFromFile(cacheListFile: File): CacheList {
 
             return if (cacheListFile.exists()) {
                 // Read file, deserialize it, assign it to cacheList
@@ -42,7 +43,7 @@ class Serializer {
         /**
          * This function serializes the [cacheList] and writes it to [cacheListFile].
          */
-        fun serializeCacheList(cacheList: CacheList, cacheListFile: File) {
+        fun serializeCacheListToFile(cacheList: CacheList, cacheListFile: File) {
             val cacheListData = CacheListDataParser.listToData(cacheList)
 
             // Does not work unfortunately:
@@ -57,6 +58,25 @@ class Serializer {
             cacheListFile.delete()
             cacheListFile.writeText(serializedCacheList)
 
+        }
+
+        /**
+         * This function serializes a single [Cache] and returns the String.
+         */
+        fun serializeCacheToString(cache: Cache): String {
+            val cacheData = CacheDataParser.cacheToData(cache)
+
+            val gson = Gson()
+            return gson.toJson(cacheData)
+        }
+
+        /**
+         * This function deserializes a single [Cache] from a String.
+         */
+        fun deserializeCacheFromString(cacheString: String) : Cache {
+            val gson = Gson()
+            val cacheData = gson.fromJson(cacheString, CacheData::class.java)
+            return CacheDataParser.dataToCache(cacheData)
         }
     }
 }
