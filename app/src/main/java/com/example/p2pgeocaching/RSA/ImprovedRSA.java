@@ -1,8 +1,5 @@
-/*
 package com.example.p2pgeocaching.RSA;
 
-
-import com.example.p2pgeocaching.RSA.RSA;
 
 import java.math.BigInteger;
 import java.util.Random;
@@ -275,5 +272,3 @@ public class ImprovedRSA {
         return randomBin;
     }
 }
-
-*/
