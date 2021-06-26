@@ -73,6 +73,7 @@ obj/
 
 # User-specific configurations
 .idea/caches/
+.idea/runConfigurations.xml
 .idea/libraries/
 .idea/shelf/
 .idea/workspace.xml
