@@ -172,7 +172,7 @@ public class RSA {
      * @param phi represents the limit of the random value
      * @return random BigInteger value
      */
-    private static BigInteger getRandomBigInteger(BigInteger phi) {
+    static BigInteger getRandomBigInteger(BigInteger phi) {
         Random random = new Random();
         BigInteger e;
         // e must be strictly lower than phi
@@ -637,7 +637,7 @@ public class RSA {
      * @param keyValue BigInteger value
      * @return length of BigInteger value in binary format as int
      */
-    private static int getLengthOfBigIntegerAsBin(BigInteger keyValue) {
+    static int getLengthOfBigIntegerAsBin(BigInteger keyValue) {
         int count = 0;
         BigInteger two = new BigInteger("2");
         while (keyValue.compareTo(BigInteger.ZERO) >= 1) {

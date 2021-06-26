@@ -2,6 +2,7 @@ package com.example.p2pgeocaching.activities
 
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.example.p2pgeocaching.R
 import com.example.p2pgeocaching.caches.Cache
@@ -45,7 +46,12 @@ class SolvedCacheDetailActivity : AppCompatActivity() {
 
         // Check if a CacheData object was given
         // If no CachedData object was given, return to previous activity
-        val cacheData: CacheData = intent?.extras?.getSerializable(CACHE) as CacheData
+        val bundleData = intent?.extras?.getSerializable(OwnCacheDetailActivity.CACHE)
+        if (bundleData == null) {
+            Log.d(OwnCacheDetailActivity.TAG, "Intent did not contain Cache")
+            finish()
+        }
+        val cacheData: CacheData = bundleData as CacheData
 
         // If a cache was given, parse it to
         cache = CacheDataParser.dataToCache(cacheData)
