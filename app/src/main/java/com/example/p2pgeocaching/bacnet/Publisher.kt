@@ -5,5 +5,7 @@ package com.example.p2pgeocaching.bacnet
  * They will sign the [Entry]s in their feed with their own private key, verifying their identity.
  */
 open class Publisher(val name: String, val publicKey: String) {
-    // TODO: implement
+
+    // TODO
+
 }

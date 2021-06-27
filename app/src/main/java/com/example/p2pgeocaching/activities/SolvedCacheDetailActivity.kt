@@ -16,7 +16,7 @@ import com.example.p2pgeocaching.databinding.ActivitySolvedCacheDetailBinding
 import java.io.File
 
 /**
- * This class is used when viewing the details of a Cache
+ * This class is used when viewing the details of a solved Cache.
  */
 class SolvedCacheDetailActivity : AppCompatActivity() {
 

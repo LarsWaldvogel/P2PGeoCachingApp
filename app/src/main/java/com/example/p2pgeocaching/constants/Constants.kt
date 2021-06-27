@@ -1,5 +1,10 @@
 package com.example.p2pgeocaching.constants
 
+/**
+ * This class holds all the constants needed in the app.
+ * This is so that if it changes in one class, it changes in all others that also
+ * utilize it.
+ */
 class Constants {
     companion object {
         const val U_NAME_FILE = "userName"

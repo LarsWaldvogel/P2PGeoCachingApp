@@ -15,6 +15,9 @@ import com.example.p2pgeocaching.p2pexceptions.InputIsEmptyException
 import com.example.p2pgeocaching.p2pexceptions.StringContainsIllegalCharacterException
 import java.io.File
 
+/**
+ * This activity enables the user to create a new cache.
+ */
 class NewCacheActivity : AppCompatActivity() {
 
     companion object {

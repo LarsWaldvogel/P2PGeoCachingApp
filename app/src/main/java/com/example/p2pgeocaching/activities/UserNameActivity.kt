@@ -16,7 +16,7 @@ import java.io.File
 
 
 /**
- * This activity enables the user to add their name to the system.
+ * This activity enables the user to add their name to the system or change it.
  */
 class UserNameActivity : AppCompatActivity() {
 

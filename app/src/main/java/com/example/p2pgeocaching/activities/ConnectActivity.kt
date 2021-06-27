@@ -11,6 +11,10 @@ import com.example.p2pgeocaching.databinding.ActivityConnectBinding
 import java.io.File
 
 // TODO: list of people in area
+
+/**
+ * This is used to set up connections to surrounding people.
+ */
 class ConnectActivity : AppCompatActivity() {
 
     companion object {

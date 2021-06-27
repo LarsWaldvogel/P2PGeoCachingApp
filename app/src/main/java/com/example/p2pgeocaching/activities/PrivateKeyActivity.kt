@@ -6,6 +6,9 @@ import com.example.p2pgeocaching.R
 import com.example.p2pgeocaching.constants.Constants
 import com.example.p2pgeocaching.databinding.ActivityPrivateKeyBinding
 
+/**
+ * Here we can view the private key of one of our own caches.
+ */
 class PrivateKeyActivity : AppCompatActivity() {
 
     companion object {

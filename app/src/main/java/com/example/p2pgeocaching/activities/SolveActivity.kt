@@ -16,6 +16,9 @@ import com.example.p2pgeocaching.inputValidator.InputValidator
 import com.example.p2pgeocaching.p2pexceptions.KeyIsNotLegalException
 import java.io.File
 
+/**
+ * This activity enables the user to solve one of their unsolved caches.
+ */
 class SolveActivity : AppCompatActivity() {
 
     companion object {
