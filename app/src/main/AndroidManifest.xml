@@ -16,6 +16,15 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.P2PGeocaching">
         <activity
+            android:name=".activities.AddNewFeedActivity"
+            android:parentActivityName=".activities.FeedActivity" />
+        <activity
+            android:name=".activities.FeedActivity"
+            android:parentActivityName=".activities.MainActivity" />
+        <activity
+            android:name=".activities.FeedDetailViewActivity"
+            android:parentActivityName=".activities.FeedActivity" />
+        <activity
             android:name=".activities.ConnectActivity"
             android:parentActivityName=".activities.MainActivity" />
         <activity
