@@ -12,8 +12,6 @@ import java.io.File
 class ConnectActivity : AppCompatActivity() {
 
     companion object {
-        const val U_NAME_FILE = "userName"
-        const val CACHE_LIST_FILE = "cacheList"
         const val TAG = "ConnectActivity"
     }
 

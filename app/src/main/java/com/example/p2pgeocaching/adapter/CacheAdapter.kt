@@ -8,7 +8,6 @@ import android.view.ViewGroup
 import android.view.accessibility.AccessibilityNodeInfo
 import android.widget.Button
 import androidx.annotation.RequiresApi
-import androidx.core.content.res.TypedArrayUtils.getString
 import androidx.recyclerview.widget.RecyclerView
 import com.example.p2pgeocaching.R
 import com.example.p2pgeocaching.activities.OwnCacheDetailActivity
@@ -17,8 +16,6 @@ import com.example.p2pgeocaching.activities.UnsolvedCacheDetailActivity
 import com.example.p2pgeocaching.caches.CacheList
 import com.example.p2pgeocaching.data.CacheData
 import com.example.p2pgeocaching.data.CacheDataParser
-import com.example.p2pgeocaching.data.CacheDataParser.Companion.OWN_CACHE
-import com.example.p2pgeocaching.data.CacheDataParser.Companion.UNSOLVED_CACHE
 
 /**
  * This class serves as the link between the recyclerView and the cacheList
@@ -82,15 +79,15 @@ class CacheAdapter(val cacheList: CacheList) :
             when (item.type) {
                 OWN_CACHE -> {
                     intent = Intent(context, OwnCacheDetailActivity::class.java)
-                    intent.putExtra(OwnCacheDetailActivity.CACHE, item)
+                    intent.putExtra(CACHE, item)
                 }
                 UNSOLVED_CACHE -> {
                     intent = Intent(context, UnsolvedCacheDetailActivity::class.java)
-                    intent.putExtra(UnsolvedCacheDetailActivity.CACHE, item)
+                    intent.putExtra(CACHE, item)
                 }
                 else -> { // Solved cache
                     intent = Intent(context, SolvedCacheDetailActivity::class.java)
-                    intent.putExtra(SolvedCacheDetailActivity.CACHE, item)
+                    intent.putExtra(CACHE, item)
                 }
             }
 
@@ -105,6 +102,8 @@ class CacheAdapter(val cacheList: CacheList) :
         const val OWN_CACHE = "OwnCache"
         const val UNSOLVED_CACHE = "UnsolvedCache"
         const val SOLVED_CACHE = "SolvedCache"
+        const val CACHE = "cache"
+
 
         @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
         override fun onInitializeAccessibilityNodeInfo(

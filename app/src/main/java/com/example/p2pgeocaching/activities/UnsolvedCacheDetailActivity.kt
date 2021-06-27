@@ -6,6 +6,7 @@ import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.example.p2pgeocaching.R
+import com.example.p2pgeocaching.adapter.CacheAdapter
 import com.example.p2pgeocaching.caches.Cache
 import com.example.p2pgeocaching.caches.CacheList
 import com.example.p2pgeocaching.caches.SolvedCache
@@ -21,13 +22,9 @@ import java.io.File
 class UnsolvedCacheDetailActivity : AppCompatActivity() {
 
     companion object {
-        const val CACHE = "cache"
         const val PUBLIC_KEY = "public key"
         const val ID = "id"
-        const val CACHE_LIST_FILE = "cacheList"
         const val TAG = "UnsolvedCacheDetailActivity"
-
-        // This variable holds the current cache
         var currentCache: Cache? = null
     }
 
@@ -49,7 +46,7 @@ class UnsolvedCacheDetailActivity : AppCompatActivity() {
         // Check if a CacheData object was given
         // If no CachedData object was given and there is no currentCache,
         // return to previous activity
-        val bundleData = intent?.extras?.getSerializable(OwnCacheDetailActivity.CACHE)
+        val bundleData = intent?.extras?.getSerializable(CacheAdapter.CACHE)
 
         // no data was given
         if (bundleData == null) {
@@ -118,7 +115,7 @@ class UnsolvedCacheDetailActivity : AppCompatActivity() {
 
         // Check if a CacheData object was given
         // If no CachedData object was given, return to previous activity
-        val bundleData = intent?.extras?.getSerializable(OwnCacheDetailActivity.CACHE)
+        val bundleData = intent?.extras?.getSerializable(CacheAdapter.CACHE)
         if (bundleData == null) {
             Log.d(OwnCacheDetailActivity.TAG, "Intent did not contain Cache")
             finish()

@@ -16,7 +16,6 @@ class SolveActivity : AppCompatActivity() {
 
     companion object {
         const val TAG = "SolveActivity"
-        const val PUBLIC_KEY = "public key"
         const val U_NAME_FILE = "userName"
         const val CACHE_LIST_FILE = "cacheList"
         const val ID = "id"
@@ -65,7 +64,8 @@ class SolveActivity : AppCompatActivity() {
         title = getString(R.string.solve_title)
 
         // Get the public key
-        publicKey = intent?.extras?.getSerializable(PUBLIC_KEY).toString()
+        publicKey =
+            intent?.extras?.getSerializable(UnsolvedCacheDetailActivity.PUBLIC_KEY).toString()
         if (publicKey == "") {
             finish()
             return

@@ -9,7 +9,6 @@ class PrivateKeyActivity : AppCompatActivity() {
 
     companion object {
         const val TAG = "PrivateKeyActivity"
-        const val PRIVATE_KEY = "private key"
     }
 
     private lateinit var binding: ActivityPrivateKeyBinding
@@ -26,7 +25,8 @@ class PrivateKeyActivity : AppCompatActivity() {
         title = getString(R.string.private_key_title)
 
         // Get and show the private key, if there is none, return
-        val privateKey = intent?.extras?.getSerializable(PRIVATE_KEY).toString()
+        val privateKey =
+            intent?.extras?.getSerializable(OwnCacheDetailActivity.PRIVATE_KEY).toString()
         if (privateKey != "") {
             binding.privateKeyText.text = getString(R.string.private_key_headline, privateKey)
         } else {

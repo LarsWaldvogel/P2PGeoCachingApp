@@ -20,7 +20,6 @@ import java.io.File
 class UserNameActivity : AppCompatActivity() {
 
     companion object {
-        const val U_NAME_FILE = "userName"
         const val TAG = "UserNameActivity"
     }
 
