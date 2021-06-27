@@ -23,6 +23,7 @@ import java.util.*
 // TODO add bluetooth transfer function
 // TODO when first opened, create publisher with username and a random public/private
 //  keypair
+// TODO button to get to FeedsActivity
 /**
  * This activity serves as the center of the app.
  * From here, we can change our name, create a new cache, look at our caches and transfer caches
