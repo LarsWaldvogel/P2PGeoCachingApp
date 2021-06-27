@@ -20,14 +20,12 @@ import java.io.File
  */
 class OwnCacheDetailActivity : AppCompatActivity() {
 
-    // TODO: save cache statically, only use when no cache has been given
-    //  return when no saved cache and no cache given
-
     companion object {
         const val CACHE = "cache"
         const val PRIVATE_KEY = "private key"
         const val CACHE_LIST_FILE = "cacheList"
         const val TAG = "OwnCacheDetailActivity"
+        var currentCache: Cache? = null
     }
 
     private lateinit var binding: ActivityOwnCacheDetailBinding
@@ -53,17 +51,42 @@ class OwnCacheDetailActivity : AppCompatActivity() {
 
 
         // Check if a CacheData object was given
-        // If no CachedData object was given, return to previous activity
-        val bundleData = intent?.extras?.getSerializable(CACHE)
+        // If no CachedData object was given and there is no currentCache,
+        // return to previous activity
+        val bundleData = intent?.extras?.getSerializable(OwnCacheDetailActivity.CACHE)
+
+        // no data was given
         if (bundleData == null) {
-            Log.d(TAG, "Intent did not contain Cache")
+            Log.d(OwnCacheDetailActivity.TAG, "Intent did not contain Cache")
+
+            // returning from previous entry, make cache currentCache
+            if (currentCache != null) {
+                cache = currentCache!!
+
+                // no cache was given and there is no previous cache, exit
+            } else {
+                finish()
+                return
+            }
+
+            // there is a cache given, make it currentCache
+        } else {
+            val cacheData: CacheData = bundleData as CacheData
+
+            // If a cache was given, parse it to cache and to currentCache
+            cache = CacheDataParser.dataToCache(cacheData)
+            currentCache = cache
+        }
+
+        // Open cacheList to check if it is still in there, if not, leave activity
+        context = applicationContext
+        cacheListFile = File(context.filesDir, SolveActivity.CACHE_LIST_FILE)
+        cacheList = Serializer.deserializeCacheListFromFile(cacheListFile)
+        if (cacheList.findByID(cache.id) == null) {
+            currentCache = null
             finish()
             return
         }
-        val cacheData: CacheData = bundleData as CacheData
-
-        // If a cache was given, parse it to
-        cache = CacheDataParser.dataToCache(cacheData)
 
         // Initialize the fields of the UI
         title = getString(R.string.own_cache_title)
@@ -88,11 +111,4 @@ class OwnCacheDetailActivity : AppCompatActivity() {
             finish()
         }
     }
-
-    override fun onRestart() {
-        Log.d(TAG, "onRestart has been called")
-        super.onRestart()
-        // FIXME: keeps on crashing when returning from PrivateKeyActivity
-    }
-
 }
