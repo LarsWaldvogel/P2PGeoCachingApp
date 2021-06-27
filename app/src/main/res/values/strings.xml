@@ -40,5 +40,8 @@
     <string name="own_tag">[Own]</string>
     <string name="solved_tag">[Solved]</string>
     <string name="unsolved_tag">[Unsolved]</string>
+    <string name="publisher_name_prompt">Publisher name:</string>
+    <string name="pub_key_edit_text">Enter last 4 digits of public key:</string>
+    <string name="new_feed_button_text">Save</string>
 
 </resources>

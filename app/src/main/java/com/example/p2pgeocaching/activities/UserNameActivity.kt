@@ -20,6 +20,8 @@ import java.io.File
  */
 class UserNameActivity : AppCompatActivity() {
 
+    // TODO: Display public key (last 4 digits)
+
     companion object {
         const val TAG = "UserNameActivity"
     }
