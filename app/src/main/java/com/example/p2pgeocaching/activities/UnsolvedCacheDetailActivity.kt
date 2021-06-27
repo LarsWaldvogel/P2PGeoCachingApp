@@ -20,6 +20,9 @@ import java.io.File
  */
 class UnsolvedCacheDetailActivity : AppCompatActivity() {
 
+    // TODO: save cache statically, only use when no cache has been given
+    //  return when no saved cache and no cache given
+
     companion object {
         const val CACHE = "cache"
         const val PUBLIC_KEY = "public key"
@@ -48,6 +51,7 @@ class UnsolvedCacheDetailActivity : AppCompatActivity() {
         if (bundleData == null) {
             Log.d(OwnCacheDetailActivity.TAG, "Intent did not contain Cache")
             finish()
+            return
         }
         val cacheData: CacheData = bundleData as CacheData
 
@@ -60,6 +64,7 @@ class UnsolvedCacheDetailActivity : AppCompatActivity() {
         cacheList = Serializer.deserializeCacheListFromFile(cacheListFile)
         if (cacheList.findByID(cache.id) == null) {
             finish()
+            return
         }
 
         // Initialize the fields of the UI
@@ -97,6 +102,7 @@ class UnsolvedCacheDetailActivity : AppCompatActivity() {
         if (bundleData == null) {
             Log.d(OwnCacheDetailActivity.TAG, "Intent did not contain Cache")
             finish()
+            return
         }
         val cacheData: CacheData = bundleData as CacheData
 

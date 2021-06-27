@@ -53,10 +53,12 @@ class SolveActivity : AppCompatActivity() {
         val cacheID = intent?.extras?.getInt(ID)
         if (cacheID == null) {
             finish()
+            return
         }
         cache = cacheList.findByID(cacheID!!) as UnsolvedCache
         if (cache == null) {
             finish()
+            return
         }
 
         // Change title
@@ -66,6 +68,7 @@ class SolveActivity : AppCompatActivity() {
         publicKey = intent?.extras?.getSerializable(PUBLIC_KEY).toString()
         if (publicKey == "") {
             finish()
+            return
         }
 
         binding.submitPrivateKeyButton.setOnClickListener {

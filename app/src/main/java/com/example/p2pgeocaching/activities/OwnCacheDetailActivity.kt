@@ -20,6 +20,9 @@ import java.io.File
  */
 class OwnCacheDetailActivity : AppCompatActivity() {
 
+    // TODO: save cache statically, only use when no cache has been given
+    //  return when no saved cache and no cache given
+
     companion object {
         const val CACHE = "cache"
         const val PRIVATE_KEY = "private key"
@@ -55,6 +58,7 @@ class OwnCacheDetailActivity : AppCompatActivity() {
         if (bundleData == null) {
             Log.d(TAG, "Intent did not contain Cache")
             finish()
+            return
         }
         val cacheData: CacheData = bundleData as CacheData
 
