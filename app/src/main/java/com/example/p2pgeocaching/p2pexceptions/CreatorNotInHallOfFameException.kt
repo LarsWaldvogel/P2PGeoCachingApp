@@ -1,3 +1,3 @@
 package com.example.p2pgeocaching.p2pexceptions
 
-class CreatorNotInHallOfFameException : Throwable()
+class CreatorNotInHallOfFameException : Exception()
