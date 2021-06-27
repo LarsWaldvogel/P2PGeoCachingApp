@@ -1,6 +1,7 @@
 package com.example.p2pgeocaching.bacnet
 
 import com.example.p2pgeocaching.caches.OwnCache
+import com.example.p2pgeocaching.constants.Constants.Companion.CACHE_ENTRY
 import com.example.p2pgeocaching.data.Serializer
 
 /**
@@ -14,6 +15,8 @@ class CacheEntry(
     content: String,
     signature: String
 ) : Entry(timestamp, id, signedPreviousSignature, CACHE_ENTRY, content, signature) {
+
+    // TODO
 
     companion object {
 

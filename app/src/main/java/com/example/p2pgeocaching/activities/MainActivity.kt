@@ -9,6 +9,10 @@ import androidx.recyclerview.widget.RecyclerView
 import com.example.p2pgeocaching.R
 import com.example.p2pgeocaching.adapter.CacheAdapter
 import com.example.p2pgeocaching.caches.CacheList
+import com.example.p2pgeocaching.constants.Constants.Companion.CACHE_LIST_FILE
+import com.example.p2pgeocaching.constants.Constants.Companion.DUMMY_LIST_FILE
+import com.example.p2pgeocaching.constants.Constants.Companion.USE_DUMMY_LIST
+import com.example.p2pgeocaching.constants.Constants.Companion.U_NAME_FILE
 import com.example.p2pgeocaching.data.Serializer.Companion.deserializeCacheListFromFile
 import com.example.p2pgeocaching.databinding.ActivityMainBinding
 import java.io.File
@@ -26,11 +30,7 @@ class MainActivity : AppCompatActivity() {
 
 
     companion object {
-        const val U_NAME_FILE = "userName"
-        const val CACHE_LIST_FILE = "cacheList"
         const val TAG = "MainActivity"
-        const val USE_DUMMY_LIST = true
-        const val DUMMY_LIST_FILE = "raw/dummyCacheList.json"
     }
 
     lateinit var cacheList: CacheList

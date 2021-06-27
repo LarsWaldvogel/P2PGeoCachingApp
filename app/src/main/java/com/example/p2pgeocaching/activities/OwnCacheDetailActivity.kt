@@ -6,9 +6,11 @@ import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.example.p2pgeocaching.R
-import com.example.p2pgeocaching.adapter.CacheAdapter
 import com.example.p2pgeocaching.caches.Cache
 import com.example.p2pgeocaching.caches.CacheList
+import com.example.p2pgeocaching.constants.Constants.Companion.CACHE
+import com.example.p2pgeocaching.constants.Constants.Companion.CACHE_LIST_FILE
+import com.example.p2pgeocaching.constants.Constants.Companion.PRIVATE_KEY
 import com.example.p2pgeocaching.data.CacheData
 import com.example.p2pgeocaching.data.CacheDataParser
 import com.example.p2pgeocaching.data.Serializer
@@ -22,7 +24,6 @@ import java.io.File
 class OwnCacheDetailActivity : AppCompatActivity() {
 
     companion object {
-        const val PRIVATE_KEY = "private key"
         const val TAG = "OwnCacheDetailActivity"
         var currentCache: Cache? = null
     }
@@ -43,7 +44,7 @@ class OwnCacheDetailActivity : AppCompatActivity() {
 
         // Opens the files used in the app for storage
         context = applicationContext
-        cacheListFile = File(context.filesDir, MainActivity.CACHE_LIST_FILE)
+        cacheListFile = File(context.filesDir, CACHE_LIST_FILE)
 
         // Get cacheList
         cacheList = Serializer.deserializeCacheListFromFile(cacheListFile)
@@ -52,7 +53,7 @@ class OwnCacheDetailActivity : AppCompatActivity() {
         // Check if a CacheData object was given
         // If no CachedData object was given and there is no currentCache,
         // return to previous activity
-        val bundleData = intent?.extras?.getSerializable(CacheAdapter.CACHE)
+        val bundleData = intent?.extras?.getSerializable(CACHE)
 
         // no data was given
         if (bundleData == null) {
@@ -79,7 +80,7 @@ class OwnCacheDetailActivity : AppCompatActivity() {
 
         // Open cacheList to check if it is still in there, if not, leave activity
         context = applicationContext
-        cacheListFile = File(context.filesDir, MainActivity.CACHE_LIST_FILE)
+        cacheListFile = File(context.filesDir, CACHE_LIST_FILE)
         cacheList = Serializer.deserializeCacheListFromFile(cacheListFile)
         if (cacheList.findByID(cache.id) == null) {
             currentCache = null

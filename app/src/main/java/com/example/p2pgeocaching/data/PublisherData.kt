@@ -1,5 +1,13 @@
 package com.example.p2pgeocaching.data
 
+import java.io.Serializable
+
+/**
+ * This class stores the data of a publisher so one can serialize and deserialize it.
+ */
 @kotlinx.serialization.Serializable
-class PublisherData {
+class PublisherData : Serializable {
+
+    // TODO
+
 }

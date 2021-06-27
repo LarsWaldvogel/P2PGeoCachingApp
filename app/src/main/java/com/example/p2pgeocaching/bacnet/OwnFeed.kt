@@ -5,6 +5,8 @@ package com.example.p2pgeocaching.bacnet
  */
 class OwnFeed(entries: List<Entry>, ownPublisher: OwnPublisher) : Feed(entries, ownPublisher) {
 
+    // TODO
+
     /**
      * Returns the [Publisher] as an [OwnPublisher] object (which it always is).
      */

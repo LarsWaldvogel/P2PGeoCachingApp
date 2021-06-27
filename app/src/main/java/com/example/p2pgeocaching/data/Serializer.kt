@@ -6,6 +6,11 @@ import com.example.p2pgeocaching.caches.CacheList
 import com.google.gson.Gson
 import java.io.File
 
+/**
+ * This class takes objects and saves them to file.
+ * It can also create objects by reading from files.
+ * It can also create objects from JSON and create JSON from objects.
+ */
 class Serializer {
 
     companion object {
@@ -73,7 +78,7 @@ class Serializer {
         /**
          * This function deserializes a single [Cache] from a String.
          */
-        fun deserializeCacheFromString(cacheString: String) : Cache {
+        fun deserializeCacheFromString(cacheString: String): Cache {
             val gson = Gson()
             val cacheData = gson.fromJson(cacheString, CacheData::class.java)
             return CacheDataParser.dataToCache(cacheData)

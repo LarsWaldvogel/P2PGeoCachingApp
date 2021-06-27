@@ -11,7 +11,10 @@ import java.lang.Exception
 import java.io.IOException
 import java.util.*
 
-class BluetoothServer(private val activity: BluetoothTransfer, private val socket: BluetoothSocket): Thread() {
+class BluetoothServer(
+    private val activity: BluetoothTransfer,
+    private val socket: BluetoothSocket
+) : Thread() {
     private val inputStream = this.socket.inputStream
     private val outputStream = this.socket.outputStream
 

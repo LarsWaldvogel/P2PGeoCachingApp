@@ -4,9 +4,10 @@ import android.bluetooth.BluetoothDevice
 import java.util.*
 
 // call BluetoothClient(device).start() from main | device ist das zu verbindende Gerät
-class BluetoothClient(device: BluetoothDevice, cache: String?): Thread() {
+class BluetoothClient(device: BluetoothDevice, cache: String?) : Thread() {
     val uuid: UUID = UUID.fromString("P2P-Bluetooth-Connection")
-    private val socket = device.createRfcommSocketToServiceRecord(uuid) // if this doesn't work, use: createInsecureRfcommSocketToServiceRecord(uuid)
+    private val socket =
+        device.createRfcommSocketToServiceRecord(uuid) // if this doesn't work, use: createInsecureRfcommSocketToServiceRecord(uuid)
     private var message = cache
     private var outputStream = this.socket.outputStream // Client sending
     private var inputStream = this.socket.inputStream // Client receive
@@ -21,11 +22,11 @@ class BluetoothClient(device: BluetoothDevice, cache: String?): Thread() {
 
         try {
             if (length != null) {
-                    // TODO add a terminate symbol for better communication protocol
+                // TODO add a terminate symbol for better communication protocol
                 outputStream.write(message?.toByteArray()) //send cache to server
                 outputStream.flush()
             }
-        } catch(e: Exception) {
+        } catch (e: Exception) {
             println("Output exception client")
         }
         try {

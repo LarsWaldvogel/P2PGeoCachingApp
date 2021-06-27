@@ -6,6 +6,10 @@ import com.example.p2pgeocaching.R
 import com.example.p2pgeocaching.RSA.RSA
 import com.example.p2pgeocaching.caches.Cache
 import com.example.p2pgeocaching.caches.UnsolvedCache
+import com.example.p2pgeocaching.constants.Constants.Companion.CACHE_LIST_FILE
+import com.example.p2pgeocaching.constants.Constants.Companion.ID
+import com.example.p2pgeocaching.constants.Constants.Companion.PUBLIC_KEY
+import com.example.p2pgeocaching.constants.Constants.Companion.U_NAME_FILE
 import com.example.p2pgeocaching.data.Serializer
 import com.example.p2pgeocaching.databinding.ActivitySolveBinding
 import com.example.p2pgeocaching.inputValidator.InputValidator
@@ -16,9 +20,6 @@ class SolveActivity : AppCompatActivity() {
 
     companion object {
         const val TAG = "SolveActivity"
-        const val U_NAME_FILE = "userName"
-        const val CACHE_LIST_FILE = "cacheList"
-        const val ID = "id"
     }
 
     private lateinit var binding: ActivitySolveBinding
@@ -65,7 +66,7 @@ class SolveActivity : AppCompatActivity() {
 
         // Get the public key
         publicKey =
-            intent?.extras?.getSerializable(UnsolvedCacheDetailActivity.PUBLIC_KEY).toString()
+            intent?.extras?.getSerializable(PUBLIC_KEY).toString()
         if (publicKey == "") {
             finish()
             return

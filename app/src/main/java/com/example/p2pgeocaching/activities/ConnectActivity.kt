@@ -5,6 +5,8 @@ import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.example.p2pgeocaching.bluetooth.BluetoothTransfer
+import com.example.p2pgeocaching.constants.Constants.Companion.CACHE_LIST_FILE
+import com.example.p2pgeocaching.constants.Constants.Companion.U_NAME_FILE
 import com.example.p2pgeocaching.databinding.ActivityConnectBinding
 import java.io.File
 
@@ -29,8 +31,8 @@ class ConnectActivity : AppCompatActivity() {
 
         // Opens the files used in the app for storage
         val context = applicationContext
-        val userNameFile = File(context.filesDir, MainActivity.U_NAME_FILE)
-        val cacheListFile = File(context.filesDir, MainActivity.CACHE_LIST_FILE)
+        val userNameFile = File(context.filesDir, U_NAME_FILE)
+        val cacheListFile = File(context.filesDir, CACHE_LIST_FILE)
 
         binding.transferButton.setOnClickListener {
             Log.d(TAG, "TransferButton has been pressed.")

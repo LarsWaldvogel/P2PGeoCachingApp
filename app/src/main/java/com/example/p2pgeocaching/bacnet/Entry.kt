@@ -20,9 +20,6 @@ open class Entry(
     val signature: String
 ) {
 
-    companion object {
-        const val HOF_ENTRY = "HoFEntry"
-        const val CACHE_ENTRY = "CacheEntry"
-        const val LOG_ENTRY = "LogEntry"
-    }
+    // TODO
+
 }

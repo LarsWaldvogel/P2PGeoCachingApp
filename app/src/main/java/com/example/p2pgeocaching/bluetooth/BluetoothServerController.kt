@@ -6,7 +6,8 @@ import android.bluetooth.BluetoothSocket
 import java.io.IOException
 import java.util.*
 
-class BluetoothServerController(activity: BluetoothTransfer,bluetoothAdapter: BluetoothAdapter) : Thread() {
+class BluetoothServerController(activity: BluetoothTransfer, bluetoothAdapter: BluetoothAdapter) :
+    Thread() {
 
     val uuid: UUID = UUID.fromString("P2P-Bluetooth-Connection")
     private var cancelled: Boolean
@@ -27,14 +28,14 @@ class BluetoothServerController(activity: BluetoothTransfer,bluetoothAdapter: Bl
     override fun run() {
         var socket: BluetoothSocket
 
-        while(true) {
+        while (true) {
             if (this.cancelled) {
                 break
             }
 
             try {
                 socket = serverSocket!!.accept()
-            } catch(e: IOException) {
+            } catch (e: IOException) {
                 break
             }
 

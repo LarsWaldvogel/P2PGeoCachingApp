@@ -3,6 +3,7 @@ package com.example.p2pgeocaching.activities
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
 import com.example.p2pgeocaching.R
+import com.example.p2pgeocaching.constants.Constants
 import com.example.p2pgeocaching.databinding.ActivityPrivateKeyBinding
 
 class PrivateKeyActivity : AppCompatActivity() {
@@ -26,7 +27,7 @@ class PrivateKeyActivity : AppCompatActivity() {
 
         // Get and show the private key, if there is none, return
         val privateKey =
-            intent?.extras?.getSerializable(OwnCacheDetailActivity.PRIVATE_KEY).toString()
+            intent?.extras?.getSerializable(Constants.PRIVATE_KEY).toString()
         if (privateKey != "") {
             binding.privateKeyText.text = getString(R.string.private_key_headline, privateKey)
         } else {

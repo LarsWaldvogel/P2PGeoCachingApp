@@ -8,6 +8,7 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
 import com.example.p2pgeocaching.R
+import com.example.p2pgeocaching.constants.Constants.Companion.U_NAME_FILE
 import com.example.p2pgeocaching.databinding.ActivityUserNameBinding
 import com.example.p2pgeocaching.inputValidator.InputValidator
 import com.example.p2pgeocaching.p2pexceptions.StringContainsIllegalCharacterException
@@ -37,7 +38,7 @@ class UserNameActivity : AppCompatActivity() {
 
         // Get the file for the username
         val context = applicationContext
-        val userNameFile = File(context.filesDir, MainActivity.U_NAME_FILE)
+        val userNameFile = File(context.filesDir, U_NAME_FILE)
 
         // validate input, show error message or return
         binding.userNameButton.setOnClickListener {

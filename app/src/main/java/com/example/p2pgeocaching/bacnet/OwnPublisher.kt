@@ -8,6 +8,8 @@ import com.example.p2pgeocaching.RSA.RSA
 class OwnPublisher(name: String, publicKey: String, val privateKey: String) :
     Publisher(name, publicKey) {
 
+    // TODO
+
     /**
      * Signs the [plainText] by hashing it and encrypting it with the [privateKey].
      */

@@ -4,7 +4,7 @@ import com.example.p2pgeocaching.caches.Cache
 import com.example.p2pgeocaching.caches.CacheList
 
 /**
- * This class is used to transform data to [CacheList] and vice versa. Also writes to file.
+ * This class is used to transform data to [CacheList] and vice versa.
  */
 class CacheListDataParser {
 

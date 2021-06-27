@@ -13,7 +13,7 @@ import com.example.p2pgeocaching.R
  * Uses byte stream to transfer JSON files of the CacheList objects
  */
 
-class BluetoothTransfer: Activity() {
+class BluetoothTransfer : Activity() {
 
     companion object {
         const val TAG = "BluetoothTransfer"
@@ -27,8 +27,8 @@ class BluetoothTransfer: Activity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         bluetoothAdapter = BluetoothAdapter.getDefaultAdapter()
-        arrayOfDevices = ArrayAdapter(this,R.layout.bluetooth_select_device)
-        if(bluetoothAdapter != null) {
+        arrayOfDevices = ArrayAdapter(this, R.layout.bluetooth_select_device)
+        if (bluetoothAdapter != null) {
             discoverDevices()
         }
         BluetoothServerController(this, bluetoothAdapter).start()

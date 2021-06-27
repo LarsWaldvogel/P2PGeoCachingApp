@@ -49,6 +49,7 @@ public class RSA {
      * This method is used to get a random prime value between 2 and 4093
      * Therefore, the method chooses randomly one line of the given file
      * "raw/primeNumbers.txt" which contains prime values.
+     *
      * @param c Context with which we can access the file
      * @return random prime as int
      */
@@ -63,7 +64,8 @@ public class RSA {
                 Log.d(TAG, "IOException when generating primes, could not open primesFile.");
                 try {
                     Log.d(TAG, "List of assets: " + Arrays.toString(assetManager.list("")));
-                } catch (IOException i) {}
+                } catch (IOException i) {
+                }
             }
         }
         Scanner scanner = new Scanner(inputStream);
@@ -71,7 +73,8 @@ public class RSA {
         String line = "";
         try {
             scanner = new Scanner(assetManager.open(FILE_PATH));
-        } catch (IOException e) {}
+        } catch (IOException e) {
+        }
         for (int i = 0; i < randomRow; i++) {
             scanner.nextLine();
         }
@@ -83,6 +86,7 @@ public class RSA {
     /**
      * This method is used to get the total amount of lines of the file
      * "raw/primeNumbers.txt".
+     *
      * @param sc Scanner which is used to scan over the lines of file "raw/primeNumbers.txt"
      * @return total amount of lines as int
      */
@@ -99,6 +103,7 @@ public class RSA {
 
     /**
      * This method is used to calculate the greatest common divisor of two BigInteger values
+     *
      * @param a first BigInteger value
      * @param b second BigInteger value
      * @return greatest common divisor of the two values a and b
@@ -124,12 +129,13 @@ public class RSA {
      * This method is called to get the multiplicative inverse of two values.
      * It calls the method extendedEuclid and checks what extendedEuclid returns
      * and makes dependent on the result a last calculation
+     *
      * @param a first value
      * @param n second value
      * @return multiplicative inverse of a and n
      */
-    public static BigInteger multiplicativeInverse (BigInteger a, BigInteger n){
-        BigInteger [] result = extendedEuclid(a,n);
+    public static BigInteger multiplicativeInverse(BigInteger a, BigInteger n) {
+        BigInteger[] result = extendedEuclid(a, n);
         if (result[1].compareTo(BigInteger.ZERO) == 1) {
             return result[1];
         } else {
@@ -141,12 +147,13 @@ public class RSA {
      * This method implements the extended euclidian algorithm
      * which is used to calculate the multiplicative inverse of two
      * values efficiently
+     *
      * @param a first value
      * @param b second value
      * @return euclidian of a and b as BigInteger array
      */
-    private static BigInteger [] extendedEuclid (BigInteger a, BigInteger b){
-        BigInteger [] result = new BigInteger[3];
+    private static BigInteger[] extendedEuclid(BigInteger a, BigInteger b) {
+        BigInteger[] result = new BigInteger[3];
         BigInteger a1, b1;
 
         if (b.equals(BigInteger.ZERO)) {
@@ -156,7 +163,7 @@ public class RSA {
             return result;
         }
 
-        result = extendedEuclid (b, a.mod(b));
+        result = extendedEuclid(b, a.mod(b));
         a1 = result[1];
         b1 = result[2];
         result[1] = b1;
@@ -169,6 +176,7 @@ public class RSA {
     /**
      * This method is used to get a random BigInteger value with the condition
      * that it must be smaller than the given parameter phi
+     *
      * @param phi represents the limit of the random value
      * @return random BigInteger value
      */
@@ -184,6 +192,7 @@ public class RSA {
 
     /**
      * This method is used to generate private and public keys
+     *
      * @param c Context which is used to reach file "raw/primeNumbers.txt"
      * @return String which contains private and public Key in the format:
      * d_n:e_n
@@ -270,19 +279,20 @@ public class RSA {
      * This method implements the chinese remainder theory. It is used for encode128, to
      * make the encoding calculation faster by splitting the original calculation
      * m^d mod n into two calculations.
+     *
      * @param m message as BigInteger which should be encoded
      * @param d private Key d
      * @param p first value of prime factorization of n
      * @param q second value of prime factorization of n
      * @return encoded value as BigInteger
      */
-    public static BigInteger crt(BigInteger m, BigInteger d, BigInteger p, BigInteger q){
+    public static BigInteger crt(BigInteger m, BigInteger d, BigInteger p, BigInteger q) {
         BigInteger dP, dQ, qInv, m1, m2, support, s;
         dP = d.mod(p.subtract(BigInteger.ONE));
         dQ = d.mod(q.subtract(BigInteger.ONE));
-        qInv = multiplicativeInverse(q,p);
-        m1 = m.modPow(dP,p);
-        m2 = m.modPow(dQ,q);
+        qInv = multiplicativeInverse(q, p);
+        m1 = m.modPow(dP, p);
+        m2 = m.modPow(dQ, q);
         support = qInv.multiply(m1.subtract(m2)).mod(p);
         s = m2.add(support.multiply(q));
         return s;
@@ -291,7 +301,8 @@ public class RSA {
     /**
      * This method is used to calculate the pow between base and exponent
      * which are both BigInteger values
-     * @param base base value as BigInteger
+     *
+     * @param base     base value as BigInteger
      * @param exponent exponent values as BigInteger
      * @return BigInteger value base^exponent
      */
@@ -309,6 +320,7 @@ public class RSA {
 
     /**
      * This method is used to generate a random binary value with length of 12 bits
+     *
      * @return String containing a binary value with length 12 bits
      */
     private static String getRandomBinValue() {
@@ -323,7 +335,8 @@ public class RSA {
 
     /**
      * This method is used to encode a message with the given privateKey
-     * @param message message which should be encoded with private Key in RSA
+     *
+     * @param message    message which should be encoded with private Key in RSA
      * @param privateKey String which contains d an n in the format d_n
      * @return String containing the given message encoded in rsa
      */
@@ -390,7 +403,8 @@ public class RSA {
             for (int i = 1; i < encodedValues.length; i++) {
                 // get encoded block and calculate XOR with next block, get the RSA
                 // encoding of XOR and save it in the array
-                encodedValues[i] = (encodedValues[i-1].xor(block[i-1])).modPow(d, n);;
+                encodedValues[i] = (encodedValues[i - 1].xor(block[i - 1])).modPow(d, n);
+                ;
             }
         }
         StringBuilder encodedMessage = new StringBuilder(encodedValues[0].toString());
@@ -407,7 +421,8 @@ public class RSA {
      * RSA-CRT. This is a method where RSA is combined with the chinese remainder
      * theory. As consequence, the prime factorization p and q are also considered
      * in the encoding scheme
-     * @param message message which should be encoded with private Key in RSA -CRT
+     *
+     * @param message    message which should be encoded with private Key in RSA -CRT
      * @param privateKey String which contains d, p, w and n in the format
      *                   "d-p-q_n"
      * @return String containing the given message encoded in RSA-CRT
@@ -448,8 +463,8 @@ public class RSA {
         block = new BigInteger[letters.length / 2];
         for (int i = 0; i < block.length; i++) {
             // get base64 encoding of letter through class BaseTable
-            String binaryBlock1 = BaseTable.getBinValue(letters[i*2]);
-            String binaryBlock2 = BaseTable.getBinValue(letters[i*2 + 1]);
+            String binaryBlock1 = BaseTable.getBinValue(letters[i * 2]);
+            String binaryBlock2 = BaseTable.getBinValue(letters[i * 2 + 1]);
             // if second block is a empty string this means that this block is only
             // used for padding. Save there the binary value 111111
             if (binaryBlock2 == "") {
@@ -472,13 +487,13 @@ public class RSA {
             encodedValues = new BigInteger[block.length + 1];
             // calculate a random binary value of length of 12 bits and get the BigInteger value
             // of it. This servers as initializing vector
-            BigInteger randomBigInt = new BigInteger(getRandomBinValue(),2);
+            BigInteger randomBigInt = new BigInteger(getRandomBinValue(), 2);
             // save RSA-CRT encoding of the initializing vector
             encodedValues[0] = crt(randomBigInt, d, p, q);
             for (int i = 1; i < encodedValues.length; i++) {
                 // get encoded block and calculate XOR with next block, get the RSA
                 // encoding of XOR and save it in the array
-                encodedValues[i] = crt(encodedValues[i-1].xor(block[i-1]), d, p, q);
+                encodedValues[i] = crt(encodedValues[i - 1].xor(block[i - 1]), d, p, q);
             }
         }
         String encodedMessage = encodedValues[0].toString();
@@ -491,8 +506,9 @@ public class RSA {
 
     /**
      * This method is used to decode an encoded message with the given public key
+     *
      * @param encodedMessageAsText encoded message that needs to be decoded
-     * @param publicKey public key in the format "e_n"
+     * @param publicKey            public key in the format "e_n"
      * @return decoded message as String
      */
     public static String decode(String encodedMessageAsText, String publicKey) {
@@ -516,7 +532,7 @@ public class RSA {
         // If the message only contains one block
         if (encodedMessage.length == 1) {
             // Decode that block with RSA
-            support = encodedMessage[0].modPow(e,n);
+            support = encodedMessage[0].modPow(e, n);
             // add zeroes to get 12 bit representation
             binaryValue = String.format("%12s", support.toString(2)).replace(' ', '0');
             // first 6 bits belongs to first letter in base64 format
@@ -571,6 +587,7 @@ public class RSA {
 
     /**
      * This method takes the keys and returns the private key
+     *
      * @param key key in the format "d_n:e_n"
      * @return private key in the format "d_n"
      */
@@ -583,6 +600,7 @@ public class RSA {
 
     /**
      * This method takes the keys and returns the public key
+     *
      * @param key key in the format "d_n:e_n"
      * @return private key in the format "e_n"
      */
@@ -595,8 +613,9 @@ public class RSA {
 
     /**
      * This method is used to create private key String
+     *
      * @param privateKey d value of private key
-     * @param publicKey format: "e_n"
+     * @param publicKey  format: "e_n"
      * @return privateKey as String in the format "d_n"
      */
     public static String createPrivateKey(String privateKey, String publicKey) {
@@ -608,10 +627,11 @@ public class RSA {
 
     /**
      * This method returns a random binary String with length n
+     *
      * @param n length of string
      * @return the binary value as String
      */
-    private static String getRandomBinWithLengthN (int n) {
+    private static String getRandomBinWithLengthN(int n) {
         String binaryString = "";
         int j;
         Random random = new Random();
@@ -624,16 +644,18 @@ public class RSA {
 
     /**
      * This method is used to transform a binary String into BigInteger
+     *
      * @param binaryString binary value as String which should be transformed into BigInteger
      * @return BigInteger value of binaryString
      */
-    private static BigInteger binToBigInteger (String binaryString) {
+    private static BigInteger binToBigInteger(String binaryString) {
         return new BigInteger(binaryString, 2);
     }
 
     /**
      * This method is used to get the length of the BigInteger value
      * in binary format
+     *
      * @param keyValue BigInteger value
      * @return length of BigInteger value in binary format as int
      */
@@ -650,11 +672,12 @@ public class RSA {
     /**
      * This method is used to split a private Key (d) into n parts
      * with XOR.
-     * @param n amount of parts
+     *
+     * @param n          amount of parts
      * @param privateKey private Key in format "d_n"
      * @return String containing the splitted keys
      */
-    public static String keySplitting (int n, String privateKey) {
+    public static String keySplitting(int n, String privateKey) {
         BigInteger[] keyList = new BigInteger[n];
         String binaryString = "";
         BigInteger intValue, xorValue;
@@ -677,7 +700,7 @@ public class RSA {
             // take the XOR between T and Q and so on. The value which was on the
             // left in one XOR calculation will be on the rigth in the next XOR
             // calculation
-            for (int i = 0; i < n-1; i++) {
+            for (int i = 0; i < n - 1; i++) {
                 // calculate a random binary value with the length of
                 // d in binary format
                 binaryString = getRandomBinWithLengthN(binLength);
@@ -692,7 +715,7 @@ public class RSA {
                 d = intValue;
             }
             // Add last element into array
-            keyList[n-1] = d;
+            keyList[n - 1] = d;
             // check whether two splitted keys are equal to each other
             // If yes, start the method again
             for (int i = 0; i < keyList.length; i++) {
@@ -707,7 +730,7 @@ public class RSA {
         // "key1_key2_...._keyn"
         String splittedKeys = "";
         for (int i = 0; i < keyList.length; i++) {
-            if (i != keyList.length-1) {
+            if (i != keyList.length - 1) {
                 splittedKeys = splittedKeys + keyList[i].toString() + "_";
             } else {
                 splittedKeys = splittedKeys + keyList[i].toString();
@@ -718,17 +741,18 @@ public class RSA {
 
     /**
      * This method recreates the private key
+     *
      * @param keyList String which contains all splitted keys in
-     * the format "key1_key2_..._keyN"
+     *                the format "key1_key2_..._keyN"
      * @return String containing d
      */
-    public static String keyRecreating (String keyList) {
+    public static String keyRecreating(String keyList) {
         // get the individual keys
         String[] keyParts = keyList.split("_");
         // get the total amount of splitted keys
         int len = keyParts.length;
         // save last element in d
-        BigInteger d = new BigInteger(keyParts[len-1]);
+        BigInteger d = new BigInteger(keyParts[len - 1]);
         // If we only have one key in the array, this means
         // that it is directly d. If we look at the method
         // keySplitting, we see that a private key will not be

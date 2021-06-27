@@ -6,6 +6,8 @@ import androidx.appcompat.app.AppCompatActivity
 import com.example.p2pgeocaching.R
 import com.example.p2pgeocaching.caches.CacheList
 import com.example.p2pgeocaching.caches.OwnCache
+import com.example.p2pgeocaching.constants.Constants.Companion.CACHE_LIST_FILE
+import com.example.p2pgeocaching.constants.Constants.Companion.U_NAME_FILE
 import com.example.p2pgeocaching.data.Serializer
 import com.example.p2pgeocaching.databinding.ActivityNewCacheBinding
 import com.example.p2pgeocaching.inputValidator.InputValidator
@@ -13,7 +15,7 @@ import com.example.p2pgeocaching.p2pexceptions.InputIsEmptyException
 import com.example.p2pgeocaching.p2pexceptions.StringContainsIllegalCharacterException
 import java.io.File
 
-class NewCacheActivity: AppCompatActivity() {
+class NewCacheActivity : AppCompatActivity() {
 
     companion object {
         const val TAG = "NewCacheActivity"
@@ -32,8 +34,8 @@ class NewCacheActivity: AppCompatActivity() {
 
         // Opens the files used in the app for storage and takes the object out of it
         val context = applicationContext
-        val cacheListFile = File(context.filesDir, MainActivity.CACHE_LIST_FILE)
-        val userNameFile = File(context.filesDir, MainActivity.U_NAME_FILE)
+        val cacheListFile = File(context.filesDir, CACHE_LIST_FILE)
+        val userNameFile = File(context.filesDir, U_NAME_FILE)
 
         cacheList = Serializer.deserializeCacheListFromFile(cacheListFile)
 

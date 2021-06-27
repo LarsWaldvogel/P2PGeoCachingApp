@@ -6,7 +6,7 @@ import android.content.DialogInterface
 import android.os.Bundle
 import androidx.fragment.app.DialogFragment
 
-class ChooseClient: DialogFragment() {
+class ChooseClient : DialogFragment() {
     override fun onCreateDialog(savedInstanceState: Bundle?): Dialog {
 
         val builder = AlertDialog.Builder(this.activity)
@@ -15,7 +15,10 @@ class ChooseClient: DialogFragment() {
         // and a listener
         builder.setAdapter(BluetoothTransfer().arrayOfDevices) { _, chosenClient: Int ->
             val cache = " "
-            BluetoothClient(BluetoothTransfer().listOfDevices!!.elementAt(chosenClient), cache).start() // elementAtOrNull(which)
+            BluetoothClient(
+                BluetoothTransfer().listOfDevices!!.elementAt(chosenClient),
+                cache
+            ).start() // elementAtOrNull(which)
         }
         return builder.create()
     }

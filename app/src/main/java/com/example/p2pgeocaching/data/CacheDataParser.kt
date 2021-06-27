@@ -4,6 +4,10 @@ import com.example.p2pgeocaching.caches.Cache
 import com.example.p2pgeocaching.caches.OwnCache
 import com.example.p2pgeocaching.caches.SolvedCache
 import com.example.p2pgeocaching.caches.UnsolvedCache
+import com.example.p2pgeocaching.constants.Constants.Companion.OWN_CACHE
+import com.example.p2pgeocaching.constants.Constants.Companion.SOLVED_CACHE
+import com.example.p2pgeocaching.constants.Constants.Companion.TRANSFER_CACHE
+import com.example.p2pgeocaching.constants.Constants.Companion.UNSOLVED_CACHE
 import com.example.p2pgeocaching.p2pexceptions.CacheDataTypeNotDefinedException
 import com.example.p2pgeocaching.p2pexceptions.IllegalCacheTypeException
 import com.example.p2pgeocaching.p2pexceptions.ParametersAreNullException
@@ -14,12 +18,6 @@ import com.example.p2pgeocaching.p2pexceptions.ParametersAreNullException
 class CacheDataParser {
 
     companion object {
-
-        const val OWN_CACHE = "OwnCache"
-        const val UNSOLVED_CACHE = "UnsolvedCache"
-        const val SOLVED_CACHE = "SolvedCache"
-        const val TRANSFER_CACHE = "TransferCache"
-
 
         /**
          * This is used to create a [Cache] from a [CacheData] object.

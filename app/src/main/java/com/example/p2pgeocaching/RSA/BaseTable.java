@@ -74,6 +74,7 @@ public class BaseTable {
     /**
      * This method is used to translate the given letter into
      * it's base64 enconding
+     *
      * @param letter letter which should be translated to binary value
      * @return base64 encoding of letter as string, if letter isn't listed in the
      * array an empty string is returned
@@ -92,6 +93,7 @@ public class BaseTable {
     /**
      * This method is used to translate given base64 encoding to
      * it's ASCII letter
+     *
      * @param binValue base64 encoding which should be translated to a letter
      * @return letter as string, if binary value isn't listed in the array
      * an empty string is returned

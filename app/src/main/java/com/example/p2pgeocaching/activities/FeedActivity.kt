@@ -7,4 +7,5 @@ class FeedActivity : AppCompatActivity() {
     companion object {
         const val TAG = "FeedActivity"
     }
+
 }

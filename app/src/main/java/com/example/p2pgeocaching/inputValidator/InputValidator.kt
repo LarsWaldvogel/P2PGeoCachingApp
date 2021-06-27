@@ -94,9 +94,8 @@ class InputValidator {
         }
 
 
-
         /**
-        * This function generates a list of all the legal characters for user names and returns it.
+         * This function generates a list of all the legal characters for user names and returns it.
          * The legal characters are the letters a-z, A-Z, <space>, and numbers 0-9.
          */
         private fun generateLegalCharactersForUserName(): List<Char> {

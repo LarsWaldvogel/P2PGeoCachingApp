@@ -3,6 +3,7 @@ package com.example.p2pgeocaching.RSA;
 
 import java.math.BigInteger;
 import java.util.Random;
+
 public class ImprovedRSA {
 
     public static String generateKeys() {
@@ -27,7 +28,7 @@ public class ImprovedRSA {
         phi = (p.subtract(BigInteger.ONE)).multiply(q.subtract(BigInteger.ONE));
         BigInteger e = BigInteger.ZERO;
         BigInteger ggt = BigInteger.ZERO;
-        while (e.compareTo(BigInteger.ONE) <= 0 || e.compareTo(phi) >= 0 || ggt.compareTo(BigInteger.ONE) != 0){
+        while (e.compareTo(BigInteger.ONE) <= 0 || e.compareTo(phi) >= 0 || ggt.compareTo(BigInteger.ONE) != 0) {
             e = RSA.getRandomBigInteger(phi);
             ggt = RSA.ggT(e, phi);
         }
@@ -51,7 +52,7 @@ public class ImprovedRSA {
         phi = (p.subtract(BigInteger.ONE)).multiply(q.subtract(BigInteger.ONE));
         BigInteger e = BigInteger.ZERO;
         BigInteger ggt = BigInteger.ZERO;
-        while (e.compareTo(BigInteger.ONE) <= 0 || e.compareTo(phi) >= 0 || ggt.compareTo(BigInteger.ONE) != 0){
+        while (e.compareTo(BigInteger.ONE) <= 0 || e.compareTo(phi) >= 0 || ggt.compareTo(BigInteger.ONE) != 0) {
             e = RSA.getRandomBigInteger(phi);
             ggt = RSA.ggT(e, phi);
         }
@@ -73,7 +74,7 @@ public class ImprovedRSA {
             letters = new String[message.length()];
         } else {
             int t = message.length() / k;
-            letters = new String[(t+1) * k];
+            letters = new String[(t + 1) * k];
         }
         for (int i = 0; i < letters.length; i++) {
             letters[i] = "";
@@ -85,7 +86,7 @@ public class ImprovedRSA {
         for (int i = 0; i < block.length; i++) {
             String string = "";
             for (int j = 0; j < k; j++) {
-                String binaryBlock = BaseTable.getBinValue(letters[i*k + j]);
+                String binaryBlock = BaseTable.getBinValue(letters[i * k + j]);
                 if (binaryBlock == "") {
                     binaryBlock = "111111";
                 }
@@ -95,10 +96,10 @@ public class ImprovedRSA {
         }
         BigInteger[] encodedValues;
         encodedValues = new BigInteger[block.length + 1];
-        BigInteger randomBigInt = new BigInteger(getRandomBinValue(k),2);
+        BigInteger randomBigInt = new BigInteger(getRandomBinValue(k), 2);
         encodedValues[0] = randomBigInt;
         for (int i = 1; i < encodedValues.length; i++) {
-            encodedValues[i] = (encodedValues[i-1].xor(block[i-1])).modPow(d, n);
+            encodedValues[i] = (encodedValues[i - 1].xor(block[i - 1])).modPow(d, n);
         }
         String encodedMessage = encodedValues[0].toString();
         for (int i = 1; i < encodedValues.length; i++) {
@@ -124,7 +125,7 @@ public class ImprovedRSA {
             letters = new String[message.length()];
         } else {
             int t = message.length() / k;
-            letters = new String[(t+1) * k];
+            letters = new String[(t + 1) * k];
         }
         for (int i = 0; i < letters.length; i++) {
             letters[i] = "";
@@ -136,7 +137,7 @@ public class ImprovedRSA {
         for (int i = 0; i < block.length; i++) {
             String string = "";
             for (int j = 0; j < k; j++) {
-                String binaryBlock = BaseTable.getBinValue(letters[i*k + j]);
+                String binaryBlock = BaseTable.getBinValue(letters[i * k + j]);
                 if (binaryBlock == "") {
                     binaryBlock = "111111";
                 }
@@ -146,10 +147,10 @@ public class ImprovedRSA {
         }
         BigInteger[] encodedValues;
         encodedValues = new BigInteger[block.length + 1];
-        BigInteger randomBigInt = new BigInteger(getRandomBinValue(k),2);
+        BigInteger randomBigInt = new BigInteger(getRandomBinValue(k), 2);
         encodedValues[0] = randomBigInt;
         for (int i = 1; i < encodedValues.length; i++) {
-            encodedValues[i] = RSA.crt(encodedValues[i-1].xor(block[i-1]), d, p, q);
+            encodedValues[i] = RSA.crt(encodedValues[i - 1].xor(block[i - 1]), d, p, q);
         }
         String encodedMessage = encodedValues[0].toString();
         for (int i = 1; i < encodedValues.length; i++) {
@@ -158,7 +159,7 @@ public class ImprovedRSA {
         return encodedMessage;
     }
 
-    public static String decode(String encodedMessageAsText, String publicKey){
+    public static String decode(String encodedMessageAsText, String publicKey) {
         String[] parts = publicKey.split("_");
         BigInteger e = new BigInteger(parts[0]);
         BigInteger n = new BigInteger(parts[1]);
@@ -175,18 +176,18 @@ public class ImprovedRSA {
         BigInteger support;
         String binaryValue;
         String m, t, s;
-        BigInteger[] decodedInt = new BigInteger[encodedMessage.length-1];
-        for (int i = encodedMessage.length-1; i >= 1; i--) {
+        BigInteger[] decodedInt = new BigInteger[encodedMessage.length - 1];
+        for (int i = encodedMessage.length - 1; i >= 1; i--) {
             //support = pow(encodedMessage[i], e).mod(n);
             support = encodedMessage[i].modPow(e, n);
             //System.out.println("out"+i);
-            decodedInt[i-1] = encodedMessage[i-1].xor(support);
+            decodedInt[i - 1] = encodedMessage[i - 1].xor(support);
         }
 
         for (int i = 0; i < decodedInt.length; i++) {
-            binaryValue = String.format("%"+(k*6)+"s", decodedInt[i].toString(2)).replace(' ', '0');
+            binaryValue = String.format("%" + (k * 6) + "s", decodedInt[i].toString(2)).replace(' ', '0');
             for (int j = 0; j < k; j++) {
-                m = binaryValue.substring(j*6, j*6+6);
+                m = binaryValue.substring(j * 6, j * 6 + 6);
                 m = BaseTable.getLetter(m);
                 message = message + m;
             }
@@ -194,13 +195,13 @@ public class ImprovedRSA {
         return message;
     }
 
-    public static BigInteger crt( BigInteger m, BigInteger d, BigInteger p, BigInteger q){
+    public static BigInteger crt(BigInteger m, BigInteger d, BigInteger p, BigInteger q) {
         BigInteger dP, dQ, qInv, m1, m2, support, s;
         dP = d.mod(p.subtract(BigInteger.ONE));
         dQ = d.mod(q.subtract(BigInteger.ONE));
-        qInv = multiplicativeInverse(q,p);
-        m1 = m.modPow(dP,p);
-        m2 = m.modPow(dQ,q);
+        qInv = multiplicativeInverse(q, p);
+        m1 = m.modPow(dP, p);
+        m2 = m.modPow(dQ, q);
         support = qInv.multiply(m1.subtract(m2)).mod(p);
         s = m2.add(support.multiply(q));
         return s;
@@ -223,8 +224,8 @@ public class ImprovedRSA {
         return ggT(b, a.mod(b));
     }
 
-    public static BigInteger multiplicativeInverse (BigInteger a, BigInteger N){
-        BigInteger [] result = extendedEuclid(a,N);
+    public static BigInteger multiplicativeInverse(BigInteger a, BigInteger N) {
+        BigInteger[] result = extendedEuclid(a, N);
         if (result[1].compareTo(BigInteger.ZERO) == 1) {
             return result[1];
         } else {
@@ -232,8 +233,8 @@ public class ImprovedRSA {
         }
     }
 
-    private static BigInteger [] extendedEuclid (BigInteger a, BigInteger b){
-        BigInteger [] result = new BigInteger[3];
+    private static BigInteger[] extendedEuclid(BigInteger a, BigInteger b) {
+        BigInteger[] result = new BigInteger[3];
         BigInteger a1, b1;
 
         if (b.equals(BigInteger.ZERO)) {
@@ -243,7 +244,7 @@ public class ImprovedRSA {
             return result;
         }
 
-        result = extendedEuclid (b, a.mod(b));
+        result = extendedEuclid(b, a.mod(b));
         a1 = result[1];
         b1 = result[2];
         result[1] = b1;
@@ -266,7 +267,7 @@ public class ImprovedRSA {
     public static String getRandomBinValue(int k) {
         String randomBin = "";
         Random random = new Random();
-        for (int i = 0; i < k*6; i++) {
+        for (int i = 0; i < k * 6; i++) {
             randomBin = randomBin + random.nextInt(2);
         }
         return randomBin;

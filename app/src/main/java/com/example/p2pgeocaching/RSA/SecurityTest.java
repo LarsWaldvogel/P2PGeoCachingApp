@@ -18,10 +18,11 @@ public class SecurityTest {
      * by going through all combinations between the numbers 2 to n.
      * So the complexity will be in O(n^2). Furthermore, it creates an own key
      * and prints out how much time it took to calculate the correct private key
+     *
      * @param c Context used to access file which is necessary for the method getRandomPrime
-     * in class RSA
+     *          in class RSA
      */
-    public static void breakRSA (Context c) {
+    public static void breakRSA(Context c) {
         // generate the keys in the format "d_n:e_n"
         String keys = RSA.generateKeys(c);
         // get the individual parts "d_n" and "e_n"
@@ -85,7 +86,7 @@ public class SecurityTest {
                 //stop time and print it out
                 long stop = System.currentTimeMillis();
                 System.out.println("Could break RSA");
-                long time = (stop-start);
+                long time = (stop - start);
                 System.out.println("Time: " + time);
                 break;
             }
@@ -95,17 +96,19 @@ public class SecurityTest {
     /**
      * This is a very naive method which tests for a given BigInteger
      * whether it is a prime or not
+     *
      * @param a BigInteger value which should be tested
      * @return boolean whether a is a prime or not
      */
     private static boolean isPrime(BigInteger a) {
-        for (BigInteger i = new BigInteger ("2"); i.compareTo(a) < 0; i = i.add(BigInteger.ONE)) {
+        for (BigInteger i = new BigInteger("2"); i.compareTo(a) < 0; i = i.add(BigInteger.ONE)) {
             try {
                 // check whether i is a divisor of a
                 if (a.mod(i) == BigInteger.ZERO) {
                     return false;
                 }
-            } catch (ArithmeticException e) {}
+            } catch (ArithmeticException e) {
+            }
         }
         return true;
     }

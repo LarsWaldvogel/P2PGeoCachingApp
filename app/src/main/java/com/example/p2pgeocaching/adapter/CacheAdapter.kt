@@ -14,6 +14,10 @@ import com.example.p2pgeocaching.activities.OwnCacheDetailActivity
 import com.example.p2pgeocaching.activities.SolvedCacheDetailActivity
 import com.example.p2pgeocaching.activities.UnsolvedCacheDetailActivity
 import com.example.p2pgeocaching.caches.CacheList
+import com.example.p2pgeocaching.constants.Constants.Companion.CACHE
+import com.example.p2pgeocaching.constants.Constants.Companion.OWN_CACHE
+import com.example.p2pgeocaching.constants.Constants.Companion.SOLVED_CACHE
+import com.example.p2pgeocaching.constants.Constants.Companion.UNSOLVED_CACHE
 import com.example.p2pgeocaching.data.CacheData
 import com.example.p2pgeocaching.data.CacheDataParser
 
@@ -99,12 +103,6 @@ class CacheAdapter(val cacheList: CacheList) :
     // Setup custom accessibility delegate to set the text read with
     // an accessibility service
     companion object Accessibility : View.AccessibilityDelegate() {
-        const val OWN_CACHE = "OwnCache"
-        const val UNSOLVED_CACHE = "UnsolvedCache"
-        const val SOLVED_CACHE = "SolvedCache"
-        const val CACHE = "cache"
-
-
         @RequiresApi(Build.VERSION_CODES.LOLLIPOP)
         override fun onInitializeAccessibilityNodeInfo(
             host: View?,
