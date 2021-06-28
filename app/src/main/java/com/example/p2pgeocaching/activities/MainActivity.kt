@@ -45,11 +45,29 @@ class MainActivity : AppCompatActivity() {
      * This method reads the files.
      * Also, prompts the user for a name if there is none saved.
      * Offers some buttons for different options.
-     *
      */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Log.d(TAG, "onCreate is called")
+
+        // TODO: On startup: make new CacheListFile from all Feeds
+        //  specifics:
+        //  When receiving new data, read all feeds for caches.
+        //  When caches are found, search all other feeds for HoF entries.
+        //  Create a Cache object based on the cache and HoF entries.
+        //  Add all those caches to a cache list.
+        //  Serialize cacheList to file.
+        //  Now always read only from cacheList file until new HoF entry or cache entry is made
+        //  by yourself or received from another person.
+
+        // TODO: Feeds should be saved to separate files. also have a file containing all feeds.
+        //  When feed is subscribed/unsubscribed, make new files or remove them,
+        //  also update feed list.
+
+        // TODO: Implement BaCNet, and have it so the feeds can be serialized.
+
+        // TODO: Have the user be able to add and remove feeds from within the app.
+
 
         // Initialize the binding object
         binding = ActivityMainBinding.inflate(layoutInflater)

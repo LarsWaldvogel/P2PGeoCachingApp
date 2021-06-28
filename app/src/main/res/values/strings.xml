@@ -43,5 +43,10 @@
     <string name="publisher_name_prompt">Publisher name:</string>
     <string name="pub_key_edit_text">Enter last 4 digits of public key:</string>
     <string name="new_feed_button_text">Save</string>
+    <string name="delete_feed_prompt">Unsubscribe from Feed</string>
+    <string name="modify_feeds_text">Manage Feeds</string>
+    <string name="empty_feed_list_prompt">Subscribe to a feed to see them here!</string>
+    <string name="add_feed_button_text">Add Feed</string>
+    <string name="feeds_title">Manage Feeds</string>
 
 </resources>

@@ -1,4 +1,4 @@
-package com.example.p2pgeocaching.bacnet
+package com.example.p2pgeocaching.ownbacnet
 
 /**
  * Publisher is the owner of a [Feed]. They are uniquely identified through their [publicKey].

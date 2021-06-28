@@ -22,6 +22,7 @@ class Constants {
         const val HOF_ENTRY = "HoFEntry"
         const val CACHE_ENTRY = "CacheEntry"
         const val LOG_ENTRY = "LogEntry"
-
+        const val FEEDS = "Feeds"
+        const val FEED_NAMES_FILE = "feedNames"
     }
 }
