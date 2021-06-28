@@ -49,5 +49,8 @@
     <string name="add_feed_button_text">Add Feed</string>
     <string name="feeds_title">Manage Feeds</string>
     <string name="feedDetailTitle">Feed</string>
+    <string name="salt_message">Salt: %s</string>
+    <string name="user_name_message">User name: %s</string>
+    <string name="feed_name_message">Feed: %s</string>
 
 </resources>

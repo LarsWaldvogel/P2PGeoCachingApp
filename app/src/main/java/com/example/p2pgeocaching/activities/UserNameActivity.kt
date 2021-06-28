@@ -42,6 +42,21 @@ class UserNameActivity : AppCompatActivity() {
         val context = applicationContext
         val userNameFile = File(context.filesDir, U_NAME_FILE)
 
+        // initialize fields
+        // TODO: get salt (last 4 digits of public key)
+        // val salt = getSalt()
+        val salt = "6753"
+        var userName = userNameFile.readLines().toString()
+        userName = userName.substring(1, userName.length - 1)
+        val feedName = "$userName#$salt"
+        val saltMessage = getString(R.string.salt_message, salt)
+        val userNameMessage = getString(R.string.user_name_message, userName)
+        val feedNameMessage = getString(R.string.feed_name_message, feedName)
+        binding.currentUserNameText.text = userNameMessage
+        binding.saltText.text = saltMessage
+        binding.yourFeedName.text = feedNameMessage
+
+
         // validate input, show error message or return
         binding.userNameButton.setOnClickListener {
             Log.d(TAG, "Button was pressed")
