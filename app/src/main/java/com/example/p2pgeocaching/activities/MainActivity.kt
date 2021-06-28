@@ -106,7 +106,13 @@ class MainActivity : AppCompatActivity() {
             Log.d(TAG, "Made it past putExtra")
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK) // Better alternative?
             context.startActivity(intent)
+        }
 
+        // Opens activity to manage feeds
+        binding.modifyFeedsButton.setOnClickListener {
+            val intent = Intent(context, FeedActivity::class.java)
+            intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
+            context.startActivity(intent)
         }
 
         // Opens activity to connect to others
