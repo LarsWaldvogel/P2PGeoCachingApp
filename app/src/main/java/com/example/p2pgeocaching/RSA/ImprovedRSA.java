@@ -44,9 +44,15 @@ public class ImprovedRSA {
         p = BigInteger.ZERO;
         q = BigInteger.ZERO;
         n = BigInteger.ZERO;
-        while (p.compareTo(q) == 0) {
-            p = BigInteger.probablePrime(1024, new Random());
-            q = BigInteger.probablePrime(1024, new Random());
+        Random random = new Random();
+        int randomNum1 = 0, randomNum2 = 0;
+        while (p.compareTo(q) == 0 || n.bitLength() < 24 || n.bitLength() > 34) {
+            while (randomNum1 == 0 || randomNum2 == 0) {
+                randomNum1 = random.nextInt(24);
+                randomNum2 = random.nextInt(24);
+            }
+            p = BigInteger.probablePrime(randomNum1, new Random());
+            q = BigInteger.probablePrime(randomNum1, new Random());
             n = p.multiply(q);
         }
         phi = (p.subtract(BigInteger.ONE)).multiply(q.subtract(BigInteger.ONE));
