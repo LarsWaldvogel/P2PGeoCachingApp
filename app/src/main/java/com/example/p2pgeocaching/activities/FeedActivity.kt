@@ -50,7 +50,7 @@ class FeedActivity : AppCompatActivity() {
         if (!feedsNameFile.exists()) {
             feedNameList = mutableListOf()
             binding.emptyFeedListPromptText.text = getString(R.string.empty_feed_list_prompt)
-            
+
         } else { // File exists
             // TODO: uncomment the following line once you have a real implementation
             //  and delete the one after

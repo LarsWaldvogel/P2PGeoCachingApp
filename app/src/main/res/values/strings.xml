@@ -48,5 +48,6 @@
     <string name="empty_feed_list_prompt">Subscribe to a feed to see them here!</string>
     <string name="add_feed_button_text">Add Feed</string>
     <string name="feeds_title">Manage Feeds</string>
+    <string name="feedDetailTitle">Feed</string>
 
 </resources>

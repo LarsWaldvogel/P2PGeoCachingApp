@@ -73,7 +73,6 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-
         // Opens the files used in the app for storage
         val context = applicationContext
         val userNameFile = File(context.filesDir, U_NAME_FILE)

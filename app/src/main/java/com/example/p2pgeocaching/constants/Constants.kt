@@ -24,5 +24,6 @@ class Constants {
         const val LOG_ENTRY = "LogEntry"
         const val FEEDS = "Feeds"
         const val FEED_NAMES_FILE = "feedNames"
+        const val FEED_NAME = "FeedName"
     }
 }
