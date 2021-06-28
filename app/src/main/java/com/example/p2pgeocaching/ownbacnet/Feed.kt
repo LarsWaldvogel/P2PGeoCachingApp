@@ -1,4 +1,4 @@
-package com.example.p2pgeocaching.bacnet
+package com.example.p2pgeocaching.ownbacnet
 
 /**
  * This class represents the BaCNet-Feed.

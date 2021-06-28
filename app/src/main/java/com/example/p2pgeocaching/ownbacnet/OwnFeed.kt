@@ -1,4 +1,4 @@
-package com.example.p2pgeocaching.bacnet
+package com.example.p2pgeocaching.ownbacnet
 
 /**
  * This is a [Feed] object, owned by the user, meaning it can be modified.

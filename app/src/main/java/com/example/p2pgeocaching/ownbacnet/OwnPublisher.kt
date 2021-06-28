@@ -1,4 +1,4 @@
-package com.example.p2pgeocaching.bacnet
+package com.example.p2pgeocaching.ownbacnet
 
 import com.example.p2pgeocaching.RSA.RSA
 

@@ -1,4 +1,4 @@
-package com.example.p2pgeocaching.bacnet
+package com.example.p2pgeocaching.ownbacnet
 
 import com.example.p2pgeocaching.constants.Constants.Companion.LOG_ENTRY
 
@@ -7,7 +7,7 @@ import com.example.p2pgeocaching.constants.Constants.Companion.LOG_ENTRY
  * Thanks to this, one could create a logical time line, making faking timestamps incredibly hard.
  * The [content] contains tuples of all the received non-log [Entry] [id]s and [signature]s,
  * with their respective [Publisher].
- * e. g. : "15, sdfh7Hjs89, Tom; 17, asd7873HHGk, Caroline; ..."
+ * e. g. : "15, sdfh7Hjs89, Tom#2571; 17, asd7873HHGk, Caroline#3142; ..."
  */
 class LogEntry(
     timestamp: Long,

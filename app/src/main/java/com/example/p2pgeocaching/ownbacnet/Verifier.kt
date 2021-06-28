@@ -1,4 +1,4 @@
-package com.example.p2pgeocaching.bacnet
+package com.example.p2pgeocaching.ownbacnet
 
 /**
  * This class can verify the validity of the [Feed]s.
