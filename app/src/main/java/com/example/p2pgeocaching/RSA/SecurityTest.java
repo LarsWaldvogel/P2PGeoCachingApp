@@ -22,9 +22,9 @@ public class SecurityTest {
      * @param c Context used to access file which is necessary for the method getRandomPrime
      *          in class RSA
      */
-    public static void breakRSA(Context c) {
+    public static void breakRSA() {
         // generate the keys in the format "d_n:e_n"
-        String keys = RSA.generateKeys(c);
+        String keys = RSA.generateKeys();
         // get the individual parts "d_n" and "e_n"
         String privateKey = RSA.getPrivateKey(keys);
         String publicKey = RSA.getPublicKey(keys);

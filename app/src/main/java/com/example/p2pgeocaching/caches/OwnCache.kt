@@ -45,7 +45,7 @@ class OwnCache(
         id = hash(stringToHash)
 
         // The key pair is created and saved to [pubKey] and [prvKey]
-        val keyPair: String = RSA.generateKeys(context)
+        val keyPair: String = RSA.generateKeys()
         pubKey = RSA.getPublicKey(keyPair)
         prvKey = RSA.getPrivateKey(keyPair)
 
