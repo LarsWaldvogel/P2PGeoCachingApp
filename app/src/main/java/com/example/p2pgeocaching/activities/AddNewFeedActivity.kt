@@ -37,7 +37,7 @@ class AddNewFeedActivity : AppCompatActivity() {
             // TODO: verify input if it is legal
             //  use inputValidator for the username, and check if the public key
             //  is 4 digits (salt)
-            //  if everything is legal, save it to the file
+            //  if everything is legal, save it to the feedListFile and make new file for the feed
             //  then return
             finish()
         }

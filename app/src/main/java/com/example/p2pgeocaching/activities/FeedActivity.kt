@@ -3,9 +3,12 @@ package com.example.p2pgeocaching.activities
 import android.content.Intent
 import android.os.Bundle
 import androidx.appcompat.app.AppCompatActivity
+import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.p2pgeocaching.R
+import com.example.p2pgeocaching.adapter.FeedAdapter
 import com.example.p2pgeocaching.constants.Constants.Companion.FEED_NAMES_FILE
+import com.example.p2pgeocaching.constants.Constants.Companion.USE_DUMMY_FEED_NAME_LIST
 import com.example.p2pgeocaching.databinding.ActivityFeedBinding
 import java.io.File
 
@@ -47,23 +50,35 @@ class FeedActivity : AppCompatActivity() {
 
         // User has not subscribed to any feeds or is opening the app for the first time
         // show them a message
-        if (!feedsNameFile.exists()) {
+        if (!feedsNameFile.exists() && !USE_DUMMY_FEED_NAME_LIST) {
             feedNameList = mutableListOf()
             binding.emptyFeedListPromptText.text = getString(R.string.empty_feed_list_prompt)
 
         } else { // File exists
-            // TODO: uncomment the following line once you have a real implementation
-            //  and delete the one after
-            // feedList = getFeedList()
-            feedNameList = mutableListOf()
+
+            // for testing purposes
+            feedNameList = if (USE_DUMMY_FEED_NAME_LIST) {
+                mutableListOf("Wolf#2404", "Adam#1234")
+
+            } else { // actual implementation
+                // TODO: uncomment the following line once you have a real implementation
+                //  and delete the one after
+                // mutableListOf(getFeedList())
+                mutableListOf()
+            }
 
             // File exists, but is empty, show message
             if (feedNameList.isEmpty()) {
                 binding.emptyFeedListPromptText.text = getString(R.string.empty_feed_list_prompt)
 
             } else { // List of feeds exists
-                // TODO: show list of feeds with recyclerview
-                TODO("Implement recyclerView")
+                // initialize the recyclerview
+                recyclerView = binding.feedRecyclerView
+                recyclerView.layoutManager = LinearLayoutManager(this)
+                recyclerView.adapter = FeedAdapter(feedNameList)
+
+                // remove prompt in background
+                binding.emptyFeedListPromptText.text = ""
             }
         }
 

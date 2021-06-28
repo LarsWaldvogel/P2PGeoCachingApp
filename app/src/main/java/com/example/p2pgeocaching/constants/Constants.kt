@@ -25,5 +25,6 @@ class Constants {
         const val FEEDS = "Feeds"
         const val FEED_NAMES_FILE = "feedNames"
         const val FEED_NAME = "FeedName"
+        const val USE_DUMMY_FEED_NAME_LIST = true
     }
 }

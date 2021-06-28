@@ -53,6 +53,7 @@ class FeedDetailViewActivity : AppCompatActivity() {
             val feedNameFile = File(context.filesDir, FEED_NAMES_FILE)
             val feedFile = File(context.filesDir, feedName)
             // TODO: delete line from feedNameFile and delete feedFile
+            finish()
         }
     }
 
