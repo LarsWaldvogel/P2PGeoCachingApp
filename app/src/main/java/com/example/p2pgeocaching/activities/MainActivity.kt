@@ -18,6 +18,8 @@ import com.example.p2pgeocaching.databinding.ActivityMainBinding
 import java.io.File
 import java.util.*
 import com.example.p2pgeocaching.RSA.RSA
+import com.example.p2pgeocaching.ownbacnet.OwnFeed
+import com.example.p2pgeocaching.ownbacnet.OwnPublisher
 
 
 // TODO add manifest to get bluetooth permissions
@@ -74,9 +76,6 @@ class MainActivity : AppCompatActivity() {
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-        val keyPair: String = RSA.generateKeys()
-        pubKey = RSA.getPublicKey(keyPair)
-        prvKey = RSA.getPrivateKey(keyPair)
 
         // Opens the files used in the app for storage
         val context = applicationContext
@@ -103,19 +102,44 @@ class MainActivity : AppCompatActivity() {
         }
 
         // Username not selected -> put NewUser in U_NAME_FILE
+        var userName = ""
         if (!userNameFile.exists()) {
-            val userNameString = "NewUser"
-            userNameFile.writeText(userNameString)
-            Log.d(TAG, "Written User Name: $userNameString")
-            title = getString(R.string.welcome_message, userNameString)
+            userName = "NewUser"
+            userNameFile.writeText(userName)
+            Log.d(TAG, "Written User Name: $userName")
+            title = getString(R.string.welcome_message, userName)
 
         } else { // Username has been selected, show it in title
-            var userName = userNameFile.readLines().toString()
+            userName = userNameFile.readLines().toString()
             userName = userName.substring(1, userName.length - 1)
             Log.d(TAG, "User name: $userName")
             title = getString(R.string.welcome_message, userName)
         }
 
+
+        Log.d(TAG, "before filestuff")
+        val fileName = "personData"
+        Log.d(TAG, "after filename")
+        var file = File(context.filesDir, fileName)
+        Log.d(TAG, "after file")
+        var fileExists = file.exists()
+        Log.d(TAG, "after fileexists")
+        if(!fileExists){
+            Log.d(TAG, "file doesn't exist/before rsa")
+            val keyPair: String = RSA.generateKeys()
+            Log.d(TAG, "after RSA")
+            val pubKey = RSA.getPublicKey(keyPair)
+            Log.d(TAG, "Public Key: $pubKey")
+            val prvKey = RSA.getPrivateKey(keyPair)
+            Log.d(TAG, "Private Key: $prvKey")
+            val ownPublisher = OwnPublisher(userName, pubKey, prvKey)
+            val ownFeed = OwnFeed(mutableListOf(),ownPublisher)
+            file.createNewFile()
+            val text = pubKey.plus(" ").plus(prvKey)
+            file.writeText(text)
+        } else {
+            Log.d(TAG, "File content: " + file.readText())
+        }
         // This function sets the recyclerView to the current cacheList written in the file.
         // Also removes the background text.
         // If it is empty, shows background text, and the recycler view is hidden.

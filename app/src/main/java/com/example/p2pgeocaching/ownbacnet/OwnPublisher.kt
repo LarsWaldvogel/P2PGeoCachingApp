@@ -1,5 +1,6 @@
 package com.example.p2pgeocaching.ownbacnet
 
+import android.util.Log
 import com.example.p2pgeocaching.RSA.RSA
 
 /**
@@ -8,7 +9,19 @@ import com.example.p2pgeocaching.RSA.RSA
 class OwnPublisher(name: String, publicKey: String, val privateKey: String) :
     Publisher(name, publicKey) {
 
-    // TODO
+    companion object {
+        const val TAG = "OwnPublisher"
+    }
+
+    val ownFeed = OwnFeed(mutableListOf(), this)
+    fun getSalt(): String {
+        val list = publicKey.split('_')
+        val n = list[1]
+        val salt = n.takeLast(4)
+        Log.d(TAG, "salt of Publisher:\n$salt")
+        return salt
+    }
+
 
     /**
      * Signs the [plainText] by hashing it and encrypting it with the [privateKey].
