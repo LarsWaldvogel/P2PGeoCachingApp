@@ -62,13 +62,6 @@ class UserNameActivity : AppCompatActivity() {
         // validate input, show error message or return
         binding.userNameButton.setOnClickListener {
             Log.d(TAG, "Button was pressed")
-            if (!Python.isStarted()) {
-                Python.start(AndroidPlatform(this))
-            }
-            val python = Python.getInstance()
-            val pythonFile = python.getModule("helloworld")
-            val helloWorldString = pythonFile.callAttr("helloworld")
-            Log.d(TAG, helloWorldString.toString())
             handleInput(userNameFile)
         }
 
