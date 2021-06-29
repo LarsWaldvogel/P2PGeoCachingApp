@@ -19,6 +19,10 @@ class CacheDataParser {
 
     companion object {
 
+
+        // TODO: make method ownToTransfer()
+
+
         /**
          * This is used to create a [Cache] from a [CacheData] object.
          * [data] is the object to be read from.
