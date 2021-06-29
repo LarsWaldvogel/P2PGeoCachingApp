@@ -75,8 +75,10 @@ class MainActivity : AppCompatActivity() {
         setContentView(binding.root)
 
         val keyPair: String = RSA.generateKeys()
-        pubKey = RSA.getPublicKey(keyPair)
-        prvKey = RSA.getPrivateKey(keyPair)
+        val pubKey = RSA.getPublicKey(keyPair)
+        val prvKey = RSA.getPrivateKey(keyPair)
+        val delim = ":"
+        val list = pubkey.split(delim)
 
         // Opens the files used in the app for storage
         val context = applicationContext
