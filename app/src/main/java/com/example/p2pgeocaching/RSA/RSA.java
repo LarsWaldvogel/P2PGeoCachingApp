@@ -3,10 +3,12 @@ package com.example.p2pgeocaching.RSA;
 
 import java.math.BigInteger;
 import java.util.Random;
+import android.util.Log;
 
 public class RSA {
 
     public static String generateKeys() {
+        Log.d("RSA", "generate keys");
         BigInteger p;
         BigInteger q;
         BigInteger n;
@@ -16,7 +18,8 @@ public class RSA {
         n = BigInteger.ZERO;
         Random random = new Random();
         int randomNum1 = 0, randomNum2 = 0;
-        while (p.compareTo(q) == 0 || n.bitLength() < 24 || n.bitLength() > 40) {
+        Log.d("RSA", "after init");
+        while (p.compareTo(q) == 0 || n.bitLength() < 12 || n.bitLength() > 48) {
             while (randomNum1 == 0 || randomNum2 == 0) {
                 randomNum1 = random.nextInt(24);
                 randomNum2 = random.nextInt(24);
@@ -24,10 +27,13 @@ public class RSA {
             p = BigInteger.probablePrime(randomNum1, new Random());
             q = BigInteger.probablePrime(randomNum1, new Random());
             n = p.multiply(q);
+            Log.d("RSA", "n = " +n);
         }
+        Log.d("RSA", "after double while loop");
         phi = (p.subtract(BigInteger.ONE)).multiply(q.subtract(BigInteger.ONE));
         BigInteger e = BigInteger.ZERO;
         BigInteger ggt = BigInteger.ZERO;
+        Log.d("RSA", "after double while loop");
         while (e.compareTo(BigInteger.ONE) <= 0 || e.compareTo(phi) >= 0 || ggt.compareTo(BigInteger.ONE) != 0) {
             e = RSA.getRandomBigInteger(phi);
             ggt = RSA.ggT(e, phi);
