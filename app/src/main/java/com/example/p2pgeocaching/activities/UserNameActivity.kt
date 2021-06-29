@@ -7,6 +7,8 @@ import android.view.KeyEvent
 import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.appcompat.app.AppCompatActivity
+import com.chaquo.python.Python
+import com.chaquo.python.android.AndroidPlatform
 import com.example.p2pgeocaching.R
 import com.example.p2pgeocaching.constants.Constants.Companion.U_NAME_FILE
 import com.example.p2pgeocaching.databinding.ActivityUserNameBinding
@@ -66,7 +68,7 @@ class UserNameActivity : AppCompatActivity() {
             val python = Python.getInstance()
             val pythonFile = python.getModule("helloworld")
             val helloWorldString = pythonFile.callAttr("helloworld")
-            Log.d(TAG, helloWorldString)
+            Log.d(TAG, helloWorldString.toString())
             handleInput(userNameFile)
         }
 
