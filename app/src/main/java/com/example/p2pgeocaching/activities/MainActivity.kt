@@ -17,6 +17,7 @@ import com.example.p2pgeocaching.data.Serializer.Companion.deserializeCacheListF
 import com.example.p2pgeocaching.databinding.ActivityMainBinding
 import java.io.File
 import java.util.*
+import com.example.p2pgeocaching.RSA.RSA
 
 
 // TODO add manifest to get bluetooth permissions
@@ -72,6 +73,10 @@ class MainActivity : AppCompatActivity() {
         // Initialize the binding object
         binding = ActivityMainBinding.inflate(layoutInflater)
         setContentView(binding.root)
+
+        val keyPair: String = RSA.generateKeys()
+        pubKey = RSA.getPublicKey(keyPair)
+        prvKey = RSA.getPrivateKey(keyPair)
 
         // Opens the files used in the app for storage
         val context = applicationContext
