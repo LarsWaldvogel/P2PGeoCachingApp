@@ -91,7 +91,11 @@ class FeedActivity : AppCompatActivity() {
 
     //*
     fun getFeedList (text: String): List<String> {
-        return text.split('\n')
+        if (text.length == 0) {
+            return mutableListOf()
+        } else {
+            return text.split('\n')
+        }
     }
 
 }

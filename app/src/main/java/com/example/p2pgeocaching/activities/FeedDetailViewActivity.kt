@@ -52,7 +52,25 @@ class FeedDetailViewActivity : AppCompatActivity() {
             // initialize the file
             val feedNameFile = File(context.filesDir, FEED_NAMES_FILE)
             val feedFile = File(context.filesDir, feedName)
-            // TODO: delete line from feedNameFile and delete feedFile
+            feedFile.delete()
+            val text = feedNameFile.readText()
+            val list = text.split('\n')
+            if (feedNameFile.exists()) {
+                feedNameFile.delete()
+            }
+            feedNameFile.createNewFile()
+            if (list.size == 1) {
+                finish()
+            }
+            for (item in list) {
+                if (!item.equals(feedName)) {
+                    if (feedNameFile.length() == 0L) {
+                        feedNameFile.appendText(item)
+                    } else {
+                        feedNameFile.appendText("\n".plus(item))
+                    }
+                }
+            }
             finish()
         }
     }
