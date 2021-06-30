@@ -1,9 +1,11 @@
 package com.example.p2pgeocaching.activities
 
 import android.os.Bundle
+import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.example.p2pgeocaching.constants.Constants
 import com.example.p2pgeocaching.databinding.ActivityAddNewFeedBinding
+import com.example.p2pgeocaching.inputValidator.InputValidator
 import java.io.File
 
 /**
@@ -33,12 +35,30 @@ class AddNewFeedActivity : AppCompatActivity() {
         val context = applicationContext
         val feedListFile = File(context.filesDir, Constants.U_NAME_FILE)
 
+        //*
         binding.saveFeedButton.setOnClickListener {
-            // TODO: verify input if it is legal
-            //  use inputValidator for the username, and check if the public key
-            //  is 4 digits (salt)
-            //  if everything is legal, save it to the feedListFile and make new file for the feed
-            //  then return
+            val feedFile = File(context.filesDir, Constants.FEED_NAMES_FILE)
+            Log.d(TAG, "Activated SaveFeedButton")
+            val publisherName = binding.publisherNameEditText.text.toString()
+            Log.d(TAG, "PublisherName = "+publisherName)
+            val pubKeyText = binding.pubKeyEditText.text.toString()
+            Log.d(TAG, "PubKey = "+pubKeyText)
+            InputValidator.checkUserNameForIllegalCharacters(publisherName)
+            if (pubKeyText.length == 4) {
+                val text = publisherName.plus('#').plus(pubKeyText)
+                if (feedFile.length() == 0L) {
+                    feedFile.appendText(text)
+                } else {
+                    feedFile.appendText("\n".plus(text))
+                }
+                val fileName = text
+                Log.d(TAG, "FileName = " + fileName)
+                var file = File(context.filesDir, fileName)
+                file.createNewFile()
+                if (file.exists()) {
+                    Log.d(TAG, "File exists")
+                }
+            }
             finish()
         }
     }

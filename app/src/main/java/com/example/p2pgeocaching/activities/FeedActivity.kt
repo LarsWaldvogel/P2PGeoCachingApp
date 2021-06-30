@@ -61,10 +61,9 @@ class FeedActivity : AppCompatActivity() {
                 mutableListOf("Wolf#2404", "Adam#1234")
 
             } else { // actual implementation
-                // TODO: uncomment the following line once you have a real implementation
-                //  and delete the one after
-                // mutableListOf(getFeedList())
-                mutableListOf()
+                //*
+                getFeedList(feedsNameFile.readText())
+                //mutableListOf()
             }
 
             // File exists, but is empty, show message
@@ -88,6 +87,11 @@ class FeedActivity : AppCompatActivity() {
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             context.startActivity(intent)
         }
+    }
+
+    //*
+    fun getFeedList (text: String): List<String> {
+        return text.split('\n')
     }
 
 }

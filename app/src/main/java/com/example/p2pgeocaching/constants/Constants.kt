@@ -12,7 +12,7 @@ class Constants {
         const val PRIVATE_KEY = "private key"
         const val PUBLIC_KEY = "public key"
         const val ID = "id"
-        const val USE_DUMMY_LIST = true
+        const val USE_DUMMY_LIST = false
         const val DUMMY_LIST_FILE = "raw/dummyCacheList.json"
         const val OWN_CACHE = "OwnCache"
         const val UNSOLVED_CACHE = "UnsolvedCache"
@@ -25,6 +25,6 @@ class Constants {
         const val FEEDS = "Feeds"
         const val FEED_NAMES_FILE = "feedNames"
         const val FEED_NAME = "FeedName"
-        const val USE_DUMMY_FEED_NAME_LIST = true
+        const val USE_DUMMY_FEED_NAME_LIST = false
     }
 }

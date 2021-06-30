@@ -20,12 +20,29 @@ class OwnFeed(entries: List<Entry>, ownPublisher: OwnPublisher) : Feed(entries, 
         val salt = getOwnPublisher().getSalt()
         val feedName = name.plus("#").plus(salt)
         Log.d(TAG, "feedName = $feedName")
-        var file = File(feedName)
-        file.createNewFile()
-
-
+        // TODO* context?
+        val file = File(feedName)
+        // TODO* activate it
+        //file.createNewFile()
     }
 
+    //*
+    fun createNewFeed(oldusername: String, key:String) {
+        var str = ""
+        val name = getOwnPublisher().name
+        val salt = getOwnPublisher().getSalt()
+        val feedName = name.plus("#").plus(salt)
+        Log.d(TAG, "feedName = $feedName")
+        // TODO* context?
+        val file = File(feedName)
+
+        val oldFeedName = oldusername.plus("#").plus(getOwnPublisher().getSaltOfOldPublisher(key))
+        val oldFile = File(oldFeedName)
+        oldFile.delete()
+        file.createNewFile()
+    }
+
+    // TODO addEntry()
     /**
      * Returns the [Publisher] as an [OwnPublisher] object (which it always is).
      */

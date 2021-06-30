@@ -133,7 +133,9 @@ class MainActivity : AppCompatActivity() {
             val prvKey = RSA.getPrivateKey(keyPair)
             Log.d(TAG, "Private Key: $prvKey")
             val ownPublisher = OwnPublisher(userName, pubKey, prvKey)
-            val ownFeed = OwnFeed(mutableListOf(),ownPublisher)
+            val ownFeed = OwnFeed(mutableListOf(), ownPublisher)
+            //*
+            ownFeed.createOwnFeed()
             file.createNewFile()
             val text = pubKey.plus(" ").plus(prvKey)
             file.writeText(text)
@@ -147,11 +149,36 @@ class MainActivity : AppCompatActivity() {
 
         // Opens rename activity when pressed
         binding.changeUserNameButton.setOnClickListener {
+            //*
+            var oldusername = userNameFile.readLines().toString()
+            oldusername = oldusername.substring(1, oldusername.length - 1)
+
             val intent = Intent(context, UserNameActivity::class.java)
             intent.putExtra(U_NAME_FILE, userNameFile)
             Log.d(TAG, "Made it past putExtra")
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK) // Better alternative?
             context.startActivity(intent)
+
+            val keyPair: String = RSA.generateKeys()
+            Log.d(TAG, "after RSA")
+            val pubKey = RSA.getPublicKey(keyPair)
+            Log.d(TAG, "Public Key: $pubKey")
+            val prvKey = RSA.getPrivateKey(keyPair)
+            Log.d(TAG, "Private Key: $prvKey")
+
+            val fileContent = file.readText()
+
+            file.delete()
+
+            userName = userNameFile.readLines().toString()
+            userName = userName.substring(1, userName.length - 1)
+
+            val ownPublisher = OwnPublisher(userName, pubKey, prvKey)
+            val ownFeed = OwnFeed(mutableListOf(), ownPublisher)
+            ownFeed.createNewFeed(oldusername, fileContent)
+            file.createNewFile()
+            val text = pubKey.plus(" ").plus(prvKey)
+            file.writeText(text)
         }
 
         // Opens activity to manage feeds
