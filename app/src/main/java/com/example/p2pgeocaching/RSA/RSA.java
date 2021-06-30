@@ -20,7 +20,7 @@ public class RSA {
         int randomNum1 = 0, randomNum2 = 0;
         Log.d("RSA", "after init");
         while (p.compareTo(q) == 0 || n.bitLength() < 12 || n.bitLength() > 48) {
-            while (randomNum1 == 0 || randomNum2 == 0) {
+            while (randomNum1 < 2 || randomNum2 < 2) {
                 randomNum1 = random.nextInt(24);
                 randomNum2 = random.nextInt(24);
             }

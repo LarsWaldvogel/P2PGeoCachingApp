@@ -3,6 +3,7 @@ package com.example.p2pgeocaching.ownbacnet
 import android.util.Log
 import com.example.p2pgeocaching.activities.MainActivity
 import java.io.File
+import android.content.Context
 
 /**
  * This is a [Feed] object, owned by the user, meaning it can be modified.
@@ -14,30 +15,30 @@ class OwnFeed(entries: List<Entry>, ownPublisher: OwnPublisher) : Feed(entries, 
         const val TAG = "OwnFeed"
     }
 
-    fun createOwnFeed() {
+    fun createOwnFeed(context: File) {
         var str = ""
         val name = getOwnPublisher().name
         val salt = getOwnPublisher().getSalt()
         val feedName = name.plus("#").plus(salt)
         Log.d(TAG, "feedName = $feedName")
         // TODO* context?
-        val file = File(feedName)
+        val file = File(context, feedName)
         // TODO* activate it
-        //file.createNewFile()
+        file.createNewFile()
     }
 
     //*
-    fun createNewFeed(oldusername: String, key:String) {
+    fun createNewFeed(oldusername: String, key:String, context: File) {
         var str = ""
         val name = getOwnPublisher().name
         val salt = getOwnPublisher().getSalt()
         val feedName = name.plus("#").plus(salt)
         Log.d(TAG, "feedName = $feedName")
         // TODO* context?
-        val file = File(feedName)
+        val file = File(context, feedName)
 
         val oldFeedName = oldusername.plus("#").plus(getOwnPublisher().getSaltOfOldPublisher(key))
-        val oldFile = File(oldFeedName)
+        val oldFile = File(context, oldFeedName)
         oldFile.delete()
         file.createNewFile()
     }

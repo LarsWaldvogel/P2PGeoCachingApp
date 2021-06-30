@@ -23,9 +23,10 @@ class OwnPublisher(name: String, publicKey: String, val privateKey: String) :
 
     //*
     fun getSaltOfOldPublisher(key: String): String {
-        val list1 = publicKey.split(' ')
+        val list1 = key.split(" ")
         val pub = list1[0]
-        val list2 = pub.split('_')
+        print(pub)
+        val list2 = pub.split("_")
         val n = list2[1]
         val salt = n.takeLast(4)
         Log.d(TAG, "Old salt of Publisher:\n$salt")

@@ -10,9 +10,12 @@ import androidx.appcompat.app.AppCompatActivity
 import com.chaquo.python.Python
 import com.chaquo.python.android.AndroidPlatform
 import com.example.p2pgeocaching.R
+import com.example.p2pgeocaching.RSA.RSA
 import com.example.p2pgeocaching.constants.Constants.Companion.U_NAME_FILE
 import com.example.p2pgeocaching.databinding.ActivityUserNameBinding
 import com.example.p2pgeocaching.inputValidator.InputValidator
+import com.example.p2pgeocaching.ownbacnet.OwnFeed
+import com.example.p2pgeocaching.ownbacnet.OwnPublisher
 import com.example.p2pgeocaching.p2pexceptions.StringContainsIllegalCharacterException
 import java.io.File
 
@@ -43,11 +46,14 @@ class UserNameActivity : AppCompatActivity() {
         // Get the file for the username
         val context = applicationContext
         val userNameFile = File(context.filesDir, U_NAME_FILE)
+        val personData = File(context.filesDir, "personData")
 
         // initialize fields
         // TODO: get salt (last 4 digits of public key)
-        // val salt = getSalt()
-        val salt = "6753"
+        //*
+        val key = personData.readText()
+        val salt = getSalt(key)
+        //val salt = "6753"
         var userName = userNameFile.readLines().toString()
         userName = userName.substring(1, userName.length - 1)
         val feedName = "$userName#$salt"
@@ -62,7 +68,8 @@ class UserNameActivity : AppCompatActivity() {
         // validate input, show error message or return
         binding.userNameButton.setOnClickListener {
             Log.d(TAG, "Button was pressed")
-            handleInput(userNameFile)
+            //*
+            handleInput(userNameFile, context.filesDir)
         }
 
         // close keyboard when enter is pressed
@@ -74,12 +81,23 @@ class UserNameActivity : AppCompatActivity() {
         }
     }
 
+    //*
+    fun getSalt(key: String): String {
+        val list1 = key.split(' ')
+        val pub = list1[0]
+        val list2 = pub.split('_')
+        val n = list2[1]
+        val salt = n.takeLast(4)
+        Log.d(OwnPublisher.TAG, "Old salt of Publisher:\n$salt")
+        return salt
+    }
+
     /**
      * This function looks if the entered text is legal.
      * If it is, it saves it and writes to the file.
      * If it is not, displays error message.
      */
-    private fun handleInput(file: File) {
+    private fun handleInput(file: File, context: File) {
         Log.d(TAG, "handleInput() was called")
         val userNameString: String = binding.userNameEditText.text.toString()
         Log.d(TAG, "usernameString is: $userNameString")
@@ -104,11 +122,40 @@ class UserNameActivity : AppCompatActivity() {
 
             // Everything is correct, write to file, go back
             if (!hasIllegalCharacters) {
+
+                val fileName = "personData"
+                var personFile = File(context, fileName)
+                val fileContent = personFile.readText()
+
+                personFile.delete()
+
+                val userNameFile = File(context, U_NAME_FILE)
+                var oldUserName = userNameFile.readLines().toString()
+                oldUserName = oldUserName.substring(1, oldUserName.length - 1)
+
+                val keyPair: String = RSA.generateKeys()
+                Log.d(MainActivity.TAG, "after RSA")
+                val pubKey = RSA.getPublicKey(keyPair)
+                Log.d(MainActivity.TAG, "Public Key: $pubKey")
+                val prvKey = RSA.getPrivateKey(keyPair)
+                Log.d(MainActivity.TAG, "Private Key: $prvKey")
+
+                val ownPublisher = OwnPublisher(userNameString, pubKey, prvKey)
+                val ownFeed = OwnFeed(mutableListOf(), ownPublisher)
+                ownFeed.createNewFeed(oldUserName, fileContent, context)
+                personFile.createNewFile()
+                val text = pubKey.plus(" ").plus(prvKey)
+                personFile.writeText(text)
+
                 Log.d(TAG, "User name was accepted")
                 file.delete()
                 Log.d(TAG, "Original file was deleted")
                 file.writeText(userNameString)
                 Log.d(TAG, "Written to file: $userNameString")
+
+                //*
+
+
                 /*
                 val inputStream: InputStream = File(U_NAME_FILE).inputStream()
                 Log.d(
