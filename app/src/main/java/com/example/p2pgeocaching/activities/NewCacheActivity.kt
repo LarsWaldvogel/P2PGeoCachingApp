@@ -8,9 +8,14 @@ import com.example.p2pgeocaching.caches.CacheList
 import com.example.p2pgeocaching.caches.OwnCache
 import com.example.p2pgeocaching.constants.Constants.Companion.CACHE_LIST_FILE
 import com.example.p2pgeocaching.constants.Constants.Companion.U_NAME_FILE
+import com.example.p2pgeocaching.data.FeedDataParser
 import com.example.p2pgeocaching.data.Serializer
 import com.example.p2pgeocaching.databinding.ActivityNewCacheBinding
 import com.example.p2pgeocaching.inputValidator.InputValidator
+import com.example.p2pgeocaching.ownbacnet.CacheEntry
+import com.example.p2pgeocaching.ownbacnet.OwnFeed
+import com.example.p2pgeocaching.ownbacnet.OwnPublisher
+import com.example.p2pgeocaching.ownbacnet.Publisher
 import com.example.p2pgeocaching.p2pexceptions.InputIsEmptyException
 import com.example.p2pgeocaching.p2pexceptions.StringContainsIllegalCharacterException
 import java.io.File
@@ -46,7 +51,7 @@ class NewCacheActivity : AppCompatActivity() {
             var wasAccepted = false
             try {
                 // Throws StringContainsIllegalCharacterException if one of the inputs is not legal
-                saveInputToCacheList(userNameFile, cacheListFile)
+                saveInputToCacheList(userNameFile, cacheListFile, context.filesDir)
                 wasAccepted = true
             } catch (e: StringContainsIllegalCharacterException) {
                 Log.d(TAG, "Created cache contained illegal characters or was empty")
@@ -63,7 +68,7 @@ class NewCacheActivity : AppCompatActivity() {
      * [cacheList], then writes the [cacheList] to the [cacheListFile] by serializing it.
      * Also needs the [userNameFile] to get the creator's name.
      */
-    private fun saveInputToCacheList(userNameFile: File, cacheListFile: File) {
+    private fun saveInputToCacheList(userNameFile: File, cacheListFile: File, context: File) {
         // Save input to variables
         val cacheTitle = binding.newCacheNameEditText.text.toString()
         val cacheDesc = binding.newCacheDescEditText.text.toString()
@@ -87,8 +92,31 @@ class NewCacheActivity : AppCompatActivity() {
         // Create the new Cache and add it to the cacheList
         val newCache = OwnCache(cacheTitle, cacheDesc, creator, this)
         cacheList.add(newCache)
+        val filename = "personData"
+        var file = File(context, filename)
+        val content = file.readText()
+        val keys = content.split(" ")
+        val pubkey = keys[0].split("_")
+        val salt = pubkey[1].takeLast(4)
+        val feedname = creator.plus("#").plus(salt)
 
+        val feedFile = File(context, feedname)
+        val feedParser = FeedDataParser()
+        val entryList = feedParser.feedToEntrylist(feedFile)
+        //val entryList = Serializer.deserializeCacheListFromFile(feedFile)
+        val op = OwnPublisher(creator, keys[0], keys[1])
+        val ownFeed = OwnFeed(entryList, op)
+
+        val cacheEntry = CacheEntry.Companion.newCacheEntry(newCache, ownFeed)
+        val appendtext = feedParser.appendCacheToFeed(cacheEntry)
+        if (feedFile.length() == 0L) {
+            feedFile.appendText(appendtext)
+        } else {
+            feedFile.appendText("\n-*-*-")
+            feedFile.appendText("\n".plus(appendtext))
+        }
         // Save the new list to file
         Serializer.serializeCacheListToFile(cacheList, cacheListFile)
     }
+
 }
