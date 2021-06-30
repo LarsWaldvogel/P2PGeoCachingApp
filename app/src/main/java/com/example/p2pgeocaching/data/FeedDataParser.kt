@@ -35,12 +35,16 @@ class FeedDataParser {
     fun appendCacheToFeed(cacheEntry : CacheEntry) : String {
         val str =
             cacheEntry.timestamp.toString()
-                .plus("\n***")
-                .plus("\n"+cacheEntry.id).plus("\n***")
-                .plus("\n"+cacheEntry.signedPreviousSignature).plus("\n***")
-                .plus("\n"+cacheEntry.content).plus("\n***")
-                .plus("\n"+cacheEntry.type).plus("\n***")
-                .plus("\n"+cacheEntry.signature)
+                .plus("***")
+                .plus("".plus(cacheEntry.id.toString()))
+                .plus("***")
+                .plus("".plus(cacheEntry.signedPreviousSignature))
+                .plus("***")
+                .plus("".plus(cacheEntry.content))
+                .plus("***")
+                .plus("".plus(cacheEntry.type))
+                .plus("***")
+                .plus("".plus(cacheEntry.signature))
         return str
     }
 

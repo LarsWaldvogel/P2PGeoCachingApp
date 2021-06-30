@@ -1,5 +1,12 @@
 package com.example.p2pgeocaching.caches
 
+import com.example.p2pgeocaching.constants.Constants
+import com.example.p2pgeocaching.data.FeedDataParser
+import com.example.p2pgeocaching.data.Serializer
+import com.example.p2pgeocaching.ownbacnet.Entry
+import java.io.File
+import android.util.Log
+
 /**
  * This class looks at the local Feeds and updates the CacheList accordingly.
  * It is called whenever there are changes to any Feed that have new CacheEntries or HoFEntries.
@@ -10,6 +17,115 @@ package com.example.p2pgeocaching.caches
  */
 class CacheListGenerator {
 
-    // TODO
+    companion object {
+        const val TAG = "CacheListGenerator"
+    }
 
+    private lateinit var cacheListFile: File
+
+    fun getCacheListFileContent (context: File) {
+        val userNameFile = File(context, Constants.U_NAME_FILE)
+        val creatorString = userNameFile.readLines().toString()
+        val creator = creatorString.substring(1, creatorString.length - 1)
+        cacheListFile = File(context, Constants.CACHE_LIST_FILE)
+        val filename = "personData"
+        var file = File(context, filename)
+        val content = file.readText()
+        val keys = content.split(" ")
+        val pubkey = keys[0].split("_")
+        val salt = pubkey[1].takeLast(4)
+        val feedname = creator.plus("#").plus(salt)
+
+        val feedFile = File(context, feedname)
+        val fdp = FeedDataParser()
+        val list = fdp.feedToEntrylist(feedFile)
+
+        val feedNamesFile = File(context, Constants.FEED_NAMES_FILE)
+        var cacheList = CacheList(mutableListOf())
+        if (feedNamesFile.length() == 0L) {
+            for (item in list) {
+                if (item.type.equals(Constants.CACHE_ENTRY)) {
+                    var cache1 = Serializer.deserializeCacheFromString(item.content)
+                    var cache = OwnCache(
+                        cache1.title,
+                        cache1.desc,
+                        cache1.creator,
+                        cache1.id,
+                        cache1.pubKey,
+                        cache1.prvKey,
+                        cache1.hallOfFame,
+                        cache1.plainTextHOF
+                    )
+                    cacheList.add(cache1)
+                }
+            }
+        } else {
+            for (item in list) {
+                if (item.type.equals(Constants.CACHE_ENTRY)) {
+                    var cache1 = Serializer.deserializeCacheFromString(item.content)
+                    var cache = OwnCache(
+                        cache1.title,
+                        cache1.desc,
+                        cache1.creator,
+                        cache1.id,
+                        cache1.pubKey,
+                        cache1.prvKey,
+                        cache1.hallOfFame,
+                        cache1.plainTextHOF
+                    )
+                    val feedNameList = feedNamesFile.readText().split("\n")
+                    for (feedName in feedNameList) {
+                        val feedFile = File(context, feedName)
+                        val listOfEntries = fdp.feedToEntrylist(feedFile)
+                        for (entry in listOfEntries) {
+                            if (entry.type.equals(Constants.HOF_ENTRY) && entry.signature.equals(
+                                    item.signature
+                                )
+                            ) {
+                                cache.addPersonToHOF(entry.content)
+                            }
+                        }
+                    }
+                    //TODO get privateKey from OwnCacheListFile
+                    cacheList.add(cache)
+
+                } else if (item.type.equals(Constants.LOG_ENTRY)) {
+                    val feedNameList = feedNamesFile.readText().split("\n")
+                    val listOfPeople = mutableListOf<String>()
+                    var cache = Cache("", "", "", 0, "", "")
+                    for (feedName in feedNameList) {
+                        val feedFile = File(context, feedName)
+                        val listOfEntries = fdp.feedToEntrylist(feedFile)
+                        for (entry in listOfEntries) {
+                            if (entry.type.equals(Constants.HOF_ENTRY) && entry.signature.equals(
+                                    item.signature
+                                )
+                            ) {
+                                listOfPeople.add(entry.content)
+                            }
+                            if (entry.type.equals(Constants.CACHE_ENTRY) && entry.signature.equals(
+                                    item.signature
+                                )
+                            ) {
+                                cache = Serializer.deserializeCacheFromString(item.content)
+                            }
+                        }
+                    }
+                    for (person in listOfPeople) {
+                        cache.addPersonToHOF(person)
+                    }
+                    for (myPerson in list) {
+                        if (myPerson.type.equals(Constants.HOF_ENTRY) && myPerson.signature.equals(
+                                item.signature
+                            )
+                        ) {
+                            cache.addPersonToHOF(myPerson.content)
+                        }
+                    }
+                    cacheList.add(cache)
+                }
+            }
+        }
+        Serializer.serializeCacheListToFile(cacheList, cacheListFile)
+    }
 }

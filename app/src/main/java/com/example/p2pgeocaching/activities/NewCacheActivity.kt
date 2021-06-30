@@ -5,6 +5,7 @@ import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
 import com.example.p2pgeocaching.R
 import com.example.p2pgeocaching.caches.CacheList
+import com.example.p2pgeocaching.caches.CacheListGenerator
 import com.example.p2pgeocaching.caches.OwnCache
 import com.example.p2pgeocaching.constants.Constants.Companion.CACHE_LIST_FILE
 import com.example.p2pgeocaching.constants.Constants.Companion.U_NAME_FILE
@@ -89,6 +90,7 @@ class NewCacheActivity : AppCompatActivity() {
             return
         }
 
+        //TODO* create class which does that
         // Create the new Cache and add it to the cacheList
         val newCache = OwnCache(cacheTitle, cacheDesc, creator, this)
         cacheList.add(newCache)
@@ -112,11 +114,14 @@ class NewCacheActivity : AppCompatActivity() {
         if (feedFile.length() == 0L) {
             feedFile.appendText(appendtext)
         } else {
-            feedFile.appendText("\n-*-*-")
-            feedFile.appendText("\n".plus(appendtext))
+            feedFile.appendText("-*-*-")
+            feedFile.appendText("".plus(appendtext))
         }
+        val generator = CacheListGenerator()
+        generator.getCacheListFileContent(context)
+
         // Save the new list to file
-        Serializer.serializeCacheListToFile(cacheList, cacheListFile)
+        //Serializer.serializeCacheListToFile(cacheList, cacheListFile)
     }
 
 }
