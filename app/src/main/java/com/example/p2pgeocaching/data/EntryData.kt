@@ -6,7 +6,14 @@ import java.io.Serializable
  * This class is used to store the data of an entry to be serialized and vice-versa.
  */
 @kotlinx.serialization.Serializable
-class EntryData : Serializable {
+data class EntryData(
+    val timestamp: Long,
+    val id: Int,
+    val signedPreviousSignature: String,
+    val content: String,
+    val type: String,
+    val signature: String,
+) : Serializable {
 
     // TODO
 
