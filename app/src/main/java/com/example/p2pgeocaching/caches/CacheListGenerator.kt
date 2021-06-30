@@ -42,10 +42,13 @@ class CacheListGenerator {
 
         val feedNamesFile = File(context, Constants.FEED_NAMES_FILE)
         var cacheList = CacheList(mutableListOf())
+        Log.i(TAG, "Length of feedNamesFile = "+feedNamesFile.length())
         if (feedNamesFile.length() == 0L) {
+            Log.i(TAG, "No feeds")
             for (item in list) {
-                if (item.type.equals(Constants.CACHE_ENTRY)) {
-                    var cache1 = Serializer.deserializeCacheFromString(item.content)
+                if (item.content.equals(Constants.CACHE_ENTRY)) {
+                    Log.i(TAG, "Item Content = "+item.content)
+                    var cache1 = Serializer.deserializeCacheFromString(item.type)
                     var cache = OwnCache(
                         cache1.title,
                         cache1.desc,
@@ -57,12 +60,13 @@ class CacheListGenerator {
                         cache1.plainTextHOF
                     )
                     cacheList.add(cache1)
+                    Log.i(TAG, "Added cache "+cache1.toString())
                 }
             }
         } else {
             for (item in list) {
-                if (item.type.equals(Constants.CACHE_ENTRY)) {
-                    var cache1 = Serializer.deserializeCacheFromString(item.content)
+                if (item.content.equals(Constants.CACHE_ENTRY)) {
+                    var cache1 = Serializer.deserializeCacheFromString(item.type)
                     var cache = OwnCache(
                         cache1.title,
                         cache1.desc,
@@ -78,18 +82,19 @@ class CacheListGenerator {
                         val feedFile = File(context, feedName)
                         val listOfEntries = fdp.feedToEntrylist(feedFile)
                         for (entry in listOfEntries) {
-                            if (entry.type.equals(Constants.HOF_ENTRY) && entry.signature.equals(
+                            if (entry.content.equals(Constants.HOF_ENTRY) && entry.signature.equals(
                                     item.signature
                                 )
                             ) {
-                                cache.addPersonToHOF(entry.content)
+                                //TODO* synchronize with HOFEntry
+                                cache.addPersonToHOF(entry.type)
                             }
                         }
                     }
                     //TODO get privateKey from OwnCacheListFile
                     cacheList.add(cache)
 
-                } else if (item.type.equals(Constants.LOG_ENTRY)) {
+                } else if (item.content.equals(Constants.LOG_ENTRY)) {
                     val feedNameList = feedNamesFile.readText().split("\n")
                     val listOfPeople = mutableListOf<String>()
                     var cache = Cache("", "", "", 0, "", "")
@@ -97,17 +102,18 @@ class CacheListGenerator {
                         val feedFile = File(context, feedName)
                         val listOfEntries = fdp.feedToEntrylist(feedFile)
                         for (entry in listOfEntries) {
-                            if (entry.type.equals(Constants.HOF_ENTRY) && entry.signature.equals(
+                            if (entry.content.equals(Constants.HOF_ENTRY) && entry.signature.equals(
                                     item.signature
                                 )
                             ) {
-                                listOfPeople.add(entry.content)
+                                //TODO* synchronize with HOFEntry
+                                listOfPeople.add(entry.type)
                             }
-                            if (entry.type.equals(Constants.CACHE_ENTRY) && entry.signature.equals(
+                            if (entry.content.equals(Constants.CACHE_ENTRY) && entry.signature.equals(
                                     item.signature
                                 )
                             ) {
-                                cache = Serializer.deserializeCacheFromString(item.content)
+                                cache = Serializer.deserializeCacheFromString(item.type)
                             }
                         }
                     }
@@ -119,7 +125,8 @@ class CacheListGenerator {
                                 item.signature
                             )
                         ) {
-                            cache.addPersonToHOF(myPerson.content)
+                            //TODO* synchronize with HOFEntry
+                            cache.addPersonToHOF(myPerson.type)
                         }
                     }
                     cacheList.add(cache)

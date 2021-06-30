@@ -3,17 +3,24 @@ package com.example.p2pgeocaching.data
 import com.example.p2pgeocaching.ownbacnet.CacheEntry
 import com.example.p2pgeocaching.ownbacnet.Entry
 import java.io.File
+import android.util.Log
+import com.example.p2pgeocaching.caches.CacheListGenerator
 
 /**
  * This class parses a FeedData object to an actual Feed and back.
  */
 class FeedDataParser {
 
+    companion object {
+        const val TAG = "NewCacheActivity"
+    }
+
     fun feedToEntrylist(feedFile : File): List<Entry> {
         if(feedFile.length() == 0L) {
             return mutableListOf()
         } else {
             val content = feedFile.readText()
+            Log.i(TAG, "Content = "+content)
             val entrylist = content.split("-*-*-")
             val listOfEntries = mutableListOf<Entry>()
             for (item in entrylist) {
@@ -26,6 +33,12 @@ class FeedDataParser {
                     ep[4],         // type
                     ep[5]          // signature
                 )
+                Log.i(CacheListGenerator.TAG, "Entry Id = "+entry.id)
+                Log.i(CacheListGenerator.TAG, "Entry Content = "+entry.content)
+                Log.i(CacheListGenerator.TAG, "Entry Signature = "+entry.signature)
+                Log.i(CacheListGenerator.TAG, "Entry Previous = "+entry.signedPreviousSignature)
+                Log.i(CacheListGenerator.TAG, "Entry Time = "+entry.timestamp)
+                Log.i(CacheListGenerator.TAG, "Entry Type = "+entry.type)
                 listOfEntries.add(entry)
             }
             return listOfEntries

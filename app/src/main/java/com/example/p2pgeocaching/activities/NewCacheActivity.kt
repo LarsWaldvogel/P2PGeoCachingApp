@@ -111,12 +111,14 @@ class NewCacheActivity : AppCompatActivity() {
 
         val cacheEntry = CacheEntry.Companion.newCacheEntry(newCache, ownFeed)
         val appendtext = feedParser.appendCacheToFeed(cacheEntry)
+        Log.i(TAG, "AppendText = "+appendtext)
         if (feedFile.length() == 0L) {
             feedFile.appendText(appendtext)
         } else {
             feedFile.appendText("-*-*-")
             feedFile.appendText("".plus(appendtext))
         }
+        Log.i(TAG, "Feed Content = "+feedFile.readText())
         val generator = CacheListGenerator()
         generator.getCacheListFileContent(context)
 

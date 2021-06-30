@@ -57,7 +57,7 @@ class Serializer {
             // Use Gson instead:
             val gson = Gson()
             val serializedCacheList = gson.toJson(cacheListData)
-            Log.d(TAG, "Wrote the following to file:\n$serializedCacheList")
+            Log.i(TAG, "Wrote the following to file:\n$serializedCacheList")
 
             // Overwrite file with new JSON cacheList
             cacheListFile.delete()
