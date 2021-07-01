@@ -33,6 +33,7 @@ class BluetoothHandler(val activity: BluetoothTransferActivity) {
     val state: BluetoothBroadcast = BluetoothBroadcast(this, activity)
 
     val devices: ArrayList<BluetoothDevice?> = ArrayList() // If you want to display the devices found
+    lateinit var bluetoothDeviceListAdapter: BluetoothDeviceListAdapter
 
     /**
      * This method makes your device discoverable for others for 100 sec
@@ -189,8 +190,4 @@ class BluetoothHandler(val activity: BluetoothTransferActivity) {
             }
         }
     }
-
-
-
-
 }
