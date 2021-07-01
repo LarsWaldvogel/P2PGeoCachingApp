@@ -54,4 +54,13 @@
         app:layout_constraintTop_toBottomOf="@+id/device_list_view"
         app:layout_constraintVertical_bias="0.204"
         tools:ignore="UseSwitchCompatOrMaterialXml" />
+
+    <Button
+        android:id="@+id/scanbtn"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="156dp"
+        android:text="@string/scan_for_devices"
+        app:layout_constraintTop_toBottomOf="@+id/device_list_view"
+        tools:layout_editor_absoluteX="116dp" />
 </androidx.constraintlayout.widget.ConstraintLayout>

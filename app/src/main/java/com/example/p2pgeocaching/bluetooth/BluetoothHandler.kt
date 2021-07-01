@@ -126,7 +126,9 @@ class BluetoothHandler(val activity: BluetoothTransferActivity) {
                 } catch (e: IOException) {
                     Log.e(TAG, "Socket's accept() method failed", e)
                     inLoop = false
+                    break
                 }
+
             }
         }
 
@@ -138,7 +140,6 @@ class BluetoothHandler(val activity: BluetoothTransferActivity) {
 
             }
         }
-
 
         fun cancel() {
             try {

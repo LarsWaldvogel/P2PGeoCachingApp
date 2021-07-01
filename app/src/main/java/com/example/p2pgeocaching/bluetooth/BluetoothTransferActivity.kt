@@ -54,6 +54,9 @@ class BluetoothTransferActivity : AppCompatActivity() {
             addAction(BluetoothDevice.ACTION_FOUND)
             addAction(BluetoothDevice.ACTION_BOND_STATE_CHANGED)
         }
+
+        bluetoothHandler = BluetoothHandler(this)
+
         binding.discoverableSwitch.setOnCheckedChangeListener { buttonView, isChecked ->
             if (isChecked) {
                 buttonView.text = "ON"
@@ -65,7 +68,7 @@ class BluetoothTransferActivity : AppCompatActivity() {
         }
 
         // list with descovered devices hopefully including the one with the started server
-        listView.setOnItemClickListener { adapterView: AdapterView<*>, view1: View, i: Int, l: Long ->
+        listView.setOnItemClickListener { _: AdapterView<*>, _: View, i: Int, _: Long ->
             Log.d(TAG, "You clicked on a device")
             val deviceName: String? = bluetoothHandler.devices[i]?.name
             val deviceAddress: String? = bluetoothHandler.devices[i]?.address
@@ -77,6 +80,11 @@ class BluetoothTransferActivity : AppCompatActivity() {
         // start server and listen for connections
         binding.servbtn.setOnClickListener {
             bluetoothHandler.startServer()
+        }
+
+        // scan for devices
+        binding.scanbtn.setOnClickListener {
+            bluetoothHandler.startDiscovery()
         }
 
         // close sockets
