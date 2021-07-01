@@ -104,6 +104,8 @@ class SolveActivity : AppCompatActivity() {
                         val unsolvedCache = cache as UnsolvedCache
                         val solvedCache = unsolvedCache.solveCache(userName, privateKey)
 
+                        // TODO* CHECK: Add log statements and check if this works
+
                         val creatorString = userNameFile.readLines().toString()
                         val creator = creatorString.substring(1, creatorString.length - 1)
                         var file = File(context.filesDir, Constants.PERSON_DATA)
@@ -118,7 +120,7 @@ class SolveActivity : AppCompatActivity() {
                         val entryList = feedParser.feedToEntrylist(feedFile)
                         val op = OwnPublisher(creator, keys[0], keys[1])
                         val ownFeed = OwnFeed(entryList, op)
-                        val hofEntry = HoFEntry.Companion.newHoFEntry(privateKey, solvedCache, ownFeed)
+                        val hofEntry = HoFEntry.Companion.newHoFEntry(privateKey, solvedCache, ownFeed, context.filesDir)
 
                         val appendtext = feedParser.appendCacheToFeed(hofEntry)
                         Log.i(NewCacheActivity.TAG, "AppendText = "+appendtext)

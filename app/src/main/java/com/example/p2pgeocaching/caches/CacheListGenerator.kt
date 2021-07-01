@@ -73,6 +73,7 @@ class CacheListGenerator {
                         cache.prvKey = prvKey.toString()
                     }
                 }
+                // TODO* CHECK: Add log statements and check if this works
                 if (feedNamesFile.length() != 0L) {
                     val feedNameList = feedNamesFile.readText().split("\n")
                     for (feedName in feedNameList) {
@@ -91,6 +92,7 @@ class CacheListGenerator {
                 cacheList.add(cache)
             }
         }
+        // TODO* CHECK: Add log statements and check if this works
         if (feedNamesFile.length() != 0L) {
             val feedNameList = feedNamesFile.readText().split("\n")
             for (feedName in feedNameList) {
