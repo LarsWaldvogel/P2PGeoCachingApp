@@ -1,10 +1,9 @@
 package com.example.p2pgeocaching.bluetooth
 
-import android.app.AlertDialog
-import android.app.Dialog
-import android.content.Intent
+import android.bluetooth.BluetoothAdapter
+import android.bluetooth.BluetoothDevice
+import android.content.IntentFilter
 import android.os.Bundle
-import android.os.Message
 import android.util.Log
 import android.view.View
 import android.widget.*
@@ -25,6 +24,7 @@ class BluetoothTransferActivity : AppCompatActivity() {
     }
 
     lateinit var listView: ListView
+    lateinit var intentFilter: IntentFilter
     lateinit var bluetoothHandler: BluetoothHandler
     var bluetoothActive = false
 
@@ -47,6 +47,13 @@ class BluetoothTransferActivity : AppCompatActivity() {
         val userNameFile = File(context.filesDir, Constants.U_NAME_FILE)
         val cacheListFile = File(context.filesDir, Constants.CACHE_LIST_FILE)
 
+        intentFilter = IntentFilter()
+        intentFilter.apply {
+            addAction(BluetoothAdapter.ACTION_STATE_CHANGED)
+            addAction(BluetoothAdapter.ACTION_SCAN_MODE_CHANGED)
+            addAction(BluetoothDevice.ACTION_FOUND)
+            addAction(BluetoothDevice.ACTION_BOND_STATE_CHANGED)
+        }
         binding.discoverableSwitch.setOnCheckedChangeListener { buttonView, isChecked ->
             if (isChecked) {
                 buttonView.text = "ON"
@@ -76,6 +83,17 @@ class BluetoothTransferActivity : AppCompatActivity() {
         binding.closebtn.setOnClickListener {
             bluetoothHandler.stop()
         }
+    }
+
+    override fun onResume() {
+        super.onResume()
+        registerReceiver(bluetoothHandler.state, intentFilter)
+    }
+
+    override fun onDestroy() {
+        super.onDestroy()
+        unregisterReceiver(bluetoothHandler.state)
+        bluetoothHandler.stop()
     }
 }
 

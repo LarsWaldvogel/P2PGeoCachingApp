@@ -5,7 +5,6 @@ import android.bluetooth.BluetoothDevice
 import android.bluetooth.BluetoothServerSocket
 import android.bluetooth.BluetoothSocket
 import android.content.Intent
-import android.os.Bundle
 import android.util.Log
 import java.io.BufferedReader
 import java.io.IOException
@@ -52,8 +51,6 @@ class BluetoothHandler(val activity: BluetoothTransferActivity) {
             discoverableIntent.putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 1)
             activity.startActivity(discoverableIntent)
         }
-
-
     }
 
     /**
