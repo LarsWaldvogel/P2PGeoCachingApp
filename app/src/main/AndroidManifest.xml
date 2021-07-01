@@ -24,6 +24,7 @@
         <activity
             android:name=".activities.FeedDetailViewActivity"
             android:parentActivityName=".activities.FeedActivity" />
+        <!--- ConnectActivity is Unnecessary and unused -->
         <activity
             android:name=".activities.ConnectActivity"
             android:parentActivityName=".activities.MainActivity" />
@@ -50,8 +51,8 @@
             android:noHistory="false"
             android:parentActivityName=".activities.MainActivity" />
         <activity
-            android:name=".bluetooth.BluetoothTransfer"
-            android:parentActivityName=".activities.ConnectActivity" />
+            android:name=".bluetooth.BluetoothTransferActivity"
+            android:parentActivityName=".activities.MainActivity" />
         <activity android:name=".activities.MainActivity">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />

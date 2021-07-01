@@ -18,7 +18,9 @@ import com.example.p2pgeocaching.databinding.ActivityMainBinding
 import java.io.File
 import java.util.*
 import com.example.p2pgeocaching.RSA.RSA
+import com.example.p2pgeocaching.bluetooth.BluetoothTransferActivity
 import com.example.p2pgeocaching.constants.Constants
+import com.example.p2pgeocaching.databinding.BluetoothTransferBinding
 import com.example.p2pgeocaching.ownbacnet.OwnFeed
 import com.example.p2pgeocaching.ownbacnet.OwnPublisher
 
@@ -166,7 +168,7 @@ class MainActivity : AppCompatActivity() {
 
         // Opens activity to connect to others
         binding.connectButton.setOnClickListener {
-            val intent = Intent(context, ConnectActivity::class.java)
+            val intent = Intent(context, BluetoothTransferActivity::class.java)
             intent.putExtra(U_NAME_FILE, userNameFile)
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK) // Better alternative?
             context.startActivity(intent)
