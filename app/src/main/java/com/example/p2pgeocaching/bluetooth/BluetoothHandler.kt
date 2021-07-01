@@ -106,6 +106,7 @@ class BluetoothHandler(val activity: BluetoothTransferActivity) {
 
             while(inLoop) {
                 try {
+                    Log.d(TAG, "Server is waiting in try block before accept")
                     socket = serverSocket?.accept()
                     socket?.remoteDevice?.name?.let { Log.d(TAG, "The name of the remote device: $it") }
                     while(true) {
@@ -124,11 +125,11 @@ class BluetoothHandler(val activity: BluetoothTransferActivity) {
                     }
 
                 } catch (e: IOException) {
-                    Log.e(TAG, "Socket's accept() method failed", e)
+                    Log.e(TAG, "Socket's accept() method failed")
                     inLoop = false
                     break
                 }
-
+                break
             }
         }
 
@@ -159,7 +160,9 @@ class BluetoothHandler(val activity: BluetoothTransferActivity) {
         private val buffer: ByteArray = ByteArray(1024)
 
         override fun run() {
+            Log.d(TAG, "ConnectThread: in run()")
             bluetoothAdapter?.cancelDiscovery()
+            Log.d(TAG, "ConnectThread: after cancelDiscovery()/before connect")
             clientSocket?.connect()
             Log.d(TAG, "run: ConnectThread connected.")
             write("json".toByteArray()) // TODO get jsonfile
