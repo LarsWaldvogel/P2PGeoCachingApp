@@ -13,6 +13,10 @@ class BluetoothTransferActivity : AppCompatActivity() {
 
     var bluetoothActive = false
 
+    // TODO GUI elements
+    //  button to activate bluetooth/bluetooth server
+    //  button/switch for discovery
+    //  list with discovered devices
 
 
 
