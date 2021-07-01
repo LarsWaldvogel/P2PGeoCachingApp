@@ -43,109 +43,118 @@ class CacheListGenerator {
         val feedNamesFile = File(context, Constants.FEED_NAMES_FILE)
         var cacheList = CacheList(mutableListOf())
         Log.i(TAG, "Length of feedNamesFile = "+feedNamesFile.length())
-        if (feedNamesFile.length() == 0L) {
-            Log.i(TAG, "No feeds")
-            for (item in list) {
-                if (item.content.equals(Constants.CACHE_ENTRY)) {
-                    Log.i(TAG, "Item Content = "+item.content)
-                    var cache1 = Serializer.deserializeCacheFromString(item.type)
-                    var cache = OwnCache(
-                        cache1.title,
-                        cache1.desc,
-                        cache1.creator,
-                        cache1.id,
-                        cache1.pubKey,
-                        cache1.prvKey,
-                        cache1.hallOfFame,
-                        cache1.plainTextHOF
-                    )
-                    val ownCacheListFile = File(context, Constants.OWN_CACHE_LIST_FILE)
-                    val ownCacheContent = ownCacheListFile.readText()
-                    Log.i(TAG, "OwnCacheListFileContent = "+ownCacheContent)
-                    val listOfTuples = ownCacheContent.split("\n")
-                    for (tuple in listOfTuples) {
-                        Log.i(TAG, "Tuple = "+tuple)
-                        val tupleElem = tuple.split(":")
-                        val sign = tupleElem[0]
-                        val prvKey = tupleElem[1]
-                        Log.i(TAG, "Signatur = "+sign)
-                        Log.i(TAG, "PrvKey = "+prvKey)
-                        if (sign.equals(item.signature)) {
-                            cache.prvKey = prvKey.toString()
-                        }
-                    }
-                    cacheList.add(cache)
-                    Log.i(TAG, "Added cache "+cache.toString())
-                }
-            }
-        } else {
-            //TODO* not finished
-            for (item in list) {
-                if (item.content.equals(Constants.CACHE_ENTRY)) {
-                    var cache1 = Serializer.deserializeCacheFromString(item.type)
-                    var cache = OwnCache(
-                        cache1.title,
-                        cache1.desc,
-                        cache1.creator,
-                        cache1.id,
-                        cache1.pubKey,
-                        cache1.prvKey,
-                        cache1.hallOfFame,
-                        cache1.plainTextHOF
-                    )
-                    val feedNameList = feedNamesFile.readText().split("\n")
-                    for (feedName in feedNameList) {
-                        val feedFile = File(context, feedName)
-                        val listOfEntries = fdp.feedToEntrylist(feedFile)
-                        for (entry in listOfEntries) {
-                            if (entry.content.equals(Constants.HOF_ENTRY) && entry.signature.equals(
-                                    item.signature
-                                )
-                            ) {
-                                //TODO* synchronize with HOFEntry
-                                cache.addPersonToHOF(entry.type)
-                            }
-                        }
-                    }
-                    //TODO get privateKey from OwnCacheListFile
-                    cacheList.add(cache)
 
-                } else if (item.content.equals(Constants.LOG_ENTRY)) {
+        //TODO* not finished
+        for (item in list) {
+            if (item.type.equals(Constants.CACHE_ENTRY)) {
+                var cache1 = Serializer.deserializeCacheFromString(item.content)
+                var cache = OwnCache(
+                    cache1.title,
+                    cache1.desc,
+                    cache1.creator,
+                    cache1.id,
+                    cache1.pubKey,
+                    cache1.prvKey,
+                    cache1.hallOfFame,
+                    cache1.plainTextHOF
+                )
+                val ownCacheListFile = File(context, Constants.OWN_CACHE_LIST_FILE)
+                val ownCacheContent = ownCacheListFile.readText()
+                Log.i(TAG, "OwnCacheListFileContent = "+ownCacheContent)
+                val listOfTuples = ownCacheContent.split("\n")
+                for (tuple in listOfTuples) {
+                    Log.i(TAG, "Tuple = "+tuple)
+                    val tupleElem = tuple.split(":")
+                    val sign = tupleElem[0]
+                    val prvKey = tupleElem[1]
+                    Log.i(TAG, "Signatur = "+sign)
+                    Log.i(TAG, "PrvKey = "+prvKey)
+                    if (sign.equals(item.signature)) {
+                        cache.prvKey = prvKey.toString()
+                    }
+                }
+                if (feedNamesFile.length() != 0L) {
                     val feedNameList = feedNamesFile.readText().split("\n")
-                    val listOfPeople = mutableListOf<String>()
-                    var cache = Cache("", "", "", 0, "", "")
                     for (feedName in feedNameList) {
                         val feedFile = File(context, feedName)
                         val listOfEntries = fdp.feedToEntrylist(feedFile)
                         for (entry in listOfEntries) {
-                            if (entry.content.equals(Constants.HOF_ENTRY) && entry.signature.equals(
+                            if (entry.type.equals(Constants.HOF_ENTRY) && entry.signature.equals(
                                     item.signature
                                 )
                             ) {
-                                //TODO* synchronize with HOFEntry
-                                listOfPeople.add(entry.type)
-                            }
-                            if (entry.content.equals(Constants.CACHE_ENTRY) && entry.signature.equals(
-                                    item.signature
-                                )
-                            ) {
-                                cache = Serializer.deserializeCacheFromString(item.type)
+                                cache.addPersonToHOF(entry.content)
                             }
                         }
                     }
-                    for (person in listOfPeople) {
-                        cache.addPersonToHOF(person)
-                    }
-                    for (myPerson in list) {
-                        if (myPerson.type.equals(Constants.HOF_ENTRY) && myPerson.signature.equals(
-                                item.signature
-                            )
-                        ) {
-                            //TODO* synchronize with HOFEntry
-                            cache.addPersonToHOF(myPerson.type)
+                }
+                cacheList.add(cache)
+            }
+        }
+        if (feedNamesFile.length() != 0L) {
+            val feedNameList = feedNamesFile.readText().split("\n")
+            for (feedName in feedNameList) {
+                val feedFile = File(context, feedName)
+                val listOfEntries = fdp.feedToEntrylist(feedFile)
+                for (item in listOfEntries) {
+                    if (item.type.equals(Constants.CACHE_ENTRY)) {
+                        var cache1 = Serializer.deserializeCacheFromString(item.content)
+                        for (feed in feedNameList) {
+                            val file = File(context, feed)
+                            val entries = fdp.feedToEntrylist(file)
+                            for (entry in entries) {
+                                if (entry.type.equals(Constants.HOF_ENTRY) && entry.signature.equals(item.signature)) {
+                                    cache1.addPersonToHOF(entry.content)
+                                }
+                            }
                         }
+                        var bool = false
+                        for (entry in list) {
+                            if (entry.type.equals(Constants.HOF_ENTRY) && entry.signature.equals(item.signature)) {
+                                cache1.addPersonToHOF(entry.content)
+                                val solvedCacheListFile = File(context, Constants.SOLVED_CACHE_LIST_FILE)
+                                val solvedCacheContent = solvedCacheListFile.readText()
+                                Log.i(TAG, "SolvedCacheListFileContent = "+solvedCacheContent)
+                                val listOfTuples = solvedCacheContent.split("\n")
+                                for (tuple in listOfTuples) {
+                                    Log.i(TAG, "Tuple = "+tuple)
+                                    val tupleElem = tuple.split(":")
+                                    val sign = tupleElem[0]
+                                    val prvKey = tupleElem[1]
+                                    Log.i(TAG, "Signatur = "+sign)
+                                    Log.i(TAG, "PrvKey = "+prvKey)
+                                    if (sign.equals(item.signature)) {
+                                        cache1.prvKey = prvKey
+                                        bool = true
+                                        break
+                                    }
+                                }
+                            }
+                        }
+                        // Todo* programm asks to do this - is there a better way?
+                        if (bool) {
+                            val cache = cache1.pubKey?.let {
+                                cache1.prvKey?.let { it1 ->
+                                    SolvedCache(cache1.title, cache1.desc, cache1.creator, cache1.id,
+                                        it, it1,
+                                        cache1.hallOfFame, cache1.plainTextHOF)
+                                }
+                            }
+                            if (cache != null) {
+                                cacheList.add(cache)
+                            }
+                        } else {
+                            val cache = cache1.pubKey?.let {
+                                UnsolvedCache(cache1.title, cache1.desc, cache1.creator, cache1.id,
+                                    it,
+                                    cache1.hallOfFame, cache1.plainTextHOF)
+                            }
+                            if (cache != null) {
+                                cacheList.add(cache)
+                            }
+                        }
+
                     }
-                    cacheList.add(cache)
                 }
             }
         }

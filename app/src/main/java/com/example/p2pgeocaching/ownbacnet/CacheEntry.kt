@@ -16,7 +16,7 @@ class CacheEntry(
     signedPreviousSignature: String,
     content: String,
     signature: String
-) : Entry(timestamp, id, signedPreviousSignature, CACHE_ENTRY, content, signature) {
+) : Entry(timestamp, id, signedPreviousSignature, content, CACHE_ENTRY, signature) {
 
     // TODO
 
