@@ -42,6 +42,7 @@ class HoFEntry(
             val feedNameContent = feedNamesFile.readText()
             val feedNameList = feedNameContent.split("\n")
             var sign = ""
+            var bool = false
             for (feedName in feedNameList) {
                 val feedFile = File(context, feedName)
                 val listOfEntries = fdp.feedToEntrylist(feedFile)
@@ -53,8 +54,13 @@ class HoFEntry(
                                 cacheEntry.id.equals(cache.id) &&
                                 cacheEntry.pubKey.equals(cache.pubKey)) {
                             sign = entry.signature
+                            bool = true
+                            break
                         }
                     }
+                }
+                if (bool) {
+                    break
                 }
             }
             val signature = sign

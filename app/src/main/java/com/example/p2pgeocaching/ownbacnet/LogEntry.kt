@@ -1,6 +1,10 @@
 package com.example.p2pgeocaching.ownbacnet
 
+import com.example.p2pgeocaching.constants.Constants
 import com.example.p2pgeocaching.constants.Constants.Companion.LOG_ENTRY
+import com.example.p2pgeocaching.data.FeedDataParser
+import com.example.p2pgeocaching.data.Serializer
+import java.io.File
 
 /**
  * This class is created whenever the app receives new data from another user.
@@ -25,12 +29,42 @@ class LogEntry(
          * This method lets us create a [LogEntry] with a list of [newEntries].
          * It also needs a [ownFeed] to determine the current position in the feed.
          */
-        fun newLogEntry(newEntries: List<Entry>, ownFeed: OwnFeed): LogEntry {
+        fun newLogEntry(newEntries: List<Entry>, ownFeed: OwnFeed, context: File): LogEntry {
             val timestamp = System.currentTimeMillis()
-            val id = TODO()
-            val signedPreviousID = TODO()
+            val id = ownFeed.getNextID()
+            val previousSignature = ownFeed.getLastSignature()
+            val signedPreviousSignature = ownFeed.getOwnPublisher().sign(previousSignature)
+            val type = LOG_ENTRY
             // TODO: initialize things and construct HoFEntry
-            return TODO()
+            var content = ""
+
+            val fdp = FeedDataParser()
+            val feedNamesFile = File(context, Constants.FEED_NAMES_FILE)
+            val feedNameContent = feedNamesFile.readText()
+            val feedNameList = feedNameContent.split("\n")
+            var bool = false
+            for (entry in newEntries) {
+                bool = false
+                for (feedName in feedNameList) {
+                    val feedFile = File(context, feedName)
+                    val listOfEntries = fdp.feedToEntrylist(feedFile)
+                    for (feedEntry in listOfEntries) {
+                        if (entry.equals(feedEntry)) {
+                            content = content.plus(entry.id).plus(",").plus(entry.signature).plus(",").plus(feedName).plus(";")
+                            bool = true
+                            break
+                        }
+                    }
+                    if (bool) {
+                        break
+                    }
+                }
+            }
+            val concatenatedString: String =
+                timestamp.toString() + id.toString() + signedPreviousSignature + type + content
+            val hashString = concatenatedString.hashCode().toString()
+            val signature = ownFeed.getOwnPublisher().sign(hashString)
+            return LogEntry(timestamp, id, signedPreviousSignature, content, signature)
         }
     }
 }
