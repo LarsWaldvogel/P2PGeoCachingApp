@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.util.Log
 import androidx.appcompat.app.AppCompatActivity
+import com.example.p2pgeocaching.bluetooth.BluetoothTransferActivity
 import com.example.p2pgeocaching.constants.Constants.Companion.CACHE_LIST_FILE
 import com.example.p2pgeocaching.constants.Constants.Companion.U_NAME_FILE
 import com.example.p2pgeocaching.databinding.ActivityConnectBinding
@@ -39,7 +40,7 @@ class ConnectActivity : AppCompatActivity() {
 
         binding.transferButton.setOnClickListener {
             Log.d(TAG, "TransferButton has been pressed.")
-            val intent = Intent(this, BluetoothTransfer::class.java)
+            val intent = Intent(this, BluetoothTransferActivity::class.java)
             startActivity(intent)
             // TODO: implement bluetooth transfer
         }
