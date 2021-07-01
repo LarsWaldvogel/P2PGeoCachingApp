@@ -33,7 +33,7 @@ class BluetoothTransferActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        Log.d(ConnectActivity.TAG, "Transfer")
+        Log.d(TAG, "Transfer")
 
         title = "Transfer"
 
@@ -79,7 +79,7 @@ class BluetoothTransferActivity : AppCompatActivity() {
 
         // start server and listen for connections
         binding.servbtn.setOnClickListener {
-            bluetoothHandler.startServer()
+            bluetoothHandler.startServer(context)
         }
 
         // scan for devices
