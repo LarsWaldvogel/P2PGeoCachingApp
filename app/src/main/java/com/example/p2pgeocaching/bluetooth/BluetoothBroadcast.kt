@@ -6,12 +6,13 @@ import android.content.BroadcastReceiver
 import android.content.Context
 import android.content.Intent
 import android.util.Log
+import com.example.p2pgeocaching.R
 
 /**
  * This class notices all bluetooth related changes such as the current state of the adapter(on,off, etc.)
  */
 class BluetoothBroadcast(
-    val blutoothHandler: BluetoothHandler,
+    private val bluetoothHandler: BluetoothHandler,
     val activity: BluetoothTransferActivity): BroadcastReceiver() {
 
     companion object {
@@ -71,15 +72,15 @@ class BluetoothBroadcast(
             BluetoothDevice.ACTION_FOUND -> {
                 val device: BluetoothDevice? = intent.getParcelableExtra(BluetoothDevice.EXTRA_DEVICE)
                 println( "Device found: ${device?.name}:${device?.address}")
-                /*if (!bluetoothDriver.devices.contains(device)) {
-                    bluetoothDriver.devices.add(device)
-                    bluetoothDriver.bluetoothDeviceListAdapter = BluetoothDeviceListAdapter(
+                if (!bluetoothHandler.devices.contains(device)) {
+                    bluetoothHandler.devices.add(device)
+                    bluetoothHandler.bluetoothDeviceListAdapter = BluetoothDeviceListAdapter(
                         context,
                         R.layout.device_adapter_view,
-                        bluetoothDriver.devices
+                        bluetoothHandler.devices
                     )
-                    activity.listView.adapter = bluetoothDriver.bluetoothDeviceListAdapter
-                }*/
+                    activity.listView.adapter = bluetoothHandler.bluetoothDeviceListAdapter
+                }
             }
 
             BluetoothDevice.ACTION_BOND_STATE_CHANGED -> {
