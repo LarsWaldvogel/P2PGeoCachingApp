@@ -11,6 +11,7 @@ class Constants {
         const val CACHE_LIST_FILE = "cacheList"
         const val PERSON_DATA = "personData"
         const val OWN_CACHE_LIST_FILE = "ownCacheListFile"
+        const val SOLVED_CACHE_LIST_FILE = "solvedCacheListFile"
         const val PRIVATE_KEY = "private key"
         const val PUBLIC_KEY = "public key"
         const val ID = "id"

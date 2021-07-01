@@ -45,7 +45,7 @@ class FeedDataParser {
         }
     }
 
-    fun appendCacheToFeed(cacheEntry : CacheEntry) : String {
+    fun appendCacheToFeed(cacheEntry : Entry) : String {
         val str =
             cacheEntry.timestamp.toString()
                 .plus("***")

@@ -79,6 +79,7 @@ class CacheListGenerator {
                 }
             }
         } else {
+            //TODO* not finished
             for (item in list) {
                 if (item.content.equals(Constants.CACHE_ENTRY)) {
                     var cache1 = Serializer.deserializeCacheFromString(item.type)

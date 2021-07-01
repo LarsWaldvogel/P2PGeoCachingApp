@@ -94,7 +94,7 @@ class NewCacheActivity : AppCompatActivity() {
         //TODO* create class which does that
         // Create the new Cache and add it to the cacheList
         val newCache = OwnCache(cacheTitle, cacheDesc, creator, this)
-        cacheList.add(newCache)
+        //cacheList.add(newCache)
         //val filename = "personData"
         var file = File(context, Constants.PERSON_DATA)
         val content = file.readText()
