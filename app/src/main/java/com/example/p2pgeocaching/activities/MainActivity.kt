@@ -18,6 +18,7 @@ import com.example.p2pgeocaching.databinding.ActivityMainBinding
 import java.io.File
 import java.util.*
 import com.example.p2pgeocaching.RSA.RSA
+import com.example.p2pgeocaching.constants.Constants
 import com.example.p2pgeocaching.ownbacnet.OwnFeed
 import com.example.p2pgeocaching.ownbacnet.OwnPublisher
 
@@ -118,9 +119,9 @@ class MainActivity : AppCompatActivity() {
 
 
         Log.d(TAG, "before filestuff")
-        val fileName = "personData"
+        //val fileName = "personData"
         Log.d(TAG, "after filename")
-        var file = File(context.filesDir, fileName)
+        var file = File(context.filesDir, Constants.PERSON_DATA)
         Log.d(TAG, "after file")
         var fileExists = file.exists()
         Log.d(TAG, "after fileexists")

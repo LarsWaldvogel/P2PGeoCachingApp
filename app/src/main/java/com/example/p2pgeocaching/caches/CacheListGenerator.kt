@@ -28,8 +28,8 @@ class CacheListGenerator {
         val creatorString = userNameFile.readLines().toString()
         val creator = creatorString.substring(1, creatorString.length - 1)
         cacheListFile = File(context, Constants.CACHE_LIST_FILE)
-        val filename = "personData"
-        var file = File(context, filename)
+        //val filename = "personData"
+        var file = File(context, Constants.PERSON_DATA)
         val content = file.readText()
         val keys = content.split(" ")
         val pubkey = keys[0].split("_")
@@ -59,8 +59,23 @@ class CacheListGenerator {
                         cache1.hallOfFame,
                         cache1.plainTextHOF
                     )
-                    cacheList.add(cache1)
-                    Log.i(TAG, "Added cache "+cache1.toString())
+                    val ownCacheListFile = File(context, Constants.OWN_CACHE_LIST_FILE)
+                    val ownCacheContent = ownCacheListFile.readText()
+                    Log.i(TAG, "OwnCacheListFileContent = "+ownCacheContent)
+                    val listOfTuples = ownCacheContent.split("\n")
+                    for (tuple in listOfTuples) {
+                        Log.i(TAG, "Tuple = "+tuple)
+                        val tupleElem = tuple.split(":")
+                        val sign = tupleElem[0]
+                        val prvKey = tupleElem[1]
+                        Log.i(TAG, "Signatur = "+sign)
+                        Log.i(TAG, "PrvKey = "+prvKey)
+                        if (sign.equals(item.signature)) {
+                            cache.prvKey = prvKey.toString()
+                        }
+                    }
+                    cacheList.add(cache)
+                    Log.i(TAG, "Added cache "+cache.toString())
                 }
             }
         } else {

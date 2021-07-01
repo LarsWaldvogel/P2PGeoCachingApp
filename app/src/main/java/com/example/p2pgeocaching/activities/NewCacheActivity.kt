@@ -7,6 +7,7 @@ import com.example.p2pgeocaching.R
 import com.example.p2pgeocaching.caches.CacheList
 import com.example.p2pgeocaching.caches.CacheListGenerator
 import com.example.p2pgeocaching.caches.OwnCache
+import com.example.p2pgeocaching.constants.Constants
 import com.example.p2pgeocaching.constants.Constants.Companion.CACHE_LIST_FILE
 import com.example.p2pgeocaching.constants.Constants.Companion.U_NAME_FILE
 import com.example.p2pgeocaching.data.FeedDataParser
@@ -94,8 +95,8 @@ class NewCacheActivity : AppCompatActivity() {
         // Create the new Cache and add it to the cacheList
         val newCache = OwnCache(cacheTitle, cacheDesc, creator, this)
         cacheList.add(newCache)
-        val filename = "personData"
-        var file = File(context, filename)
+        //val filename = "personData"
+        var file = File(context, Constants.PERSON_DATA)
         val content = file.readText()
         val keys = content.split(" ")
         val pubkey = keys[0].split("_")
@@ -118,6 +119,18 @@ class NewCacheActivity : AppCompatActivity() {
             feedFile.appendText("-*-*-")
             feedFile.appendText("".plus(appendtext))
         }
+        val ownCacheListFile = File(context, Constants.OWN_CACHE_LIST_FILE)
+        if (!ownCacheListFile.exists()) {
+            ownCacheListFile.createNewFile()
+        }
+        if (ownCacheListFile.length() == 0L) {
+            Log.i(TAG, "ownCacheListFile appendedText = "+cacheEntry.signature.plus(":").plus(newCache.prvKey))
+            ownCacheListFile.appendText(cacheEntry.signature.plus(":").plus(newCache.prvKey))
+        } else {
+            Log.i(TAG, "ownCacheListFile appendedText = "+cacheEntry.signature.plus(":").plus(newCache.prvKey))
+            ownCacheListFile.appendText("\n".plus(cacheEntry.signature).plus(":").plus(newCache.prvKey))
+        }
+        Log.i(TAG, "ownCacheListFile Text = "+ownCacheListFile.readText())
         Log.i(TAG, "Feed Content = "+feedFile.readText())
         val generator = CacheListGenerator()
         generator.getCacheListFileContent(context)

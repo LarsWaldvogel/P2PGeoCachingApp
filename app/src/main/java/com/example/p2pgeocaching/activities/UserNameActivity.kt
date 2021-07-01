@@ -11,6 +11,7 @@ import com.chaquo.python.Python
 import com.chaquo.python.android.AndroidPlatform
 import com.example.p2pgeocaching.R
 import com.example.p2pgeocaching.RSA.RSA
+import com.example.p2pgeocaching.constants.Constants.Companion.PERSON_DATA
 import com.example.p2pgeocaching.constants.Constants.Companion.U_NAME_FILE
 import com.example.p2pgeocaching.databinding.ActivityUserNameBinding
 import com.example.p2pgeocaching.inputValidator.InputValidator
@@ -46,7 +47,7 @@ class UserNameActivity : AppCompatActivity() {
         // Get the file for the username
         val context = applicationContext
         val userNameFile = File(context.filesDir, U_NAME_FILE)
-        val personData = File(context.filesDir, "personData")
+        val personData = File(context.filesDir, PERSON_DATA)
 
         // initialize fields
         // TODO: get salt (last 4 digits of public key)
@@ -123,8 +124,8 @@ class UserNameActivity : AppCompatActivity() {
             // Everything is correct, write to file, go back
             if (!hasIllegalCharacters) {
 
-                val fileName = "personData"
-                var personFile = File(context, fileName)
+                //val fileName = "personData"
+                var personFile = File(context, PERSON_DATA)
                 val fileContent = personFile.readText()
 
                 personFile.delete()

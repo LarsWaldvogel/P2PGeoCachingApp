@@ -9,6 +9,8 @@ class Constants {
     companion object {
         const val U_NAME_FILE = "userName"
         const val CACHE_LIST_FILE = "cacheList"
+        const val PERSON_DATA = "personData"
+        const val OWN_CACHE_LIST_FILE = "ownCacheListFile"
         const val PRIVATE_KEY = "private key"
         const val PUBLIC_KEY = "public key"
         const val ID = "id"
