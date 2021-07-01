@@ -38,6 +38,7 @@ class LogEntry(
             // TODO: initialize things and construct HoFEntry
             var content = ""
 
+            // TODO* CHECK: test if this works
             val fdp = FeedDataParser()
             val feedNamesFile = File(context, Constants.FEED_NAMES_FILE)
             val feedNameContent = feedNamesFile.readText()
