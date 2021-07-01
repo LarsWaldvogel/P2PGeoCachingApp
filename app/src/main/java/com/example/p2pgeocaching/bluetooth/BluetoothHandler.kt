@@ -4,11 +4,11 @@ import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothDevice
 import android.bluetooth.BluetoothServerSocket
 import android.bluetooth.BluetoothSocket
+import android.content.Context
 import android.content.Intent
 import android.util.Log
-import java.io.BufferedReader
-import java.io.IOException
-import java.io.InputStreamReader
+import com.example.p2pgeocaching.data.FeedData
+import java.io.*
 import java.util.*
 
 /**
@@ -21,6 +21,7 @@ class BluetoothHandler(val activity: BluetoothTransferActivity) {
         const val TAG = "BluetoothHandler"
     }
 
+    lateinit var context: Context
     val bluetoothAdapter: BluetoothAdapter? = BluetoothAdapter.getDefaultAdapter()
 
     private val appName: String = "P2P_Geocaching"
@@ -65,9 +66,9 @@ class BluetoothHandler(val activity: BluetoothTransferActivity) {
     /**
      * This method starts the serverThread and listens for incoming connections
      */
-    fun startServer() {
+    fun startServer(c:  Context) {
         Log.d(TAG, "Starting server thread and waiting for incoming connections ...")
-
+        context = c
         serverAcceptThread = AcceptThread()
         serverAcceptThread?.start()
     }
@@ -110,12 +111,28 @@ class BluetoothHandler(val activity: BluetoothTransferActivity) {
                     socket = serverSocket?.accept()
                     socket?.remoteDevice?.name?.let { Log.d(TAG, "The name of the remote device: $it") }
                     while(true) {
-                        val json = "json file" // TODO get json ownfeed file
-                        write(json.toByteArray())
+                        val fd = FeedData().feedToData(context.filesDir)
+                        val feedToSend = File(context.filesDir,fd)
+                        val bytes = ByteArray(feedToSend.length() as Int)
+                        Log.d(TAG, "File to bytes, bytearraysize: " + feedToSend.length())
+
+                        var fis: FileInputStream? = null
+                        try {
+                            fis = FileInputStream(feedToSend)
+
+                            //read file into bytes[]
+                            fis.read(bytes)
+                        } finally {
+                            fis?.close()
+                        }
+                        write(bytes)
                         try {
                             val input = BufferedReader(InputStreamReader(socket!!.inputStream)) //socket!!.inputStream.read(buffer)
-                            val inputText = input.readText() // TODO convert back to json file
-
+                            val inputText = input.readText()
+                            if(inputText.equals("OK")) {
+                                Log.e(TAG, "Everything went great")
+                                break
+                            }
                         } catch (e: IOException) {
                             Log.e(TAG, "AcceptThread: inputstream error")
                         }
@@ -142,6 +159,18 @@ class BluetoothHandler(val activity: BluetoothTransferActivity) {
             }
         }
 
+        private fun read(bytes: ByteArray) {
+            try {
+                val input = BufferedReader(InputStreamReader(socket!!.inputStream)) //socket!!.inputStream.read(buffer)
+                val inputText = input.readText()
+                if(inputText.equals("OK")) {
+
+                }
+            } catch (e: IOException) {
+                Log.e(TAG, "AcceptThread: inputstream error")
+            }
+        }
+
         fun cancel() {
             try {
                 serverSocket?.close()
@@ -157,7 +186,7 @@ class BluetoothHandler(val activity: BluetoothTransferActivity) {
     inner class ConnectThread(val device: BluetoothDevice?): Thread() {
 
         private val clientSocket: BluetoothSocket? = device?.createRfcommSocketToServiceRecord(uuid)
-        private val buffer: ByteArray = ByteArray(1024)
+        private val buffer: ByteArray = ByteArray(1024) // How to find Filesize
 
         override fun run() {
             Log.d(TAG, "ConnectThread: in run()")
@@ -165,14 +194,28 @@ class BluetoothHandler(val activity: BluetoothTransferActivity) {
             Log.d(TAG, "ConnectThread: after cancelDiscovery()/before connect")
             clientSocket?.connect()
             Log.d(TAG, "run: ConnectThread connected.")
-            write("json".toByteArray()) // TODO get jsonfile
+            var receivedFeedFile = File(context.filesDir, "rcvFile")
 
             try {
-                clientSocket?.inputStream?.read(buffer)
+                read(buffer, receivedFeedFile)
+                write("OK".toByteArray())
+
             } catch (e: IOException) {
                 Log.e(TAG, "ConnectThread: inputstream error")
             }
             clientSocket?.close()
+        }
+
+        private fun read(bytes: ByteArray, file: File) {
+            clientSocket?.inputStream?.read(bytes)
+            var fos: FileOutputStream? = null
+            try {
+                fos = FileOutputStream(file)
+                fos.write(bytes)
+            } finally {
+                fos?.close()
+            }
+            FeedData().dataToFeed(file, context.filesDir)
         }
 
         private fun write(bytes: ByteArray) {
@@ -180,6 +223,7 @@ class BluetoothHandler(val activity: BluetoothTransferActivity) {
                 clientSocket?.outputStream?.write(bytes)
             } catch (e: IOException) {
                 Log.e(TAG, "outputstream error", e)
+
             }
         }
 
