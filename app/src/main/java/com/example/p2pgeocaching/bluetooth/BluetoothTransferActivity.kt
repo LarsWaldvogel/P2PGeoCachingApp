@@ -1,18 +1,22 @@
 package com.example.p2pgeocaching.bluetooth
 
+import android.Manifest
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothDevice
 import android.content.IntentFilter
+import android.content.pm.PackageManager
 import android.os.Bundle
 import android.util.Log
 import android.view.View
-import android.widget.*
+import android.widget.AdapterView
+import android.widget.ListView
 import androidx.appcompat.app.AppCompatActivity
+import androidx.core.app.ActivityCompat
 import com.example.p2pgeocaching.R
-import com.example.p2pgeocaching.activities.ConnectActivity
 import com.example.p2pgeocaching.constants.Constants
 import com.example.p2pgeocaching.databinding.BluetoothTransferBinding
 import java.io.File
+
 
 /**
  * This activity handles all bluetooth related things
@@ -46,6 +50,13 @@ class BluetoothTransferActivity : AppCompatActivity() {
         val context = applicationContext
         val userNameFile = File(context.filesDir, Constants.U_NAME_FILE)
         val cacheListFile = File(context.filesDir, Constants.CACHE_LIST_FILE)
+
+        if(!hasRequiredPermissions()){
+            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.BLUETOOTH), PackageManager.PERMISSION_GRANTED)
+            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.BLUETOOTH_ADMIN), PackageManager.PERMISSION_GRANTED)
+            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION), PackageManager.PERMISSION_GRANTED)
+            ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), PackageManager.PERMISSION_GRANTED)
+        }
 
         intentFilter = IntentFilter()
         intentFilter.apply {
@@ -103,6 +114,24 @@ class BluetoothTransferActivity : AppCompatActivity() {
         super.onDestroy()
         unregisterReceiver(bluetoothHandler.state)
         bluetoothHandler.stop()
+    }
+
+    private fun hasPermission(permission: String): Boolean {
+        return ActivityCompat.checkSelfPermission(
+            this,
+            permission
+        ) == PackageManager.PERMISSION_GRANTED
+    }
+
+    private fun hasRequiredPermissions(): Boolean {
+        val hasBluetoothPermission: Boolean = hasPermission(Manifest.permission.BLUETOOTH)
+        val hasBluetoothAdminPermission: Boolean =
+            hasPermission(Manifest.permission.BLUETOOTH_ADMIN)
+        val hasLocationPermission: Boolean =
+            hasPermission(Manifest.permission.ACCESS_COARSE_LOCATION)
+        val hasFineLocationPermission: Boolean =
+            hasPermission(Manifest.permission.ACCESS_FINE_LOCATION)
+        return hasBluetoothPermission && hasBluetoothAdminPermission && hasLocationPermission && hasFineLocationPermission
     }
 }
 
