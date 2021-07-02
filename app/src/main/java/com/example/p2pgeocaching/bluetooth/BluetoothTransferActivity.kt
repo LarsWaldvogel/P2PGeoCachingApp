@@ -33,7 +33,7 @@ class BluetoothTransferActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        Log.d(TAG, "Transfer")
+        Log.i(TAG, "Transfer")
 
         title = "Transfer"
 
@@ -69,10 +69,10 @@ class BluetoothTransferActivity : AppCompatActivity() {
 
         // list with descovered devices hopefully including the one with the started server
         listView.setOnItemClickListener { _: AdapterView<*>, _: View, i: Int, _: Long ->
-            Log.d(TAG, "You clicked on a device")
+            Log.i(TAG, "You clicked on a device")
             val deviceName: String? = bluetoothHandler.devices[i]?.name
             val deviceAddress: String? = bluetoothHandler.devices[i]?.address
-            Log.d(TAG, "You clicked on device: $deviceName, $deviceAddress")
+            Log.i(TAG, "You clicked on device: $deviceName, $deviceAddress")
             val device = bluetoothHandler.devices[i] // device?.address!!
             bluetoothHandler.connectToServer(device)
         }
@@ -95,6 +95,7 @@ class BluetoothTransferActivity : AppCompatActivity() {
 
     override fun onResume() {
         super.onResume()
+        Log.i(TAG, "on Resume")
         registerReceiver(bluetoothHandler.state, intentFilter)
     }
 

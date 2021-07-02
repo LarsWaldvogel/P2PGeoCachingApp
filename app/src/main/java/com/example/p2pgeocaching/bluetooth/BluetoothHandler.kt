@@ -40,7 +40,7 @@ class BluetoothHandler(val activity: BluetoothTransferActivity) {
      */
     fun discoverable(enabled: Boolean) {
         if (enabled) {
-            Log.d(TAG, "Making device discoverable")
+            Log.i(TAG, "Making device discoverable")
 
             val discoverableIntent = Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE)
             discoverableIntent.putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 100)
@@ -58,7 +58,7 @@ class BluetoothHandler(val activity: BluetoothTransferActivity) {
      * This method searches for discoverable devices in the surrounding
      */
     fun startDiscovery() {
-        Log.d(TAG, "Looking for unpaired devices.")
+        Log.i(TAG, "Looking for unpaired devices.")
 
         bluetoothAdapter?.startDiscovery()
     }
@@ -67,7 +67,7 @@ class BluetoothHandler(val activity: BluetoothTransferActivity) {
      * This method starts the serverThread and listens for incoming connections
      */
     fun startServer(c:  Context) {
-        Log.d(TAG, "Starting server thread and waiting for incoming connections ...")
+        Log.i(TAG, "Starting server thread and waiting for incoming connections ...")
         context = c
         serverAcceptThread = AcceptThread()
         serverAcceptThread?.start()
@@ -77,7 +77,7 @@ class BluetoothHandler(val activity: BluetoothTransferActivity) {
      * This method starts a clientThread and tries to connect with a server device
      */
     fun connectToServer(device: BluetoothDevice?) {
-        Log.d(TAG, "Connecting Bluetooth ...")
+        Log.i(TAG, "Connecting Bluetooth ...")
 
         clientConnectThread = ConnectThread(device)
         clientConnectThread?.start()
@@ -90,7 +90,7 @@ class BluetoothHandler(val activity: BluetoothTransferActivity) {
         clientConnectThread?.cancel()
         serverAcceptThread?.cancel()
 
-        Log.d(TAG, "Bluetooth Handler closed all sockets")
+        Log.i(TAG, "Bluetooth Handler closed all sockets")
     }
 
     /**
@@ -107,14 +107,14 @@ class BluetoothHandler(val activity: BluetoothTransferActivity) {
 
             while(inLoop) {
                 try {
-                    Log.d(TAG, "Server is waiting in try block before accept")
+                    Log.i(TAG, "Server is waiting in try block before accept")
                     socket = serverSocket?.accept()
                     socket?.remoteDevice?.name?.let { Log.d(TAG, "The name of the remote device: $it") }
                     while(true) {
                         val fd = FeedData().feedToData(context.filesDir)
                         val feedToSend = File(context.filesDir,fd)
                         val bytes = ByteArray(feedToSend.length() as Int)
-                        Log.d(TAG, "File to bytes, bytearraysize: " + feedToSend.length())
+                        Log.i(TAG, "File to bytes, bytearraysize: " + feedToSend.length())
 
                         var fis: FileInputStream? = null
                         try {
@@ -189,11 +189,11 @@ class BluetoothHandler(val activity: BluetoothTransferActivity) {
         private val buffer: ByteArray = ByteArray(1024) // How to find Filesize
 
         override fun run() {
-            Log.d(TAG, "ConnectThread: in run()")
+            Log.i(TAG, "ConnectThread: in run()")
             bluetoothAdapter?.cancelDiscovery()
-            Log.d(TAG, "ConnectThread: after cancelDiscovery()/before connect")
+            Log.i(TAG, "ConnectThread: after cancelDiscovery()/before connect")
             clientSocket?.connect()
-            Log.d(TAG, "run: ConnectThread connected.")
+            Log.i(TAG, "run: ConnectThread connected.")
             var receivedFeedFile = File(context.filesDir, "rcvFile")
 
             try {
