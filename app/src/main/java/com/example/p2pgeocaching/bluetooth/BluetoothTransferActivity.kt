@@ -64,9 +64,12 @@ class BluetoothTransferActivity : AppCompatActivity() {
 
         val bluetoothManager: BluetoothManager = getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
         val bluetoothAdapter = bluetoothManager.adapter
+        bluetoothHandler = BluetoothHandler(this, bluetoothManager)
+
         val deviceList = bluetoothAdapter.bondedDevices
         var devices = ArrayList<BluetoothDevice?>()
         devices.addAll(deviceList)
+        bluetoothHandler.devices = devices
         Log.i(TAG,"deviceList implemented size = ${devices.size}")
 
         listView.adapter = BluetoothDeviceListAdapter(
@@ -89,7 +92,6 @@ class BluetoothTransferActivity : AppCompatActivity() {
             startActivityForResult(enableIntent, 3)
         }
 
-        bluetoothHandler = BluetoothHandler(this, bluetoothManager)
 
         binding.discoverableSwitch.setOnCheckedChangeListener { buttonView, isChecked ->
             if (isChecked) {

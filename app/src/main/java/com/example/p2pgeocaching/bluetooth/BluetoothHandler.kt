@@ -29,7 +29,7 @@ class BluetoothHandler(val activity: BluetoothTransferActivity, val manager: Blu
 
     val state: BluetoothBroadcast = BluetoothBroadcast(this, activity)
 
-    val devices: ArrayList<BluetoothDevice?> = ArrayList() // If you want to display the devices found
+    var devices: ArrayList<BluetoothDevice?> = ArrayList() // If you want to display the devices found
     lateinit var bluetoothDeviceListAdapter: BluetoothDeviceListAdapter
 
     /**
