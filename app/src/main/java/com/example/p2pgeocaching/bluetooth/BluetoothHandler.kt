@@ -1,9 +1,6 @@
 package com.example.p2pgeocaching.bluetooth
 
-import android.bluetooth.BluetoothAdapter
-import android.bluetooth.BluetoothDevice
-import android.bluetooth.BluetoothServerSocket
-import android.bluetooth.BluetoothSocket
+import android.bluetooth.*
 import android.content.Context
 import android.content.Intent
 import android.util.Log
@@ -15,14 +12,14 @@ import java.util.*
  * This Class has all functions to connect to devices via Bluetooth
  */
 
-class BluetoothHandler(val activity: BluetoothTransferActivity) {
+class BluetoothHandler(val activity: BluetoothTransferActivity, val manager: BluetoothManager) {
 
     companion object {
         const val TAG = "BluetoothHandler"
     }
 
     lateinit var context: Context
-    val bluetoothAdapter: BluetoothAdapter? = BluetoothAdapter.getDefaultAdapter()
+    val bluetoothAdapter: BluetoothAdapter = manager.adapter
 
     private val appName: String = "P2P_Geocaching"
     private val uuid: UUID = UUID.fromString("708305f5-933b-40ad-b687-5b8ebfd8b5c6")

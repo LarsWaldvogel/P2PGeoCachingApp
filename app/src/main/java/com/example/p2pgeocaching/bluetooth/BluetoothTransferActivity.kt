@@ -3,6 +3,9 @@ package com.example.p2pgeocaching.bluetooth
 import android.Manifest
 import android.bluetooth.BluetoothAdapter
 import android.bluetooth.BluetoothDevice
+import android.bluetooth.BluetoothManager
+import android.content.Context
+import android.content.Intent
 import android.content.IntentFilter
 import android.content.pm.PackageManager
 import android.os.Bundle
@@ -52,11 +55,16 @@ class BluetoothTransferActivity : AppCompatActivity() {
         val cacheListFile = File(context.filesDir, Constants.CACHE_LIST_FILE)
 
         if(!hasRequiredPermissions()){
+            Log.i(TAG, "didn't have all required permissions!")
             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.BLUETOOTH), PackageManager.PERMISSION_GRANTED)
             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.BLUETOOTH_ADMIN), PackageManager.PERMISSION_GRANTED)
             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_COARSE_LOCATION), PackageManager.PERMISSION_GRANTED)
             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.ACCESS_FINE_LOCATION), PackageManager.PERMISSION_GRANTED)
         }
+
+        val bluetoothManager: BluetoothManager = getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
+        val bluetoothAdapter = bluetoothManager.adapter
+
 
         intentFilter = IntentFilter()
         intentFilter.apply {
@@ -66,7 +74,13 @@ class BluetoothTransferActivity : AppCompatActivity() {
             addAction(BluetoothDevice.ACTION_BOND_STATE_CHANGED)
         }
 
-        bluetoothHandler = BluetoothHandler(this)
+
+        if (bluetoothAdapter != null && !bluetoothAdapter.isEnabled()) {
+            val enableIntent = Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
+            startActivityForResult(enableIntent, 3)
+        }
+
+        bluetoothHandler = BluetoothHandler(this, bluetoothManager)
 
         binding.discoverableSwitch.setOnCheckedChangeListener { buttonView, isChecked ->
             if (isChecked) {
