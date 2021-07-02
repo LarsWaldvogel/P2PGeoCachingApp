@@ -5,7 +5,7 @@ import java.util.*;
 import java.util.Base64.*;
 import java.io.*;
 
-public class Test
+public class RuntimeTester
 {
     public static void main (String[] args) {
         BigInteger p;
