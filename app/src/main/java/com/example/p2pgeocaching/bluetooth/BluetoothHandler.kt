@@ -56,7 +56,11 @@ class BluetoothHandler(val activity: BluetoothTransferActivity, val manager: Blu
      */
     fun startDiscovery() {
         Log.i(TAG, "Looking for unpaired devices.")
-
+        if(bluetoothAdapter == null) {
+            Log.i(TAG, "NULL")
+        }
+        Log.i(TAG, "BA Adress = "+bluetoothAdapter.address)
+        Log.i(TAG, "BA Name = "+bluetoothAdapter.name)
         bluetoothAdapter?.startDiscovery()
     }
 
