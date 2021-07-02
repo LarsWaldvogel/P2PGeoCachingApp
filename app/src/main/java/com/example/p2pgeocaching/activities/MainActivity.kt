@@ -7,20 +7,20 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.p2pgeocaching.R
+import com.example.p2pgeocaching.RSA.RSA
 import com.example.p2pgeocaching.adapter.CacheAdapter
 import com.example.p2pgeocaching.caches.CacheList
+import com.example.p2pgeocaching.constants.Constants
 import com.example.p2pgeocaching.constants.Constants.Companion.CACHE_LIST_FILE
 import com.example.p2pgeocaching.constants.Constants.Companion.DUMMY_LIST_FILE
 import com.example.p2pgeocaching.constants.Constants.Companion.USE_DUMMY_LIST
 import com.example.p2pgeocaching.constants.Constants.Companion.U_NAME_FILE
 import com.example.p2pgeocaching.data.Serializer.Companion.deserializeCacheListFromFile
 import com.example.p2pgeocaching.databinding.ActivityMainBinding
-import java.io.File
-import java.util.*
-import com.example.p2pgeocaching.RSA.RSA
-import com.example.p2pgeocaching.constants.Constants
 import com.example.p2pgeocaching.ownbacnet.OwnFeed
 import com.example.p2pgeocaching.ownbacnet.OwnPublisher
+import java.io.File
+import java.util.*
 
 
 // TODO add manifest to get bluetooth permissions
