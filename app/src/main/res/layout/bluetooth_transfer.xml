@@ -24,9 +24,9 @@
         android:layout_marginTop="516dp"
         android:text="@string/close"
         app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintEnd_toEndOf="@+id/scanbtn"
         app:layout_constraintHorizontal_bias="0.498"
-        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintStart_toStartOf="@+id/scanbtn"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.323" />
 
@@ -36,6 +36,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="156dp"
         android:text="@string/scan_for_devices"
+        app:layout_constraintBottom_toTopOf="@+id/closebtn"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/device_list_view" />
