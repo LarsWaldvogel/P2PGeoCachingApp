@@ -18,7 +18,7 @@ class BluetoothHandler(val activity: BluetoothTransferActivity, val manager: Blu
         const val TAG = "BluetoothHandler"
     }
 
-    lateinit var context: Context
+    var context: File = File("file")
     val bluetoothAdapter: BluetoothAdapter = manager.adapter
 
     private val appName: String = "P2P_Geocaching"
@@ -67,7 +67,7 @@ class BluetoothHandler(val activity: BluetoothTransferActivity, val manager: Blu
     /**
      * This method starts the serverThread and listens for incoming connections
      */
-    fun startServer(c:  Context) {
+    fun startServer(c:  File) {
         Log.i(TAG, "Starting server thread and waiting for incoming connections ...")
         context = c
         serverAcceptThread = AcceptThread()
@@ -77,9 +77,9 @@ class BluetoothHandler(val activity: BluetoothTransferActivity, val manager: Blu
     /**
      * This method starts a clientThread and tries to connect with a server device
      */
-    fun connectToServer(device: BluetoothDevice?) {
+    fun connectToServer(device: BluetoothDevice?, c: File) {
         Log.i(TAG, "Connecting Bluetooth ...")
-
+        context = c
         clientConnectThread = ConnectThread(device)
         clientConnectThread?.start()
     }
@@ -109,37 +109,42 @@ class BluetoothHandler(val activity: BluetoothTransferActivity, val manager: Blu
             while(inLoop) {
                 try {
                     Log.i(TAG, "Server is waiting in try block before accept")
+                    if (serverSocket == null) {
+                        Log.i(TAG, "Serversocket is null")
+                    }
                     socket = serverSocket?.accept()
-                    socket?.remoteDevice?.name?.let { Log.d(TAG, "The name of the remote device: $it") }
+                    Log.i(TAG, "socket accepted")
+                    //socket?.remoteDevice?.name?.let { Log.d(TAG, "The name of the remote device: $it") }
                     while(true) {
-                        val fd = FeedData().feedToData(context.filesDir)
-                        val feedToSend = File(context.filesDir,fd)
-                        val bytes = ByteArray(feedToSend.length() as Int)
-                        Log.i(TAG, "File to bytes, bytearraysize: " + feedToSend.length())
-
-                        var fis: FileInputStream? = null
-                        try {
-                            fis = FileInputStream(feedToSend)
-
-                            //read file into bytes[]
-                            fis.read(bytes)
-                        } finally {
-                            fis?.close()
+                        val fd = FeedData(context)
+                        if (fd.stringFileContent.length != 0) {
+                            Log.i(TAG, "feedToSend = " + fd.stringFileContent)
+                            val bytes = ByteArray(fd.stringFileContent.length)
+                            //val serializedFeed = FeedData.serializer(fd)
+                            Log.i(TAG, "File to bytes, bytearraysize: " + fd.stringFileContent.length)
+                            val charset = Charsets.UTF_8
+                            write(fd.stringFileContent.toByteArray(charset))
+                            Log.i(TAG, "write bytes = "+fd.stringFileContent.toByteArray())
+                            Log.i(TAG, "write bytes = "+fd.stringFileContent.toByteArray().contentToString()
+                            )
+                            // TODO* Define Protocol!
+                            /*try {
+                                var inputStream =
+                                val input =
+                                    BufferedReader(InputStreamReader(socket!!.inputStream)) //socket!!.inputStream.read(buffer)
+                                val inputText = input.readText()
+                                if (inputText.equals("OK")) {
+                                    Log.e(TAG, "Everything went great")
+                                    break
+                                }
+                            } catch (e: IOException) {
+                                Log.e(TAG, "AcceptThread: inputstream error")
+                            }*/
                         }
-                        write(bytes)
-                        try {
-                            val input = BufferedReader(InputStreamReader(socket!!.inputStream)) //socket!!.inputStream.read(buffer)
-                            val inputText = input.readText()
-                            if(inputText.equals("OK")) {
-                                Log.e(TAG, "Everything went great")
-                                break
-                            }
-                        } catch (e: IOException) {
-                            Log.e(TAG, "AcceptThread: inputstream error")
-                        }
-                        serverSocket?.close()
-                        inLoop = false
-                        break
+                            serverSocket?.close()
+                            Log.i(TAG, "close server")
+                            inLoop = false
+                            break
                     }
 
                 } catch (e: IOException) {
@@ -152,8 +157,10 @@ class BluetoothHandler(val activity: BluetoothTransferActivity, val manager: Blu
         }
 
         private fun write(bytes: ByteArray) {
+            Log.i(TAG, "in write")
             try {
                 socket?.outputStream?.write(bytes)
+                Log.i(TAG, "write-socket write")
             } catch (e: IOException) {
                 Log.e(TAG, "outputstream error", e)
 
@@ -195,12 +202,14 @@ class BluetoothHandler(val activity: BluetoothTransferActivity, val manager: Blu
             Log.i(TAG, "ConnectThread: after cancelDiscovery()/before connect")
             clientSocket?.connect()
             Log.i(TAG, "run: ConnectThread connected.")
-            var receivedFeedFile = File(context.filesDir, "rcvFile")
+            var receivedFeedFile = File(context, "rcvFile")
 
             try {
+                Log.i(TAG, "In try")
                 read(buffer, receivedFeedFile)
-                write("OK".toByteArray())
-
+                Log.i(TAG, "read File")
+                //write("OK".toByteArray())
+                Log.i(TAG, "OK-Statement")
             } catch (e: IOException) {
                 Log.e(TAG, "ConnectThread: inputstream error")
             }
@@ -208,20 +217,42 @@ class BluetoothHandler(val activity: BluetoothTransferActivity, val manager: Blu
         }
 
         private fun read(bytes: ByteArray, file: File) {
+            Log.i(TAG, "Started read")
             clientSocket?.inputStream?.read(bytes)
+            val charset = Charsets.UTF_8
+            Log.i(TAG, "Inputstream "+bytes.toString(charset))
+            /*Log.i(TAG, "Inputstream "+bytes.contentToString())
             var fos: FileOutputStream? = null
             try {
+                Log.i(TAG, "read-Try")
                 fos = FileOutputStream(file)
+                Log.i(TAG, "FileOutputStream")
                 fos.write(bytes)
+                Log.i(TAG, "FileOutputStream write")
             } finally {
                 fos?.close()
+                Log.i(TAG, "close")
+            }*/
+            if (!file.exists()) {
+                Log.i(TAG, "File doesn't exist")
+                file.createNewFile()
+                Log.i(TAG, "CreatedFile")
+            } else {
+                file.delete()
+                file.createNewFile()
             }
-            FeedData().dataToFeed(file, context.filesDir)
+            Log.i(TAG, "Going to write in File")
+            file.writeText(bytes.toString(charset))
+            Log.i(TAG, "Wrote to File = "+file.readText())
+            val fd = FeedData(file, context)
+            Log.i(TAG, "dataToFeed over")
         }
 
         private fun write(bytes: ByteArray) {
+            Log.i(TAG, "write()")
             try {
                 clientSocket?.outputStream?.write(bytes)
+                Log.i(TAG, "outputstream of clientsocket")
             } catch (e: IOException) {
                 Log.e(TAG, "outputstream error", e)
 

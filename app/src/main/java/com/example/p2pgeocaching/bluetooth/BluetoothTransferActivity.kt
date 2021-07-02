@@ -110,12 +110,12 @@ class BluetoothTransferActivity : AppCompatActivity() {
             val deviceAddress: String? = bluetoothHandler.devices[i]?.address
             Log.i(TAG, "You clicked on device: $deviceName, $deviceAddress")
             val device = bluetoothHandler.devices[i] // device?.address!!
-            bluetoothHandler.connectToServer(device)
+            bluetoothHandler.connectToServer(device, context.filesDir)
         }
 
         // start server and listen for connections
         binding.servbtn.setOnClickListener {
-            bluetoothHandler.startServer(context)
+            bluetoothHandler.startServer(context.filesDir)
         }
 
         // scan for devices
