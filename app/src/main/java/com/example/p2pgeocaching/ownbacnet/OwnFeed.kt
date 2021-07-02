@@ -21,9 +21,7 @@ class OwnFeed(entries: List<Entry>, ownPublisher: OwnPublisher) : Feed(entries, 
         val salt = getOwnPublisher().getSalt()
         val feedName = name.plus("#").plus(salt)
         Log.d(TAG, "feedName = $feedName")
-        // TODO* context?
         val file = File(context, feedName)
-        // TODO* activate it
         file.createNewFile()
     }
 
@@ -34,7 +32,6 @@ class OwnFeed(entries: List<Entry>, ownPublisher: OwnPublisher) : Feed(entries, 
         val salt = getOwnPublisher().getSalt()
         val feedName = name.plus("#").plus(salt)
         Log.d(TAG, "feedName = $feedName")
-        // TODO* context?
         val file = File(context, feedName)
 
         val oldFeedName = oldusername.plus("#").plus(getOwnPublisher().getSaltOfOldPublisher(key))

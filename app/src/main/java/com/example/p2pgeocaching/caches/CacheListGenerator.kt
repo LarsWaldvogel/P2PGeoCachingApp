@@ -6,6 +6,7 @@ import com.example.p2pgeocaching.data.Serializer
 import com.example.p2pgeocaching.ownbacnet.Entry
 import java.io.File
 import android.util.Log
+import com.example.p2pgeocaching.data.FeedData
 
 /**
  * This class looks at the local Feeds and updates the CacheList accordingly.
@@ -42,7 +43,6 @@ class CacheListGenerator {
 
         val feedNamesFile = File(context, Constants.FEED_NAMES_FILE)
         var cacheList = CacheList(mutableListOf())
-        Log.i(TAG, "Length of feedNamesFile = "+feedNamesFile.length())
 
         //TODO* not finished
         for (item in list) {
@@ -84,6 +84,7 @@ class CacheListGenerator {
                                     item.signature
                                 )
                             ) {
+                                Log.i(TAG, "Added person to HoF = "+entry.content)
                                 cache.addPersonToHOF(entry.content)
                             }
                         }
