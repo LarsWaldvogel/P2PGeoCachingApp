@@ -98,4 +98,12 @@ class FeedActivity : AppCompatActivity() {
         }
     }
 
+    /**
+     * When new cache is added and it returns to this activity, refresh list.
+     */
+    override fun onRestart() {
+        super.onRestart()
+        // TODO: add refresh of list
+    }
+
 }
