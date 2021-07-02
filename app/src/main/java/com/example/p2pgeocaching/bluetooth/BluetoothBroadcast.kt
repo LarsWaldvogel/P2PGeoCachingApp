@@ -7,13 +7,15 @@ import android.content.Context
 import android.content.Intent
 import android.util.Log
 import com.example.p2pgeocaching.R
+import com.example.p2pgeocaching.activities.BluetoothTransferActivity
 
 /**
  * This class notices all bluetooth related changes such as the current state of the adapter(on,off, etc.)
  */
 class BluetoothBroadcast(
     private val bluetoothHandler: BluetoothHandler,
-    val activity: BluetoothTransferActivity): BroadcastReceiver() {
+    val activity: BluetoothTransferActivity
+): BroadcastReceiver() {
 
     companion object {
         const val TAG = "BluetoothBroadcast"

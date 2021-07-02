@@ -53,7 +53,7 @@
             android:noHistory="false"
             android:parentActivityName=".activities.MainActivity" />
         <activity
-            android:name=".bluetooth.BluetoothTransferActivity"
+            android:name=".activities.BluetoothTransferActivity"
             android:parentActivityName=".activities.MainActivity" />
         <activity android:name=".activities.MainActivity">
             <intent-filter>

@@ -18,9 +18,7 @@ import com.example.p2pgeocaching.databinding.ActivityMainBinding
 import java.io.File
 import java.util.*
 import com.example.p2pgeocaching.RSA.RSA
-import com.example.p2pgeocaching.bluetooth.BluetoothTransferActivity
 import com.example.p2pgeocaching.constants.Constants
-import com.example.p2pgeocaching.databinding.BluetoothTransferBinding
 import com.example.p2pgeocaching.ownbacnet.OwnFeed
 import com.example.p2pgeocaching.ownbacnet.OwnPublisher
 

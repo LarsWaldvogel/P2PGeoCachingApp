@@ -1,4 +1,4 @@
-package com.example.p2pgeocaching.bluetooth
+package com.example.p2pgeocaching.activities
 
 import android.Manifest
 import android.bluetooth.BluetoothAdapter
@@ -16,6 +16,8 @@ import android.widget.ListView
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import com.example.p2pgeocaching.R
+import com.example.p2pgeocaching.bluetooth.BluetoothDeviceListAdapter
+import com.example.p2pgeocaching.bluetooth.BluetoothHandler
 import com.example.p2pgeocaching.constants.Constants
 import com.example.p2pgeocaching.databinding.ActivityBluetoothTransferBinding
 import java.io.File
@@ -91,7 +93,7 @@ class BluetoothTransferActivity : AppCompatActivity() {
             val enableIntent = Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
             startActivityForResult(enableIntent, 3)
         }
-        
+
 
         // list with descovered devices hopefully including the one with the started server
         listView.setOnItemClickListener { _: AdapterView<*>, _: View, i: Int, _: Long ->

@@ -1,9 +1,9 @@
 package com.example.p2pgeocaching.bluetooth
 
 import android.bluetooth.*
-import android.content.Context
 import android.content.Intent
 import android.util.Log
+import com.example.p2pgeocaching.activities.BluetoothTransferActivity
 import com.example.p2pgeocaching.data.FeedData
 import java.io.*
 import java.util.*
