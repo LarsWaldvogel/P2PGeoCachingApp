@@ -26,10 +26,6 @@
         <activity
             android:name=".activities.FeedDetailViewActivity"
             android:parentActivityName=".activities.FeedActivity" />
-        <!--- ConnectActivity is Unnecessary and unused -->
-        <activity
-            android:name=".activities.ConnectActivity"
-            android:parentActivityName=".activities.MainActivity" />
         <activity
             android:name=".activities.NewCacheActivity"
             android:parentActivityName=".activities.MainActivity" />
