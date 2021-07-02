@@ -64,15 +64,16 @@ class BluetoothTransferActivity : AppCompatActivity() {
 
         val bluetoothManager: BluetoothManager = getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
         val bluetoothAdapter = bluetoothManager.adapter
-        val deviceList = bluetoothAdapter.bondedDevices as ArrayList<BluetoothDevice?>
-        Log.i(TAG,"deviceList implemented size = ${deviceList.size}")
+        val deviceList = bluetoothAdapter.bondedDevices
+        var devices = ArrayList<BluetoothDevice?>()
+        devices.addAll(deviceList)
+        Log.i(TAG,"deviceList implemented size = ${devices.size}")
 
         listView.adapter = BluetoothDeviceListAdapter(
             context,
             R.layout.device_adapter_view,
-            deviceList
+            devices
         )
-
 
         intentFilter = IntentFilter()
         intentFilter.apply {
@@ -147,12 +148,19 @@ class BluetoothTransferActivity : AppCompatActivity() {
 
     private fun hasRequiredPermissions(): Boolean {
         val hasBluetoothPermission: Boolean = hasPermission(Manifest.permission.BLUETOOTH)
+        Log.i(TAG, "hasBluetoothPermission = "+hasBluetoothPermission)
         val hasBluetoothAdminPermission: Boolean =
             hasPermission(Manifest.permission.BLUETOOTH_ADMIN)
+        Log.i(TAG, "hasBluetoothAdminPermission = "+hasBluetoothAdminPermission)
         val hasLocationPermission: Boolean =
             hasPermission(Manifest.permission.ACCESS_COARSE_LOCATION)
+        Log.i(TAG, "hasLocationPermission = "+hasLocationPermission)
         val hasFineLocationPermission: Boolean =
             hasPermission(Manifest.permission.ACCESS_FINE_LOCATION)
+        Log.i(TAG, "hasFineLocationPermission = "+hasFineLocationPermission)
+        val hasBackgroundAccess: Boolean =
+            hasPermission(Manifest.permission.ACCESS_BACKGROUND_LOCATION)
+        Log.i(TAG, "hasBackgroundAccess = "+hasBackgroundAccess)
         return hasBluetoothPermission && hasBluetoothAdminPermission && hasLocationPermission && hasFineLocationPermission
     }
 }
