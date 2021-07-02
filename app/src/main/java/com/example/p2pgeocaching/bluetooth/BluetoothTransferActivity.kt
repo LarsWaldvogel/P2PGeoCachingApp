@@ -54,7 +54,7 @@ class BluetoothTransferActivity : AppCompatActivity() {
         val userNameFile = File(context.filesDir, Constants.U_NAME_FILE)
         val cacheListFile = File(context.filesDir, Constants.CACHE_LIST_FILE)
 
-        if(!hasRequiredPermissions()){
+        while(!hasRequiredPermissions()){
             Log.i(TAG, "didn't have all required permissions!")
             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.BLUETOOTH), PackageManager.PERMISSION_GRANTED)
             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.BLUETOOTH_ADMIN), PackageManager.PERMISSION_GRANTED)
@@ -64,6 +64,14 @@ class BluetoothTransferActivity : AppCompatActivity() {
 
         val bluetoothManager: BluetoothManager = getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
         val bluetoothAdapter = bluetoothManager.adapter
+        val deviceList = bluetoothAdapter.bondedDevices as ArrayList<BluetoothDevice?>
+        Log.i(TAG,"deviceList implemented size = ${deviceList.size}")
+
+        listView.adapter = BluetoothDeviceListAdapter(
+            context,
+            R.layout.device_adapter_view,
+            deviceList
+        )
 
 
         intentFilter = IntentFilter()
