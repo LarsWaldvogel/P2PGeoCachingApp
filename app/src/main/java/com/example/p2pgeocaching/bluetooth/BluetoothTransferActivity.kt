@@ -17,7 +17,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.app.ActivityCompat
 import com.example.p2pgeocaching.R
 import com.example.p2pgeocaching.constants.Constants
-import com.example.p2pgeocaching.databinding.BluetoothTransferBinding
+import com.example.p2pgeocaching.databinding.ActivityBluetoothTransferBinding
 import java.io.File
 
 
@@ -35,7 +35,7 @@ class BluetoothTransferActivity : AppCompatActivity() {
     lateinit var bluetoothHandler: BluetoothHandler
     var bluetoothActive = false
 
-    private lateinit var binding: BluetoothTransferBinding
+    private lateinit var binding: ActivityBluetoothTransferBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,7 +44,7 @@ class BluetoothTransferActivity : AppCompatActivity() {
 
         title = "Transfer"
 
-        binding = BluetoothTransferBinding.inflate(layoutInflater)
+        binding = ActivityBluetoothTransferBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
         listView = findViewById(R.id.device_list_view)
@@ -91,17 +91,7 @@ class BluetoothTransferActivity : AppCompatActivity() {
             val enableIntent = Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
             startActivityForResult(enableIntent, 3)
         }
-
-
-        binding.discoverableSwitch.setOnCheckedChangeListener { buttonView, isChecked ->
-            if (isChecked) {
-                buttonView.text = "ON"
-                bluetoothHandler.discoverable(true)
-            } else {
-                buttonView.text = "OFF"
-                bluetoothHandler.discoverable(false)
-            }
-        }
+        
 
         // list with descovered devices hopefully including the one with the started server
         listView.setOnItemClickListener { _: AdapterView<*>, _: View, i: Int, _: Long ->
