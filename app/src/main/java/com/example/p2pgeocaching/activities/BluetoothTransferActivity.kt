@@ -51,12 +51,9 @@ class BluetoothTransferActivity : AppCompatActivity() {
 
         listView = findViewById(R.id.device_list_view)
 
-        // Opens the files used in the app for storage
         val context = applicationContext
-        val userNameFile = File(context.filesDir, Constants.U_NAME_FILE)
-        val cacheListFile = File(context.filesDir, Constants.CACHE_LIST_FILE)
 
-        while(!hasRequiredPermissions()){
+        if(!hasRequiredPermissions()){
             Log.i(TAG, "didn't have all required permissions!")
             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.BLUETOOTH), PackageManager.PERMISSION_GRANTED)
             ActivityCompat.requestPermissions(this, arrayOf(Manifest.permission.BLUETOOTH_ADMIN), PackageManager.PERMISSION_GRANTED)
@@ -142,19 +139,19 @@ class BluetoothTransferActivity : AppCompatActivity() {
 
     private fun hasRequiredPermissions(): Boolean {
         val hasBluetoothPermission: Boolean = hasPermission(Manifest.permission.BLUETOOTH)
-        Log.i(TAG, "hasBluetoothPermission = "+hasBluetoothPermission)
+        Log.i(TAG, "hasBluetoothPermission = $hasBluetoothPermission")
         val hasBluetoothAdminPermission: Boolean =
             hasPermission(Manifest.permission.BLUETOOTH_ADMIN)
-        Log.i(TAG, "hasBluetoothAdminPermission = "+hasBluetoothAdminPermission)
+        Log.i(TAG, "hasBluetoothAdminPermission = $hasBluetoothAdminPermission")
         val hasLocationPermission: Boolean =
             hasPermission(Manifest.permission.ACCESS_COARSE_LOCATION)
-        Log.i(TAG, "hasLocationPermission = "+hasLocationPermission)
+        Log.i(TAG, "hasLocationPermission = $hasLocationPermission")
         val hasFineLocationPermission: Boolean =
             hasPermission(Manifest.permission.ACCESS_FINE_LOCATION)
-        Log.i(TAG, "hasFineLocationPermission = "+hasFineLocationPermission)
+        Log.i(TAG, "hasFineLocationPermission = $hasFineLocationPermission")
         val hasBackgroundAccess: Boolean =
             hasPermission(Manifest.permission.ACCESS_BACKGROUND_LOCATION)
-        Log.i(TAG, "hasBackgroundAccess = "+hasBackgroundAccess)
+        Log.i(TAG, "hasBackgroundAccess = $hasBackgroundAccess")
         return hasBluetoothPermission && hasBluetoothAdminPermission && hasLocationPermission && hasFineLocationPermission
     }
 }
