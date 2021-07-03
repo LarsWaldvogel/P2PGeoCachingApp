@@ -32,8 +32,8 @@ class BluetoothTransferActivity : AppCompatActivity() {
     }
 
     lateinit var listView: ListView
-    lateinit var intentFilter: IntentFilter
-    lateinit var bluetoothHandler: BluetoothHandler
+    private lateinit var intentFilter: IntentFilter
+    private lateinit var bluetoothHandler: BluetoothHandler
     var bluetoothActive = false
 
     private lateinit var binding: ActivityBluetoothTransferBinding
@@ -65,7 +65,7 @@ class BluetoothTransferActivity : AppCompatActivity() {
         bluetoothHandler = BluetoothHandler(this, bluetoothManager, context)
 
         val deviceList = bluetoothAdapter.bondedDevices
-        var devices = ArrayList<BluetoothDevice?>()
+        val devices = ArrayList<BluetoothDevice?>()
         devices.addAll(deviceList)
         bluetoothHandler.devices = devices
         Log.i(TAG,"deviceList implemented size = ${devices.size}")
@@ -85,13 +85,13 @@ class BluetoothTransferActivity : AppCompatActivity() {
         }
 
 
-        if (bluetoothAdapter != null && !bluetoothAdapter.isEnabled()) {
+        if (bluetoothAdapter != null && !bluetoothAdapter.isEnabled) {
             val enableIntent = Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE)
             startActivityForResult(enableIntent, 3)
         }
 
 
-        // list with descovered devices hopefully including the one with the started server
+        // list with bonded devices including the one with the started sender (sender device has to be bonded)
         listView.setOnItemClickListener { _: AdapterView<*>, _: View, i: Int, _: Long ->
             Log.i(TAG, "You clicked on a device")
             val deviceName: String? = bluetoothHandler.devices[i]?.name
@@ -102,17 +102,12 @@ class BluetoothTransferActivity : AppCompatActivity() {
         }
 
         // start server and listen for connections
-        binding.servbtn.setOnClickListener {
+        binding.sendBtn.setOnClickListener {
             bluetoothHandler.startServer(context.filesDir)
         }
 
-        // scan for devices
-        binding.scanbtn.setOnClickListener {
-            bluetoothHandler.startDiscovery()
-        }
-
         // close sockets
-        binding.closebtn.setOnClickListener {
+        binding.closeBtn.setOnClickListener {
             bluetoothHandler.stop()
         }
     }
