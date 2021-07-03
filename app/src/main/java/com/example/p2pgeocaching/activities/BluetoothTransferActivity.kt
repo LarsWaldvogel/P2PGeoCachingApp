@@ -66,7 +66,7 @@ class BluetoothTransferActivity : AppCompatActivity() {
 
         val bluetoothManager: BluetoothManager = getSystemService(Context.BLUETOOTH_SERVICE) as BluetoothManager
         val bluetoothAdapter = bluetoothManager.adapter
-        bluetoothHandler = BluetoothHandler(this, bluetoothManager)
+        bluetoothHandler = BluetoothHandler(this, bluetoothManager, context)
 
         val deviceList = bluetoothAdapter.bondedDevices
         var devices = ArrayList<BluetoothDevice?>()

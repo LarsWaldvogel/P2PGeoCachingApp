@@ -1,8 +1,10 @@
 package com.example.p2pgeocaching.bluetooth
 
 import android.bluetooth.*
+import android.content.Context
 import android.content.Intent
 import android.util.Log
+import android.widget.Toast
 import com.example.p2pgeocaching.activities.BluetoothTransferActivity
 import com.example.p2pgeocaching.data.FeedData
 import java.io.*
@@ -12,7 +14,11 @@ import java.util.*
  * This Class has all functions to connect to devices via Bluetooth
  */
 
-class BluetoothHandler(val activity: BluetoothTransferActivity, manager: BluetoothManager) {
+class BluetoothHandler(
+    val activity: BluetoothTransferActivity,
+    manager: BluetoothManager,
+    var applicationContext: Context
+) {
 
     companion object {
         const val TAG = "BluetoothHandler"
@@ -113,9 +119,10 @@ class BluetoothHandler(val activity: BluetoothTransferActivity, manager: Bluetoo
                     if (serverSocket == null) {
                         Log.i(TAG, "Serversocket is null")
                     }
+                    Toast.makeText(applicationContext, "waiting for incoming connection", Toast.LENGTH_SHORT).show()
                     socket = serverSocket?.accept()
                     Log.i(TAG, "socket accepted")
-                    //socket?.remoteDevice?.name?.let { Log.d(TAG, "The name of the remote device: $it") }
+                    Toast.makeText(applicationContext, "accepted an incoming connection", Toast.LENGTH_SHORT).show()
                     while(true) {
                         val fd = FeedData(context)
                         if (fd.stringFileContent.isNotEmpty()) {
@@ -124,6 +131,7 @@ class BluetoothHandler(val activity: BluetoothTransferActivity, manager: Bluetoo
                             val charset = Charsets.UTF_8
                             val bytes = fd.stringFileContent.toByteArray(charset)
                             write(bytes)
+                            Toast.makeText(applicationContext, "feeds sent", Toast.LENGTH_SHORT).show()
                             Log.i(TAG, "write bytes = "+fd.stringFileContent.toByteArray())
                             Log.i(TAG, "write bytes = "+fd.stringFileContent.toByteArray().contentToString()
                             )
@@ -141,13 +149,16 @@ class BluetoothHandler(val activity: BluetoothTransferActivity, manager: Bluetoo
                                 Log.e(TAG, "AcceptThread: inputstream error")
                             }*/
                         }
-                            serverSocket?.close()
-                            Log.i(TAG, "close server")
-                            inLoop = false
-                            break
+                        serverSocket?.close()
+                        Toast.makeText(applicationContext, "closed your socket", Toast.LENGTH_SHORT).show()
+                        Log.i(TAG, "close server")
+                        inLoop = false
+                        break
                     }
 
                 } catch (e: IOException) {
+                    Toast.makeText(applicationContext, "can't accept connections", Toast.LENGTH_SHORT).show()
+                    Toast.makeText(applicationContext, "Try again later", Toast.LENGTH_SHORT).show()
                     Log.e(TAG, "Socket's accept() method failed")
                     inLoop = false
                     break
@@ -182,6 +193,8 @@ class BluetoothHandler(val activity: BluetoothTransferActivity, manager: Bluetoo
         fun cancel() {
             try {
                 serverSocket?.close()
+                Toast.makeText(applicationContext, "closed your socket", Toast.LENGTH_SHORT).show()
+
             } catch (e: IOException) {
                 Log.e(TAG, "Could not close the connect socket", e)
             }
@@ -200,13 +213,16 @@ class BluetoothHandler(val activity: BluetoothTransferActivity, manager: Bluetoo
             Log.i(TAG, "ConnectThread: in run()")
             bluetoothAdapter.cancelDiscovery()
             Log.i(TAG, "ConnectThread: after cancelDiscovery()/before connect")
+            Toast.makeText(applicationContext, "waiting for connection", Toast.LENGTH_SHORT).show()
             clientSocket?.connect()
+            Toast.makeText(applicationContext, "connection accepted", Toast.LENGTH_SHORT).show()
             Log.i(TAG, "run: ConnectThread connected.")
             val receivedFeedFile = File(context, "rcvFile")
 
             try {
                 Log.i(TAG, "In try")
                 read(buffer, receivedFeedFile)
+                Toast.makeText(applicationContext, "received feed", Toast.LENGTH_SHORT).show()
                 Log.i(TAG, "read File")
                 //write("OK".toByteArray())
                 Log.i(TAG, "OK-Statement")
@@ -214,6 +230,7 @@ class BluetoothHandler(val activity: BluetoothTransferActivity, manager: Bluetoo
                 Log.e(TAG, "ConnectThread: inputstream error")
             }
             clientSocket?.close()
+            Toast.makeText(applicationContext, "closed your socket", Toast.LENGTH_SHORT).show()
         }
 
         private fun read(bytes: ByteArray, file: File) {
@@ -262,6 +279,7 @@ class BluetoothHandler(val activity: BluetoothTransferActivity, manager: Bluetoo
         fun cancel() {
             try {
                 clientSocket?.close()
+                Toast.makeText(applicationContext, "closed your socket", Toast.LENGTH_SHORT).show()
             } catch (e: IOException) {
                 Log.e(TAG, "Could not close the client socket", e)
             }
