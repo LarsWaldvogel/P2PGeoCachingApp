@@ -31,49 +31,41 @@ class BluetoothHandler(
     private val appName: String = "P2P_Geocaching"
     private val uuid: UUID = UUID.fromString("708305f5-933b-40ad-b687-5b8ebfd8b5c6")
 
-    private var serverAcceptThread: AcceptThread? = null  // Server / Sender
-    private var clientConnectThread: ConnectThread? = null    // Client / Receiver
+    private var serverSenderThread: SenderThread? = null  // Server
+    private var clientReceiverThread: ReceiverThread? = null    // Client
 
     val state: BluetoothBroadcast = BluetoothBroadcast(this, activity)
 
     var devices: ArrayList<BluetoothDevice?> = ArrayList() // If you want to display the devices found
     lateinit var bluetoothDeviceListAdapter: BluetoothDeviceListAdapter
 
-    /**
-     * This method searches for discoverable devices in the surrounding
-     */
-    fun startDiscovery() {
-        Log.i(TAG, "Looking for unpaired devices.")
-        Log.i(TAG, "BA Name = "+bluetoothAdapter.name)
-        bluetoothAdapter.startDiscovery()
-    }
 
     /**
      * This method starts the serverThread and listens for incoming connections
      */
-    fun startServer(c:  File) {
+    fun startSender(c:  File) {
         Log.i(TAG, "Starting server thread and waiting for incoming connections ...")
         context = c
-        serverAcceptThread = AcceptThread()
-        serverAcceptThread?.start()
+        serverSenderThread = SenderThread()
+        serverSenderThread?.start()
     }
 
     /**
      * This method starts a clientThread and tries to connect with a server device
      */
-    fun connectToServer(device: BluetoothDevice?, c: File) {
+    fun startReceiver(device: BluetoothDevice?, c: File) {
         Log.i(TAG, "Connecting Bluetooth ...")
         context = c
-        clientConnectThread = ConnectThread(device)
-        clientConnectThread?.start()
+        clientReceiverThread = ReceiverThread(device)
+        clientReceiverThread?.start()
     }
 
     /**
      * This method stops the connection by closing their sockets
      */
     fun stop() {
-        clientConnectThread?.cancel()
-        serverAcceptThread?.cancel()
+        clientReceiverThread?.cancel()
+        serverSenderThread?.cancel()
 
         Log.i(TAG, "Bluetooth Handler closed all sockets")
     }
@@ -81,7 +73,7 @@ class BluetoothHandler(
     /**
      * This inner class represents the server thread who accepts incoming connections
      */
-    inner class AcceptThread: Thread() {
+    inner class SenderThread: Thread() {
 
         private val serverSocket: BluetoothServerSocket? =
             bluetoothAdapter.listenUsingInsecureRfcommWithServiceRecord(appName, uuid)
@@ -174,15 +166,14 @@ class BluetoothHandler(
     /**
      * This inner class represents the client thread who tries to connect to the server
      */
-    inner class ConnectThread(val device: BluetoothDevice?): Thread() {
+    inner class ReceiverThread(val device: BluetoothDevice?): Thread() {
 
         private val clientSocket: BluetoothSocket? = device?.createRfcommSocketToServiceRecord(uuid)
         private val buffer: ByteArray = ByteArray(BUFFERSIZE)
 
         override fun run() {
             Log.i(TAG, "ConnectThread: in run()")
-            bluetoothAdapter.cancelDiscovery()
-            Log.i(TAG, "ConnectThread: after cancelDiscovery()/before connect")
+
             makeToast("waiting for connection")
 
             clientSocket?.connect()
