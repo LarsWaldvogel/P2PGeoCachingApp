@@ -115,26 +115,53 @@ class BluetoothHandler(
 
             while(inLoop) {
                 try {
-                    Log.i(TAG, "Server is waiting in try block before accept")
+                    Log.i(TAG, "Server is waiting in try block before accept before runOnUiThread")
                     if (serverSocket == null) {
                         Log.i(TAG, "Serversocket is null")
                     }
-                    Toast.makeText(applicationContext, "waiting for incoming connection", Toast.LENGTH_SHORT).show()
+                    activity.runOnUiThread {
+                        Log.i(TAG, "in runOnUiThread before Toast")
+                        Toast.makeText(applicationContext, "waiting for incoming connection", Toast.LENGTH_SHORT).show()
+                        Log.i(TAG, "in runOnUiThread after Toast")
+                    }
+                    Log.i(TAG, "Server is waiting in try block before accept after runOnUiThread")
+
                     socket = serverSocket?.accept()
+
                     Log.i(TAG, "socket accepted")
-                    Toast.makeText(applicationContext, "accepted an incoming connection", Toast.LENGTH_SHORT).show()
+                    activity.runOnUiThread {
+                        Log.i(TAG, "in runOnUiThread before Toast")
+                        Toast.makeText(applicationContext, "accepted an incoming connection", Toast.LENGTH_SHORT).show()
+                        Log.i(TAG, "in runOnUiThread after Toast")
+                    }
+
+                    val outputStream = socket?.outputStream
                     while(true) {
                         val fd = FeedData(context)
                         if (fd.stringFileContent.isNotEmpty()) {
                             Log.i(TAG, "feedToSend = " + fd.stringFileContent)
                             Log.i(TAG, "File to bytes, bytearraysize: " + fd.stringFileContent.length)
                             val charset = Charsets.UTF_8
-                            val bytes = fd.stringFileContent.toByteArray(charset)
-                            write(bytes)
-                            Toast.makeText(applicationContext, "feeds sent", Toast.LENGTH_SHORT).show()
+                            val msgSplit =  fd.stringFileContent.chunked(500)
+                            val splitSeq = msgSplit.size
+                            Log.i(TAG, "$splitSeq chunks to send")
+
+                            outputStream?.write(splitSeq) // Erste Nachricht an receiver ist Anzahl substring die er erhält
+
+                            var counter = 0
+                            while(counter < splitSeq) {
+                                val bytes = msgSplit[counter].toByteArray(charset)
+                                write(bytes, outputStream)
+                                Log.i(TAG, "write bytes = "+bytes.contentToString())
+                                counter++
+                            }
+                            activity.runOnUiThread {
+                                Log.i(TAG, "in runOnUiThread before Toast")
+                                Toast.makeText(applicationContext, "feeds sent", Toast.LENGTH_SHORT).show()
+                                Log.i(TAG, "in runOnUiThread after Toast")
+                            }
                             Log.i(TAG, "write bytes = "+fd.stringFileContent.toByteArray())
-                            Log.i(TAG, "write bytes = "+fd.stringFileContent.toByteArray().contentToString()
-                            )
+                            Log.i(TAG, "write bytes = "+fd.stringFileContent.toByteArray().contentToString())
                             // TODO* Define Protocol!
                             /*try {
                                 var inputStream =
@@ -167,10 +194,10 @@ class BluetoothHandler(
             }
         }
 
-        private fun write(bytes: ByteArray) {
+        private fun write(bytes: ByteArray, outputStream: OutputStream?) {
             Log.i(TAG, "in write")
             try {
-                socket?.outputStream?.write(bytes)
+                outputStream?.write(bytes)
                 Log.i(TAG, "write-socket write")
             } catch (e: IOException) {
                 Log.e(TAG, "outputstream error", e)
@@ -207,7 +234,7 @@ class BluetoothHandler(
     inner class ConnectThread(val device: BluetoothDevice?): Thread() {
 
         private val clientSocket: BluetoothSocket? = device?.createRfcommSocketToServiceRecord(uuid)
-        private val buffer: ByteArray = ByteArray(1024) // How to find Filesize
+        private val buffer: ByteArray = ByteArray(500) // How to find Filesize
 
         override fun run() {
             Log.i(TAG, "ConnectThread: in run()")
@@ -221,8 +248,17 @@ class BluetoothHandler(
 
             try {
                 Log.i(TAG, "In try")
+                activity.runOnUiThread {
+                    Log.i(TAG, "in runOnUiThread before Toast")
+                    Toast.makeText(applicationContext, "wait... you are receiving", Toast.LENGTH_SHORT).show()
+                    Log.i(TAG, "in runOnUiThread after Toast")
+                }
                 read(buffer, receivedFeedFile)
-                Toast.makeText(applicationContext, "received feed", Toast.LENGTH_SHORT).show()
+                activity.runOnUiThread {
+                    Log.i(TAG, "in runOnUiThread before Toast")
+                    Toast.makeText(applicationContext, "feed received", Toast.LENGTH_SHORT).show()
+                    Log.i(TAG, "in runOnUiThread after Toast")
+                }
                 Log.i(TAG, "read File")
                 //write("OK".toByteArray())
                 Log.i(TAG, "OK-Statement")
@@ -235,21 +271,25 @@ class BluetoothHandler(
 
         private fun read(bytes: ByteArray, file: File) {
             Log.i(TAG, "Started read")
-            clientSocket?.inputStream?.read(bytes)
+            var finalMsg = ""
+            val inputStream = clientSocket?.inputStream
             val charset = Charsets.UTF_8
-            Log.i(TAG, "Inputstream "+bytes.toString(charset))
-            /*Log.i(TAG, "Inputstream "+bytes.contentToString())
-            var fos: FileOutputStream? = null
-            try {
-                Log.i(TAG, "read-Try")
-                fos = FileOutputStream(file)
-                Log.i(TAG, "FileOutputStream")
-                fos.write(bytes)
-                Log.i(TAG, "FileOutputStream write")
-            } finally {
-                fos?.close()
-                Log.i(TAG, "close")
-            }*/
+
+            val splitSeq = inputStream?.read()
+            var counter = 0
+            while(true) {
+                while(counter < splitSeq!!) {
+                    inputStream.read(bytes)
+                    finalMsg += bytes.toString(charset)
+                    counter++
+                }
+                if(counter == splitSeq) {
+                    break
+                }
+            }
+
+            Log.i(TAG, "Inputstream $finalMsg")
+
             if (!file.exists()) {
                 Log.i(TAG, "File doesn't exist")
                 file.createNewFile()
@@ -259,7 +299,7 @@ class BluetoothHandler(
                 file.createNewFile()
             }
             Log.i(TAG, "Going to write in File")
-            file.writeText(bytes.toString(charset))
+            file.writeText(finalMsg)
             Log.i(TAG, "Wrote to File = "+file.readText())
             FeedData(file, context)
             Log.i(TAG, "dataToFeed over")
