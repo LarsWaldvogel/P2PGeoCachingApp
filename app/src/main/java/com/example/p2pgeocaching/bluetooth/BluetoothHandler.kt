@@ -2,7 +2,6 @@ package com.example.p2pgeocaching.bluetooth
 
 import android.bluetooth.*
 import android.content.Context
-import android.content.Intent
 import android.util.Log
 import android.widget.Toast
 import com.example.p2pgeocaching.activities.BluetoothTransferActivity
@@ -40,33 +39,10 @@ class BluetoothHandler(
     lateinit var bluetoothDeviceListAdapter: BluetoothDeviceListAdapter
 
     /**
-     * This method makes your device discoverable for others for 100 sec
-     */
-    fun discoverable(enabled: Boolean) {
-        if (enabled) {
-            Log.i(TAG, "Making device discoverable")
-
-            val discoverableIntent = Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE)
-            discoverableIntent.putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 100)
-            activity.startActivity(discoverableIntent)
-        } else {
-            Log.d(TAG, "Making device not discoverable anymore")
-
-            val discoverableIntent = Intent(BluetoothAdapter.ACTION_REQUEST_DISCOVERABLE)
-            discoverableIntent.putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION, 1)
-            activity.startActivity(discoverableIntent)
-        }
-    }
-
-    /**
      * This method searches for discoverable devices in the surrounding
      */
     fun startDiscovery() {
         Log.i(TAG, "Looking for unpaired devices.")
-        if(bluetoothAdapter == null) {
-            Log.i(TAG, "NULL")
-        }
-        Log.i(TAG, "BA Adress = "+bluetoothAdapter.address)
         Log.i(TAG, "BA Name = "+bluetoothAdapter.name)
         bluetoothAdapter.startDiscovery()
     }
@@ -109,12 +85,10 @@ class BluetoothHandler(
         private val serverSocket: BluetoothServerSocket? =
             bluetoothAdapter.listenUsingInsecureRfcommWithServiceRecord(appName, uuid)
         private var socket: BluetoothSocket? = null
-        private val buffer: ByteArray = ByteArray(1024)
 
         override fun run() {
-            var inLoop = true
 
-            while(inLoop) {
+            while(true) {
                 try {
                     Log.i(TAG, "Server is waiting in try block before accept before runOnUiThread")
                     if (serverSocket == null) {
@@ -151,12 +125,10 @@ class BluetoothHandler(
 
                             makeToast("feeds sent")
                             Log.i(TAG, "write bytes = "+fd.stringFileContent.toByteArray().contentToString())
-                            // TODO* Define Protocol!
                         }
                         serverSocket?.close()
                         makeToast("closed your socket")
                         Log.i(TAG, "close server")
-                        inLoop = false
                         break
                     }
 
@@ -164,7 +136,6 @@ class BluetoothHandler(
                     makeToast("can't accept connections")
                     makeToast("try again later")
                     Log.e(TAG, "Socket's accept() method failed")
-                    inLoop = false
                     break
                 }
                 break
@@ -179,18 +150,6 @@ class BluetoothHandler(
             } catch (e: IOException) {
                 Log.e(TAG, "outputstream error", e)
 
-            }
-        }
-
-        private fun read(bytes: ByteArray) {
-            try {
-                val input = BufferedReader(InputStreamReader(socket!!.inputStream)) //socket!!.inputStream.read(buffer)
-                val inputText = input.readText()
-                if(inputText == "OK") {
-
-                }
-            } catch (e: IOException) {
-                Log.e(TAG, "AcceptThread: inputstream error")
             }
         }
 
@@ -284,17 +243,6 @@ class BluetoothHandler(
             Log.i(TAG, "Wrote to File = "+file.readText())
             FeedData(file, context)
             Log.i(TAG, "dataToFeed over")
-        }
-
-        private fun write(bytes: ByteArray) {
-            Log.i(TAG, "write()")
-            try {
-                clientSocket?.outputStream?.write(bytes)
-                Log.i(TAG, "outputstream of clientsocket")
-            } catch (e: IOException) {
-                Log.e(TAG, "outputstream error", e)
-
-            }
         }
 
         private fun makeToast(msg: String) {
