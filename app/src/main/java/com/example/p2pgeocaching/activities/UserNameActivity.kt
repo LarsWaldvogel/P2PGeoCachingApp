@@ -11,6 +11,7 @@ import com.chaquo.python.Python
 import com.chaquo.python.android.AndroidPlatform
 import com.example.p2pgeocaching.R
 import com.example.p2pgeocaching.RSA.RSA
+import com.example.p2pgeocaching.caches.CacheListGenerator
 import com.example.p2pgeocaching.constants.Constants.Companion.PERSON_DATA
 import com.example.p2pgeocaching.constants.Constants.Companion.U_NAME_FILE
 import com.example.p2pgeocaching.databinding.ActivityUserNameBinding
@@ -153,7 +154,8 @@ class UserNameActivity : AppCompatActivity() {
                 Log.d(TAG, "Original file was deleted")
                 file.writeText(userNameString)
                 Log.d(TAG, "Written to file: $userNameString")
-
+                val cacheListGenerator = CacheListGenerator()
+                cacheListGenerator.getCacheListFileContent(context)
                 //*
 
 
