@@ -24,9 +24,8 @@ class BluetoothBroadcast(
     override fun onReceive(context: Context, intent: Intent) {
         when(intent.action) {
             BluetoothAdapter.ACTION_STATE_CHANGED -> {
-                val state: Int = intent.getIntExtra(BluetoothAdapter.EXTRA_STATE, BluetoothAdapter.ERROR)
 
-                when (state) {
+                when (intent.getIntExtra(BluetoothAdapter.EXTRA_STATE, BluetoothAdapter.ERROR)) {
                     BluetoothAdapter.STATE_OFF -> {
                         Log.i(TAG, "STATE OFF")
                     }
@@ -46,9 +45,8 @@ class BluetoothBroadcast(
             }
 
             BluetoothAdapter.ACTION_SCAN_MODE_CHANGED -> {
-                val scanMode: Int = intent.getIntExtra(BluetoothAdapter.EXTRA_SCAN_MODE, BluetoothAdapter.ERROR)
 
-                when(scanMode) {
+                when(intent.getIntExtra(BluetoothAdapter.EXTRA_SCAN_MODE, BluetoothAdapter.ERROR)) {
                     BluetoothAdapter.SCAN_MODE_CONNECTABLE_DISCOVERABLE -> {
                         Log.i(TAG, "Discoverability Enabled")
                     }
