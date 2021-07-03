@@ -53,8 +53,7 @@
     <string name="user_name_message">User name: %s</string>
     <string name="feed_name_message">Feed: %s</string>
     <string name="discoverable">Discoverable</string>
-    <string name="server">server</string>
     <string name="close">close</string>
-    <string name="scan_for_devices">Scan for Devices</string>
+    <string name="Sender">Sender</string>
 
 </resources>
