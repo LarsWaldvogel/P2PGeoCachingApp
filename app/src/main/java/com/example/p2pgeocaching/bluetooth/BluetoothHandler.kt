@@ -177,15 +177,28 @@ class BluetoothHandler(
                             }*/
                         }
                         serverSocket?.close()
-                        Toast.makeText(applicationContext, "closed your socket", Toast.LENGTH_SHORT).show()
+                        activity.runOnUiThread {
+                            Log.i(TAG, "in runOnUiThread before Toast")
+                            Toast.makeText(applicationContext, "closed your socket", Toast.LENGTH_SHORT).show()
+                            Log.i(TAG, "in runOnUiThread after Toast")
+                        }
                         Log.i(TAG, "close server")
                         inLoop = false
                         break
                     }
 
                 } catch (e: IOException) {
-                    Toast.makeText(applicationContext, "can't accept connections", Toast.LENGTH_SHORT).show()
-                    Toast.makeText(applicationContext, "Try again later", Toast.LENGTH_SHORT).show()
+                    activity.runOnUiThread {
+                        Log.i(TAG, "in runOnUiThread before Toast")
+                        Toast.makeText(applicationContext, "can't accept connections", Toast.LENGTH_SHORT).show()
+                        Log.i(TAG, "in runOnUiThread after Toast")
+                    }
+
+                    activity.runOnUiThread {
+                        Log.i(TAG, "in runOnUiThread before Toast")
+                        Toast.makeText(applicationContext, "Try again later", Toast.LENGTH_SHORT).show()
+                        Log.i(TAG, "in runOnUiThread after Toast")
+                    }
                     Log.e(TAG, "Socket's accept() method failed")
                     inLoop = false
                     break
@@ -220,8 +233,11 @@ class BluetoothHandler(
         fun cancel() {
             try {
                 serverSocket?.close()
-                Toast.makeText(applicationContext, "closed your socket", Toast.LENGTH_SHORT).show()
-
+                activity.runOnUiThread {
+                    Log.i(TAG, "in runOnUiThread before Toast")
+                    Toast.makeText(applicationContext, "closed your socket", Toast.LENGTH_SHORT).show()
+                    Log.i(TAG, "in runOnUiThread after Toast")
+                }
             } catch (e: IOException) {
                 Log.e(TAG, "Could not close the connect socket", e)
             }
@@ -240,9 +256,17 @@ class BluetoothHandler(
             Log.i(TAG, "ConnectThread: in run()")
             bluetoothAdapter.cancelDiscovery()
             Log.i(TAG, "ConnectThread: after cancelDiscovery()/before connect")
-            Toast.makeText(applicationContext, "waiting for connection", Toast.LENGTH_SHORT).show()
+            activity.runOnUiThread {
+                Log.i(TAG, "in runOnUiThread before Toast")
+                Toast.makeText(applicationContext, "waiting for connection", Toast.LENGTH_SHORT).show()
+                Log.i(TAG, "in runOnUiThread after Toast")
+            }
             clientSocket?.connect()
-            Toast.makeText(applicationContext, "connection accepted", Toast.LENGTH_SHORT).show()
+            activity.runOnUiThread {
+                Log.i(TAG, "in runOnUiThread before Toast")
+                Toast.makeText(applicationContext, "connection accepted", Toast.LENGTH_SHORT).show()
+                Log.i(TAG, "in runOnUiThread after Toast")
+            }
             Log.i(TAG, "run: ConnectThread connected.")
             val receivedFeedFile = File(context, "rcvFile")
 
@@ -266,7 +290,11 @@ class BluetoothHandler(
                 Log.e(TAG, "ConnectThread: inputstream error")
             }
             clientSocket?.close()
-            Toast.makeText(applicationContext, "closed your socket", Toast.LENGTH_SHORT).show()
+            activity.runOnUiThread {
+                Log.i(TAG, "in runOnUiThread before Toast")
+                Toast.makeText(applicationContext, "closed your socket", Toast.LENGTH_SHORT).show()
+                Log.i(TAG, "in runOnUiThread after Toast")
+            }
         }
 
         private fun read(bytes: ByteArray, file: File) {
@@ -319,7 +347,11 @@ class BluetoothHandler(
         fun cancel() {
             try {
                 clientSocket?.close()
-                Toast.makeText(applicationContext, "closed your socket", Toast.LENGTH_SHORT).show()
+                activity.runOnUiThread {
+                    Log.i(TAG, "in runOnUiThread before Toast")
+                    Toast.makeText(applicationContext, "closed your socket", Toast.LENGTH_SHORT).show()
+                    Log.i(TAG, "in runOnUiThread after Toast")
+                }
             } catch (e: IOException) {
                 Log.e(TAG, "Could not close the client socket", e)
             }
