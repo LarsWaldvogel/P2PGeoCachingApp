@@ -12,7 +12,7 @@ import java.util.*
  * This Class has all functions to connect to devices via Bluetooth
  */
 
-class BluetoothHandler(val activity: BluetoothTransferActivity, val manager: BluetoothManager) {
+class BluetoothHandler(val activity: BluetoothTransferActivity, manager: BluetoothManager) {
 
     companion object {
         const val TAG = "BluetoothHandler"
@@ -24,8 +24,8 @@ class BluetoothHandler(val activity: BluetoothTransferActivity, val manager: Blu
     private val appName: String = "P2P_Geocaching"
     private val uuid: UUID = UUID.fromString("708305f5-933b-40ad-b687-5b8ebfd8b5c6")
 
-    var serverAcceptThread: AcceptThread? = null  // Server
-    var clientConnectThread: ConnectThread? = null    // Client
+    private var serverAcceptThread: AcceptThread? = null  // Server / Sender
+    private var clientConnectThread: ConnectThread? = null    // Client / Receiver
 
     val state: BluetoothBroadcast = BluetoothBroadcast(this, activity)
 
@@ -61,7 +61,7 @@ class BluetoothHandler(val activity: BluetoothTransferActivity, val manager: Blu
         }
         Log.i(TAG, "BA Adress = "+bluetoothAdapter.address)
         Log.i(TAG, "BA Name = "+bluetoothAdapter.name)
-        bluetoothAdapter?.startDiscovery()
+        bluetoothAdapter.startDiscovery()
     }
 
     /**
@@ -99,8 +99,9 @@ class BluetoothHandler(val activity: BluetoothTransferActivity, val manager: Blu
      */
     inner class AcceptThread: Thread() {
 
-        private val serverSocket: BluetoothServerSocket? = bluetoothAdapter?.listenUsingInsecureRfcommWithServiceRecord(appName, uuid)
-        var socket: BluetoothSocket? = null
+        private val serverSocket: BluetoothServerSocket? =
+            bluetoothAdapter.listenUsingInsecureRfcommWithServiceRecord(appName, uuid)
+        private var socket: BluetoothSocket? = null
         private val buffer: ByteArray = ByteArray(1024)
 
         override fun run() {
@@ -117,13 +118,12 @@ class BluetoothHandler(val activity: BluetoothTransferActivity, val manager: Blu
                     //socket?.remoteDevice?.name?.let { Log.d(TAG, "The name of the remote device: $it") }
                     while(true) {
                         val fd = FeedData(context)
-                        if (fd.stringFileContent.length != 0) {
+                        if (fd.stringFileContent.isNotEmpty()) {
                             Log.i(TAG, "feedToSend = " + fd.stringFileContent)
-                            val bytes = ByteArray(fd.stringFileContent.length)
-                            //val serializedFeed = FeedData.serializer(fd)
                             Log.i(TAG, "File to bytes, bytearraysize: " + fd.stringFileContent.length)
                             val charset = Charsets.UTF_8
-                            write(fd.stringFileContent.toByteArray(charset))
+                            val bytes = fd.stringFileContent.toByteArray(charset)
+                            write(bytes)
                             Log.i(TAG, "write bytes = "+fd.stringFileContent.toByteArray())
                             Log.i(TAG, "write bytes = "+fd.stringFileContent.toByteArray().contentToString()
                             )
@@ -171,7 +171,7 @@ class BluetoothHandler(val activity: BluetoothTransferActivity, val manager: Blu
             try {
                 val input = BufferedReader(InputStreamReader(socket!!.inputStream)) //socket!!.inputStream.read(buffer)
                 val inputText = input.readText()
-                if(inputText.equals("OK")) {
+                if(inputText == "OK") {
 
                 }
             } catch (e: IOException) {
@@ -198,11 +198,11 @@ class BluetoothHandler(val activity: BluetoothTransferActivity, val manager: Blu
 
         override fun run() {
             Log.i(TAG, "ConnectThread: in run()")
-            bluetoothAdapter?.cancelDiscovery()
+            bluetoothAdapter.cancelDiscovery()
             Log.i(TAG, "ConnectThread: after cancelDiscovery()/before connect")
             clientSocket?.connect()
             Log.i(TAG, "run: ConnectThread connected.")
-            var receivedFeedFile = File(context, "rcvFile")
+            val receivedFeedFile = File(context, "rcvFile")
 
             try {
                 Log.i(TAG, "In try")
@@ -244,7 +244,7 @@ class BluetoothHandler(val activity: BluetoothTransferActivity, val manager: Blu
             Log.i(TAG, "Going to write in File")
             file.writeText(bytes.toString(charset))
             Log.i(TAG, "Wrote to File = "+file.readText())
-            val fd = FeedData(file, context)
+            FeedData(file, context)
             Log.i(TAG, "dataToFeed over")
         }
 
