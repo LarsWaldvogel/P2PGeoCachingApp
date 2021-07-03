@@ -18,9 +18,7 @@ import androidx.core.app.ActivityCompat
 import com.example.p2pgeocaching.R
 import com.example.p2pgeocaching.bluetooth.BluetoothDeviceListAdapter
 import com.example.p2pgeocaching.bluetooth.BluetoothHandler
-import com.example.p2pgeocaching.constants.Constants
 import com.example.p2pgeocaching.databinding.ActivityBluetoothTransferBinding
-import java.io.File
 
 
 /**
