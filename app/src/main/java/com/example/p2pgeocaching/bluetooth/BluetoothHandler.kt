@@ -5,6 +5,7 @@ import android.content.Context
 import android.util.Log
 import android.widget.Toast
 import com.example.p2pgeocaching.activities.BluetoothTransferActivity
+import com.example.p2pgeocaching.constants.Constants.Companion.BUFFERSIZE
 import com.example.p2pgeocaching.data.FeedData
 import java.io.*
 import java.math.BigInteger
@@ -108,7 +109,7 @@ class BluetoothHandler(
                             Log.i(TAG, "feedToSend = " + fd.stringFileContent)
                             Log.i(TAG, "File to bytes, bytearraysize: " + fd.stringFileContent.length)
                             val charset = Charsets.UTF_8
-                            val msgSplit =  fd.stringFileContent.chunked(500)
+                            val msgSplit =  fd.stringFileContent.chunked(BUFFERSIZE)
                             val splitSeq = msgSplit.size
                             Log.d(TAG, "chunks to send = $splitSeq ")
                             val sentSeq = BigInteger.valueOf(splitSeq.toLong()).toByteArray()
@@ -176,7 +177,7 @@ class BluetoothHandler(
     inner class ConnectThread(val device: BluetoothDevice?): Thread() {
 
         private val clientSocket: BluetoothSocket? = device?.createRfcommSocketToServiceRecord(uuid)
-        private val buffer: ByteArray = ByteArray(500) // How to find Filesize
+        private val buffer: ByteArray = ByteArray(BUFFERSIZE)
 
         override fun run() {
             Log.i(TAG, "ConnectThread: in run()")
