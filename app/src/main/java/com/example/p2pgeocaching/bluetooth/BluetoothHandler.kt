@@ -119,22 +119,13 @@ class BluetoothHandler(
                     if (serverSocket == null) {
                         Log.i(TAG, "Serversocket is null")
                     }
-                    activity.runOnUiThread {
-                        Log.i(TAG, "in runOnUiThread before Toast")
-                        Toast.makeText(applicationContext, "waiting for incoming connection", Toast.LENGTH_SHORT).show()
-                        Log.i(TAG, "in runOnUiThread after Toast")
-                    }
+                    makeToast("waiting for incoming connection")
                     Log.i(TAG, "Server is waiting in try block before accept after runOnUiThread")
 
                     socket = serverSocket?.accept()
 
                     Log.i(TAG, "socket accepted")
-                    activity.runOnUiThread {
-                        Log.i(TAG, "in runOnUiThread before Toast")
-                        Toast.makeText(applicationContext, "accepted an incoming connection", Toast.LENGTH_SHORT).show()
-                        Log.i(TAG, "in runOnUiThread after Toast")
-                    }
-
+                    makeToast("accepted an incoming connection")
                     val outputStream = socket?.outputStream
                     while(true) {
                         val fd = FeedData(context)
@@ -155,50 +146,22 @@ class BluetoothHandler(
                                 Log.i(TAG, "write bytes = "+bytes.contentToString())
                                 counter++
                             }
-                            activity.runOnUiThread {
-                                Log.i(TAG, "in runOnUiThread before Toast")
-                                Toast.makeText(applicationContext, "feeds sent", Toast.LENGTH_SHORT).show()
-                                Log.i(TAG, "in runOnUiThread after Toast")
-                            }
+
+                            makeToast("feeds sent")
                             Log.i(TAG, "write bytes = "+fd.stringFileContent.toByteArray())
                             Log.i(TAG, "write bytes = "+fd.stringFileContent.toByteArray().contentToString())
                             // TODO* Define Protocol!
-                            /*try {
-                                var inputStream =
-                                val input =
-                                    BufferedReader(InputStreamReader(socket!!.inputStream)) //socket!!.inputStream.read(buffer)
-                                val inputText = input.readText()
-                                if (inputText.equals("OK")) {
-                                    Log.e(TAG, "Everything went great")
-                                    break
-                                }
-                            } catch (e: IOException) {
-                                Log.e(TAG, "AcceptThread: inputstream error")
-                            }*/
                         }
                         serverSocket?.close()
-                        activity.runOnUiThread {
-                            Log.i(TAG, "in runOnUiThread before Toast")
-                            Toast.makeText(applicationContext, "closed your socket", Toast.LENGTH_SHORT).show()
-                            Log.i(TAG, "in runOnUiThread after Toast")
-                        }
+                        makeToast("closed your socket")
                         Log.i(TAG, "close server")
                         inLoop = false
                         break
                     }
 
                 } catch (e: IOException) {
-                    activity.runOnUiThread {
-                        Log.i(TAG, "in runOnUiThread before Toast")
-                        Toast.makeText(applicationContext, "can't accept connections", Toast.LENGTH_SHORT).show()
-                        Log.i(TAG, "in runOnUiThread after Toast")
-                    }
-
-                    activity.runOnUiThread {
-                        Log.i(TAG, "in runOnUiThread before Toast")
-                        Toast.makeText(applicationContext, "Try again later", Toast.LENGTH_SHORT).show()
-                        Log.i(TAG, "in runOnUiThread after Toast")
-                    }
+                    makeToast("can't accept connections")
+                    makeToast("try again later")
                     Log.e(TAG, "Socket's accept() method failed")
                     inLoop = false
                     break
@@ -230,14 +193,17 @@ class BluetoothHandler(
             }
         }
 
+        private fun makeToast(msg: String) {
+            activity.runOnUiThread {
+                Toast.makeText(applicationContext, msg, Toast.LENGTH_SHORT).show()
+            }
+            Log.e(TAG, "TOAST: $msg")
+        }
+
         fun cancel() {
             try {
                 serverSocket?.close()
-                activity.runOnUiThread {
-                    Log.i(TAG, "in runOnUiThread before Toast")
-                    Toast.makeText(applicationContext, "closed your socket", Toast.LENGTH_SHORT).show()
-                    Log.i(TAG, "in runOnUiThread after Toast")
-                }
+                makeToast("closed your socket by cancel()")
             } catch (e: IOException) {
                 Log.e(TAG, "Could not close the connect socket", e)
             }
@@ -256,45 +222,28 @@ class BluetoothHandler(
             Log.i(TAG, "ConnectThread: in run()")
             bluetoothAdapter.cancelDiscovery()
             Log.i(TAG, "ConnectThread: after cancelDiscovery()/before connect")
-            activity.runOnUiThread {
-                Log.i(TAG, "in runOnUiThread before Toast")
-                Toast.makeText(applicationContext, "waiting for connection", Toast.LENGTH_SHORT).show()
-                Log.i(TAG, "in runOnUiThread after Toast")
-            }
+            makeToast("waiting for connection")
+
             clientSocket?.connect()
-            activity.runOnUiThread {
-                Log.i(TAG, "in runOnUiThread before Toast")
-                Toast.makeText(applicationContext, "connection accepted", Toast.LENGTH_SHORT).show()
-                Log.i(TAG, "in runOnUiThread after Toast")
-            }
+
+            makeToast("connection accepted")
             Log.i(TAG, "run: ConnectThread connected.")
             val receivedFeedFile = File(context, "rcvFile")
 
             try {
                 Log.i(TAG, "In try")
-                activity.runOnUiThread {
-                    Log.i(TAG, "in runOnUiThread before Toast")
-                    Toast.makeText(applicationContext, "wait... you are receiving", Toast.LENGTH_SHORT).show()
-                    Log.i(TAG, "in runOnUiThread after Toast")
-                }
+
+                makeToast("wait... you are receiving data")
+
                 read(buffer, receivedFeedFile)
-                activity.runOnUiThread {
-                    Log.i(TAG, "in runOnUiThread before Toast")
-                    Toast.makeText(applicationContext, "feed received", Toast.LENGTH_SHORT).show()
-                    Log.i(TAG, "in runOnUiThread after Toast")
-                }
+
+                makeToast("feed received")
                 Log.i(TAG, "read File")
-                //write("OK".toByteArray())
-                Log.i(TAG, "OK-Statement")
             } catch (e: IOException) {
                 Log.e(TAG, "ConnectThread: inputstream error")
             }
             clientSocket?.close()
-            activity.runOnUiThread {
-                Log.i(TAG, "in runOnUiThread before Toast")
-                Toast.makeText(applicationContext, "closed your socket", Toast.LENGTH_SHORT).show()
-                Log.i(TAG, "in runOnUiThread after Toast")
-            }
+            makeToast("closed your socket")
         }
 
         private fun read(bytes: ByteArray, file: File) {
@@ -304,6 +253,7 @@ class BluetoothHandler(
             val charset = Charsets.UTF_8
 
             val splitSeq = inputStream?.read()
+            Log.d(TAG, "splitSeq = $splitSeq")
             var counter = 0
             while(true) {
                 while(counter < splitSeq!!) {
@@ -342,6 +292,13 @@ class BluetoothHandler(
                 Log.e(TAG, "outputstream error", e)
 
             }
+        }
+
+        private fun makeToast(msg: String) {
+            activity.runOnUiThread {
+                Toast.makeText(applicationContext, msg, Toast.LENGTH_SHORT).show()
+            }
+            Log.e(TAG, msg)
         }
 
         fun cancel() {
