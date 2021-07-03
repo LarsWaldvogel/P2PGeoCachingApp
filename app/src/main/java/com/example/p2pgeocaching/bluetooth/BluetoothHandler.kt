@@ -8,6 +8,7 @@ import android.widget.Toast
 import com.example.p2pgeocaching.activities.BluetoothTransferActivity
 import com.example.p2pgeocaching.data.FeedData
 import java.io.*
+import java.math.BigInteger
 import java.util.*
 
 /**
@@ -135,20 +136,20 @@ class BluetoothHandler(
                             val charset = Charsets.UTF_8
                             val msgSplit =  fd.stringFileContent.chunked(500)
                             val splitSeq = msgSplit.size
-                            Log.i(TAG, "$splitSeq chunks to send")
-
-                            outputStream?.write(splitSeq) // Erste Nachricht an receiver ist Anzahl substring die er erhält
-
+                            Log.d(TAG, "chunks to send = $splitSeq ")
+                            val sentSeq = BigInteger.valueOf(splitSeq.toLong()).toByteArray()
+                            outputStream?.write(sentSeq) // Erste Nachricht an receiver ist Anzahl substring die er erhält
                             var counter = 0
                             while(counter < splitSeq) {
                                 val bytes = msgSplit[counter].toByteArray(charset)
                                 write(bytes, outputStream)
-                                Log.i(TAG, "write bytes = "+bytes.contentToString())
+                                Log.i(TAG, "write bytes chunk = "+bytes.contentToString())
+                                Log.i(TAG, "written bytes as String = " + bytes.toString(charset))
+                                Log.i(TAG, "counter = $counter")
                                 counter++
                             }
 
                             makeToast("feeds sent")
-                            Log.i(TAG, "write bytes = "+fd.stringFileContent.toByteArray())
                             Log.i(TAG, "write bytes = "+fd.stringFileContent.toByteArray().contentToString())
                             // TODO* Define Protocol!
                         }
@@ -252,13 +253,15 @@ class BluetoothHandler(
             val inputStream = clientSocket?.inputStream
             val charset = Charsets.UTF_8
 
-            val splitSeq = inputStream?.read()
+            val splitSeq = inputStream?.read() // Is this chunksize?
             Log.d(TAG, "splitSeq = $splitSeq")
             var counter = 0
             while(true) {
                 while(counter < splitSeq!!) {
                     inputStream.read(bytes)
                     finalMsg += bytes.toString(charset)
+                    Log.d(TAG, "finalMsg = $finalMsg")
+                    Log.d(TAG, "counter = $counter")
                     counter++
                 }
                 if(counter == splitSeq) {
