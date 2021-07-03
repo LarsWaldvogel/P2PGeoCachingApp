@@ -82,13 +82,17 @@ class FeedData : Serializable {
                 }
             }
         }
+        if (file.length() != 0L) {
+            file.appendText("$$$$$")
+        }
         Log.i(TAG, "File Content at the end = "+file.readText())
         return file.readText()
     }
 
     fun dataToFeed (file: File, context:File) {
         Log.i(TAG, "started dataToFeed")
-        val fileContent = file.readText()
+        val fileContentList = file.readText().split("$$$$$")
+        val fileContent = fileContentList[0]
         Log.i(TAG, "Received File Content = "+fileContent)
         val feedList = fileContent.split("#####")
 
