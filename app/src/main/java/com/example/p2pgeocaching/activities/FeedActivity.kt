@@ -27,7 +27,6 @@ class FeedActivity : AppCompatActivity() {
     private lateinit var recyclerView: RecyclerView
     private lateinit var feedNameList: List<String>
 
-
     /**
      * Reads from files which feeds the user is subscribed to.
      * Displays them in recyclerList, when pressed on they open FeedDetailViewActivity
@@ -86,6 +85,7 @@ class FeedActivity : AppCompatActivity() {
             val intent = Intent(context, AddNewFeedActivity::class.java)
             intent.addFlags(Intent.FLAG_ACTIVITY_NEW_TASK)
             context.startActivity(intent)
+            onRestart()
         }
     }
 
@@ -104,6 +104,38 @@ class FeedActivity : AppCompatActivity() {
     override fun onRestart() {
         super.onRestart()
         // TODO: add refresh of list
+        val context = applicationContext
+        val feedsNameFile = File(context.filesDir, FEED_NAMES_FILE)
+        if (!feedsNameFile.exists() && !USE_DUMMY_FEED_NAME_LIST) {
+            feedNameList = mutableListOf()
+            binding.emptyFeedListPromptText.text = getString(R.string.empty_feed_list_prompt)
+
+        } else { // File exists
+
+            // for testing purposes
+            feedNameList = if (USE_DUMMY_FEED_NAME_LIST) {
+                mutableListOf("Wolf#2404", "Adam#1234")
+
+            } else { // actual implementation
+                //*
+                getFeedList(feedsNameFile.readText())
+                //mutableListOf()
+            }
+
+            // File exists, but is empty, show message
+            if (feedNameList.isEmpty()) {
+                binding.emptyFeedListPromptText.text = getString(R.string.empty_feed_list_prompt)
+
+            } else { // List of feeds exists
+                // initialize the recyclerview
+                recyclerView = binding.feedRecyclerView
+                recyclerView.layoutManager = LinearLayoutManager(this)
+                recyclerView.adapter = FeedAdapter(feedNameList)
+
+                // remove prompt in background
+                binding.emptyFeedListPromptText.text = ""
+            }
+        }
     }
 
 }
