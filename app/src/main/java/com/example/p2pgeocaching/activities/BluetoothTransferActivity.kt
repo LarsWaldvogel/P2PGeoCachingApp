@@ -145,13 +145,12 @@ class BluetoothTransferActivity : AppCompatActivity() {
         val hasLocationPermission: Boolean =
             hasPermission(Manifest.permission.ACCESS_COARSE_LOCATION)
         Log.i(TAG, "hasLocationPermission = $hasLocationPermission")
-        checkLocationPermission()
+
+        checkLocationPermission()   // inApp location permission request
+
         val hasFineLocationPermission: Boolean =
             hasPermission(Manifest.permission.ACCESS_FINE_LOCATION)
         Log.i(TAG, "hasFineLocationPermission = $hasFineLocationPermission")
-        val hasBackgroundAccess: Boolean =
-            hasPermission(Manifest.permission.ACCESS_BACKGROUND_LOCATION)
-        Log.i(TAG, "hasBackgroundAccess = $hasBackgroundAccess")
         return hasBluetoothPermission && hasBluetoothAdminPermission && hasLocationPermission && hasFineLocationPermission
     }
 
