@@ -35,6 +35,10 @@ class FeedData : Serializable {
         if (!file.exists()) {
             file.createNewFile()
             Log.i(TAG, "Created File")
+        } else {
+            file.delete()
+            file.createNewFile()
+            Log.i(TAG, "Deleted and Created File")
         }
 
         val userNameFile = File(context, Constants.U_NAME_FILE)
@@ -53,8 +57,8 @@ class FeedData : Serializable {
         if (ownFeedContent.isNotEmpty()) {
             Log.i(TAG, "length is not zero")
             file.appendText(feedName)
-            file.appendText("_:_:_")
-            file.appendText("".plus(ownFeedContent))
+            file.appendText("\n_:_:_")
+            file.appendText("\n".plus(ownFeedContent))
             Log.i(TAG, "File Content after adding own feed = "+file.readText())
         }
 
@@ -67,20 +71,20 @@ class FeedData : Serializable {
                 val feedContent = feedFile.readText()
                 if (file.length() == 0L && feedContent.isNotEmpty()) {
                     file.appendText(feed)
-                    file.appendText("_:_:_")
-                    file.appendText("".plus(feedContent))
+                    file.appendText("\n_:_:_")
+                    file.appendText("\n".plus(feedContent))
                     Log.i(TAG, "File Content after adding new feed = " + file.readText())
                 } else if (feedContent.isNotEmpty()) {
-                    file.appendText("#####")
-                    file.appendText("".plus(feed))
-                    file.appendText("_:_:_")
-                    file.appendText("".plus(feedContent))
+                    file.appendText("\n#####")
+                    file.appendText("\n".plus(feed))
+                    file.appendText("\n_:_:_")
+                    file.appendText("\n".plus(feedContent))
                     Log.i(TAG, "File Content after adding new feed = " + file.readText())
                 }
             }
         }
         if (file.length() != 0L) {
-            file.appendText("$$$$$")
+            file.appendText("\n$$$$$")
         }
         Log.i(TAG, "File Content at the end = "+file.readText())
         return file.readText()
@@ -88,11 +92,9 @@ class FeedData : Serializable {
 
     private fun dataToFeed (file: File, context:File) {
         Log.i(TAG, "started dataToFeed")
-        val fileContentList = file.readText().split("$$$$$")
-        val sizeOfFileContent = fileContentList.size
-        val counter = 0
-        while(counter < sizeOfFileContent) {
-            val fileContent = fileContentList[counter]
+        try {
+            val fileContentList = file.readText().replace("\n","").split("$$$$$")
+            var fileContent = fileContentList[0]
             Log.i(TAG, "Received File Content = $fileContent")
             val feedList = fileContent.split("#####")
 
@@ -112,17 +114,23 @@ class FeedData : Serializable {
                     val feedContent = feedElem[1]
                     Log.i(TAG, "FeedContent = $feedContent")
                     for (person in feedNameList) {
-                        if (person == feedName) {
-                            Log.i(TAG, "Feed is subscribed")
+                        Log.i (TAG, "Is this the Person = "+person)
+                        if (person.equals(feedName)) {
+                            Log.i(TAG, "Yes it's this Person: Feed is subscribed")
                             val personFile = File(context, person)
                             if (personFile.length() == 0L) {
+                                Log.i (TAG, "Person's file length is zero")
                                 personFile.appendText(feedContent)
+                                Log.i (TAG, "Person's file content = "+personFile.readText())
                                 val feedEntryList = fdp.feedToEntrylist(personFile)
+                                Log.i(TAG, "feedEntryList size = "+feedEntryList.size)
                                 for (element in feedEntryList) {
                                     newEntryList.add(element)
                                 }
                             } else {
+                                Log.i (TAG, "Person's file length is NOT zero")
                                 val entryList = fdp.feedToEntrylist(personFile)
+                                Log.i(TAG, "Old feedEntryList size = "+entryList.size)
                                 var len = entryList.size
                                 val lastEntry = entryList[len - 1]
 
@@ -134,17 +142,17 @@ class FeedData : Serializable {
                                     supportFile.createNewFile()
                                 }
                                 supportFile.appendText(feedContent)
-                                Log.i(TAG, "Support File Content = " + supportFile.readText())
                                 val feedEntryList = fdp.feedToEntrylist(supportFile)
                                 len = feedEntryList.size
                                 val lastEntryInFeed = feedEntryList[len - 1]
-
-                                Log.i(TAG, "Old Feed Content = " + personFile.readText())
+                                Log.i(TAG, "New feedEntryList size = "+len)
 
                                 if (lastEntry.id < lastEntryInFeed.id) {
+                                    Log.i(TAG, "We need Update")
                                     for (i in (lastEntry.id + 1)..lastEntryInFeed.id) {
                                         newEntryList.add(feedEntryList[i])
                                     }
+                                    Log.i(TAG, "Old Feed Content = "+personFile.readText())
                                     personFile.delete()
                                     personFile.createNewFile()
                                     personFile.appendText(supportFile.readText())
@@ -189,7 +197,10 @@ class FeedData : Serializable {
                     generator.getCacheListFileContent(context)
                 }
             }
+        } catch(exception: Exception) {
+
         }
+
     }
 
 }

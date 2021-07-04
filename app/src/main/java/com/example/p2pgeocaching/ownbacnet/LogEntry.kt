@@ -5,6 +5,7 @@ import com.example.p2pgeocaching.constants.Constants.Companion.LOG_ENTRY
 import com.example.p2pgeocaching.data.FeedDataParser
 import com.example.p2pgeocaching.data.Serializer
 import java.io.File
+import android.util.Log
 
 /**
  * This class is created whenever the app receives new data from another user.
@@ -25,15 +26,23 @@ class LogEntry(
 
     companion object {
 
+        const val TAG = "LogEntry"
+
         /**
          * This method lets us create a [LogEntry] with a list of [newEntries].
          * It also needs a [ownFeed] to determine the current position in the feed.
          */
         fun newLogEntry(newEntries: List<Entry>, ownFeed: OwnFeed, context: File): LogEntry {
+            Log.i(TAG, "New Log Entry")
+            Log.i(TAG, "newEntries size = "+newEntries.size)
             val timestamp = System.currentTimeMillis()
+            Log.i(TAG, "timeStamp = "+timestamp)
             val id = ownFeed.getNextID()
+            Log.i(TAG, "id = "+id)
             val previousSignature = ownFeed.getLastSignature()
+            Log.i(TAG, "previous signature = "+previousSignature)
             val signedPreviousSignature = ownFeed.getOwnPublisher().sign(previousSignature)
+            Log.i(TAG, "signedPreviousSignature = "+previousSignature)
             val type = LOG_ENTRY
             // TODO: initialize things and construct HoFEntry
             var content = ""
@@ -50,7 +59,11 @@ class LogEntry(
                     val feedFile = File(context, feedName)
                     val listOfEntries = fdp.feedToEntrylist(feedFile)
                     for (feedEntry in listOfEntries) {
-                        if (entry.equals(feedEntry)) {
+                        if (entry.id.equals(feedEntry.id) &&
+                                entry.type.equals(feedEntry.type) &&
+                                entry.signature.equals(feedEntry.signature) &&
+                                entry.content.equals(feedEntry.content)) {
+                            Log.i(TAG, "Got matching entry")
                             content = content.plus(entry.id).plus(",").plus(entry.signature).plus(",").plus(feedName).plus(";")
                             bool = true
                             break
@@ -61,11 +74,14 @@ class LogEntry(
                     }
                 }
             }
+            Log.i(TAG, "content = "+content)
             val concatenatedString: String =
                 timestamp.toString() + id.toString() + signedPreviousSignature + type + content
             val hashString = concatenatedString.hashCode().toString()
             val signature = ownFeed.getOwnPublisher().sign(hashString)
-            return LogEntry(timestamp, id, signedPreviousSignature, content, signature)
+            val logEntry = LogEntry(timestamp, id, signedPreviousSignature, content, signature)
+            Log.i(TAG, "LogEntry content = "+logEntry.content)
+            return logEntry
         }
     }
 }

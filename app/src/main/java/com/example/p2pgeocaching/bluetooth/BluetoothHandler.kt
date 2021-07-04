@@ -103,7 +103,7 @@ class BluetoothHandler(
                             val charset = Charsets.UTF_8
                             val msgSplit =  fd.stringFileContent.chunked(BUFFERSIZE)
                             val splitSeq = msgSplit.size
-                            Log.d(TAG, "chunks to send = $splitSeq ")
+                            Log.i(TAG, "chunks to send = $splitSeq ")
                             val sentSeq = BigInteger.valueOf(splitSeq.toLong()).toByteArray()
                             outputStream?.write(sentSeq) // Erste Nachricht an receiver ist Anzahl substring die er erhält
                             var counter = 0
@@ -205,14 +205,15 @@ class BluetoothHandler(
             val charset = Charsets.UTF_8
 
             val splitSeq = inputStream?.read() // Is this chunksize?
-            Log.d(TAG, "splitSeq = $splitSeq")
+            Log.i(TAG, "splitSeq = $splitSeq")
             var counter = 0
             while(true) {
                 while(counter < splitSeq!!) {
                     inputStream.read(bytes)
                     finalMsg += bytes.toString(charset)
-                    Log.d(TAG, "finalMsg = $finalMsg")
-                    Log.d(TAG, "counter = $counter")
+                    Log.i(TAG, "Received bytes = ${bytes.toString(charset)}")
+                    Log.i(TAG, "finalMsg = $finalMsg")
+                    Log.i(TAG, "counter = $counter")
                     counter++
                 }
                 if(counter == splitSeq) {

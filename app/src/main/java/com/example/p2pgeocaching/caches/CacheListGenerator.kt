@@ -25,6 +25,7 @@ class CacheListGenerator {
     private lateinit var cacheListFile: File
 
     fun getCacheListFileContent (context: File) {
+        Log.i(TAG, "Started CacheListGenerator")
         val userNameFile = File(context, Constants.U_NAME_FILE)
         val creatorString = userNameFile.readLines().toString()
         val creator = creatorString.substring(1, creatorString.length - 1)
@@ -45,8 +46,10 @@ class CacheListGenerator {
         var cacheList = CacheList(mutableListOf())
 
         //TODO* not finished
+        Log.i(TAG, "Searching for Entries in OwnFeed")
         for (item in list) {
             if (item.type.equals(Constants.CACHE_ENTRY)) {
+                Log.i(TAG, "Got Cache Entry")
                 var cache1 = Serializer.deserializeCacheFromString(item.content)
                 var cache = OwnCache(
                     cache1.title,
@@ -58,6 +61,7 @@ class CacheListGenerator {
                     cache1.hallOfFame,
                     cache1.plainTextHOF
                 )
+                Log.i(TAG, "Name of Cache Entry = "+cache.title)
                 val ownCacheListFile = File(context, Constants.OWN_CACHE_LIST_FILE)
                 val ownCacheContent = ownCacheListFile.readText()
                 Log.i(TAG, "OwnCacheListFileContent = "+ownCacheContent)
@@ -70,16 +74,23 @@ class CacheListGenerator {
                     Log.i(TAG, "Signatur = "+sign)
                     Log.i(TAG, "PrvKey = "+prvKey)
                     if (sign.equals(item.signature)) {
+                        Log.i(TAG, "Got correct private key")
                         cache.prvKey = prvKey.toString()
+                        break
                     }
                 }
                 // TODO* CHECK: Add log statements and check if this works
+                Log.i(TAG, "Checking subscribed Feeds")
                 if (feedNamesFile.length() != 0L) {
+                    Log.i(TAG, "I did subscribe Feeds")
                     val feedNameList = feedNamesFile.readText().split("\n")
                     for (feedName in feedNameList) {
+                        Log.i(TAG, "Lookin at feed = "+feedName)
                         val feedFile = File(context, feedName)
                         val listOfEntries = fdp.feedToEntrylist(feedFile)
+                        Log.i(TAG, "Feeds size of list = "+listOfEntries.size)
                         for (entry in listOfEntries) {
+                            Log.i(TAG, "Entry type = "+entry.type)
                             if (entry.type.equals(Constants.HOF_ENTRY) && entry.signature.equals(
                                     item.signature
                                 )

@@ -12,7 +12,7 @@ import com.example.p2pgeocaching.caches.CacheListGenerator
 class FeedDataParser {
 
     companion object {
-        const val TAG = "NewCacheActivity"
+        const val TAG = "FeedDataParser"
     }
 
     fun feedToEntrylist(feedFile : File): List<Entry> {
@@ -33,12 +33,12 @@ class FeedDataParser {
                     ep[4],         // type
                     ep[5]          // signature
                 )
-                Log.i(CacheListGenerator.TAG, "Entry Id = "+entry.id)
-                Log.i(CacheListGenerator.TAG, "Entry Content = "+entry.content)
-                Log.i(CacheListGenerator.TAG, "Entry Signature = "+entry.signature)
-                Log.i(CacheListGenerator.TAG, "Entry Previous = "+entry.signedPreviousSignature)
-                Log.i(CacheListGenerator.TAG, "Entry Time = "+entry.timestamp)
-                Log.i(CacheListGenerator.TAG, "Entry Type = "+entry.type)
+                Log.i(TAG, "Entry Id = "+entry.id)
+                Log.i(TAG, "Entry Content = "+entry.content)
+                Log.i(TAG, "Entry Signature = "+entry.signature)
+                Log.i(TAG, "Entry Previous = "+entry.signedPreviousSignature)
+                Log.i(TAG, "Entry Time = "+entry.timestamp)
+                Log.i(TAG, "Entry Type = "+entry.type)
                 listOfEntries.add(entry)
             }
             return listOfEntries
