@@ -105,10 +105,10 @@ class OwnCacheDetailActivity : AppCompatActivity() {
         }
 
         // Press the delete button to return to the list with the cache removed
-        binding.deleteButtonOwn.setOnClickListener {
+        /*binding.deleteButtonOwn.setOnClickListener {
             cacheList.removeCacheByID(cache.id)
             Serializer.serializeCacheListToFile(cacheList, cacheListFile)
             finish()
-        }
+        }*/
     }
 }

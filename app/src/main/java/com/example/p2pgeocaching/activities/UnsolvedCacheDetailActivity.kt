@@ -98,11 +98,11 @@ class UnsolvedCacheDetailActivity : AppCompatActivity() {
         }
 
         // Press the delete button to return to the list with the cache removed
-        binding.deleteButtonUnsolved.setOnClickListener {
+        /*binding.deleteButtonUnsolved.setOnClickListener {
             cacheList.removeCacheByID(cache.id)
             Serializer.serializeCacheListToFile(cacheList, cacheListFile)
             finish()
-        }
+        }*/
     }
 
 

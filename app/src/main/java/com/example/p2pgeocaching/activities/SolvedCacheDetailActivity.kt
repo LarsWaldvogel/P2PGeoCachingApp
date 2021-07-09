@@ -92,10 +92,10 @@ class SolvedCacheDetailActivity : AppCompatActivity() {
         binding.hallOfFameText.text = cache.plainTextHOF
 
         // Press the delete button to return to the list with the cache removed
-        binding.deleteButtonSolved.setOnClickListener {
+        /*binding.deleteButtonSolved.setOnClickListener {
             cacheList.removeCacheByID(cache.id)
             Serializer.serializeCacheListToFile(cacheList, cacheListFile)
             finish()
-        }
+        }*/
     }
 }
