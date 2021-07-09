@@ -15,6 +15,7 @@ data class EntryData(
     val signature: String,
 ) : Serializable {
 
-    // TODO
+    // TODO: In future, the tasks of FeedData and FeedDataParser can be split up into
+    // multiple classes
 
 }

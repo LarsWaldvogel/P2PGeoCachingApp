@@ -8,6 +8,8 @@ import java.io.Serializable
 @kotlinx.serialization.Serializable
 class PublisherData : Serializable {
 
-    // TODO
+    // TODO: In future, the tasks of FeedData and FeedDataParser can be split up into
+    // multiple classes
+
 
 }

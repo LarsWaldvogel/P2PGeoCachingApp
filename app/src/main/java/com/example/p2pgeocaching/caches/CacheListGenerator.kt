@@ -45,7 +45,6 @@ class CacheListGenerator {
         val feedNamesFile = File(context, Constants.FEED_NAMES_FILE)
         var cacheList = CacheList(mutableListOf())
 
-        //TODO* not finished
         Log.i(TAG, "Searching for Entries in OwnFeed")
         for (item in list) {
             if (item.type.equals(Constants.CACHE_ENTRY)) {
@@ -79,7 +78,6 @@ class CacheListGenerator {
                         break
                     }
                 }
-                // TODO* CHECK: Add log statements and check if this works
                 Log.i(TAG, "Checking subscribed Feeds")
                 if (feedNamesFile.length() != 0L) {
                     Log.i(TAG, "I did subscribe Feeds")
@@ -104,7 +102,6 @@ class CacheListGenerator {
                 cacheList.add(cache)
             }
         }
-        // TODO* CHECK: Add log statements and check if this works
         if (feedNamesFile.length() != 0L) {
             val feedNameList = feedNamesFile.readText().split("\n")
             for (feedName in feedNameList) {

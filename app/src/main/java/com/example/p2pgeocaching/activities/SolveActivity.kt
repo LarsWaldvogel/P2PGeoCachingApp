@@ -104,8 +104,6 @@ class SolveActivity : AppCompatActivity() {
                         val unsolvedCache = cache as UnsolvedCache
                         val solvedCache = unsolvedCache.solveCache(userName, privateKey)
 
-                        // TODO* CHECK: Add log statements and check if this works
-
                         val creatorString = userNameFile.readLines().toString()
                         val creator = creatorString.substring(1, creatorString.length - 1)
                         var file = File(context.filesDir, Constants.PERSON_DATA)

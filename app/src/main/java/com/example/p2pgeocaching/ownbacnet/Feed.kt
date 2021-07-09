@@ -7,8 +7,6 @@ package com.example.p2pgeocaching.ownbacnet
  */
 open class Feed(val entries: List<Entry>, val publisher: Publisher) {
 
-    // TODO
-
     /**
      * This function gives back the ID of the last entry.
      */

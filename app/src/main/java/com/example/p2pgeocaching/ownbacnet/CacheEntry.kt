@@ -18,8 +18,6 @@ class CacheEntry(
     signature: String
 ) : Entry(timestamp, id, signedPreviousSignature, content, CACHE_ENTRY, signature) {
 
-    // TODO
-
     companion object {
 
         /**
@@ -49,6 +47,4 @@ class CacheEntry(
             return CacheEntry(timestamp, id, signedPreviousSignature, content, signature)
         }
     }
-
-
 }

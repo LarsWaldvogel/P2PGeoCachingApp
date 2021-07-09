@@ -92,7 +92,4 @@ class FeedAdapter(val feedNameList: List<String>) :
             info?.addAction(customClick)
         }
     }
-
-    // TODO
-
 }

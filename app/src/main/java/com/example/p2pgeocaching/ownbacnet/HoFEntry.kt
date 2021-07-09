@@ -21,8 +21,6 @@ class HoFEntry(
     signature: String
 ) : Entry(timestamp, id, signedPreviousSignature, content, HOF_ENTRY, signature) {
 
-    // TODO
-
     companion object {
 
         /**
@@ -30,7 +28,6 @@ class HoFEntry(
          * It also needs a [ownFeed] to determine the current position in the feed.
          */
         fun newHoFEntry(privateKey: String, cache: Cache, ownFeed: OwnFeed, context: File): HoFEntry {
-        // TODO* CHECK: Add log statements and check if this works
             val timestamp = System.currentTimeMillis()
             val id = ownFeed.getNextID()
             val previousSignature = ownFeed.getLastSignature()

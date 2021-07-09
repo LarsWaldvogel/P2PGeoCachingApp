@@ -27,8 +27,6 @@ import java.io.File
  */
 class UserNameActivity : AppCompatActivity() {
 
-    // TODO: Display public key (last 4 digits)
-
     companion object {
         const val TAG = "UserNameActivity"
     }
@@ -51,11 +49,8 @@ class UserNameActivity : AppCompatActivity() {
         val personData = File(context.filesDir, PERSON_DATA)
 
         // initialize fields
-        // TODO: get salt (last 4 digits of public key)
-        //*
         val key = personData.readText()
         val salt = getSalt(key)
-        //val salt = "6753"
         var userName = userNameFile.readLines().toString()
         userName = userName.substring(1, userName.length - 1)
         val feedName = "$userName#$salt"
@@ -70,7 +65,6 @@ class UserNameActivity : AppCompatActivity() {
         // validate input, show error message or return
         binding.userNameButton.setOnClickListener {
             Log.d(TAG, "Button was pressed")
-            //*
             handleInput(userNameFile, context.filesDir)
         }
 
@@ -83,7 +77,7 @@ class UserNameActivity : AppCompatActivity() {
         }
     }
 
-    //*
+    // This method returns salt
     fun getSalt(key: String): String {
         val list1 = key.split(' ')
         val pub = list1[0]
@@ -156,17 +150,7 @@ class UserNameActivity : AppCompatActivity() {
                 Log.d(TAG, "Written to file: $userNameString")
                 val cacheListGenerator = CacheListGenerator()
                 cacheListGenerator.getCacheListFileContent(context)
-                //*
 
-
-                /*
-                val inputStream: InputStream = File(U_NAME_FILE).inputStream()
-                Log.d(
-                    TAG,
-                    "File currently contains: " +
-                            inputStream.bufferedReader().use { it.readText() }.toString()
-                )
-                */
                 binding.userNameErrorText.text = ""
 
                 // Go back to original screen

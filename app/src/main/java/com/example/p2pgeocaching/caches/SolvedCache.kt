@@ -14,5 +14,3 @@ class SolvedCache(
     hallOfFame: MutableSet<String>,
     plainTextHOF: String
 ) : Cache(title, desc, creator, id, pubKey, prvKey, hallOfFame, plainTextHOF)
-
-// TODO: remove privateKey field

@@ -6,6 +6,7 @@ package com.example.p2pgeocaching.ownbacnet
  */
 open class Publisher(val name: String, val publicKey: String) {
 
-    // TODO
+    // TODO: Can be done in future to get a better overview. At the moment, the publisher
+    // is created through the personData file and Username file
 
 }

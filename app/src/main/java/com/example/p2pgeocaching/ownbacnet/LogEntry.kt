@@ -22,8 +22,6 @@ class LogEntry(
     signature: String
 ) : Entry(timestamp, id, signedPreviousSignature, content, LOG_ENTRY, signature) {
 
-    // TODO
-
     companion object {
 
         const val TAG = "LogEntry"
@@ -44,10 +42,8 @@ class LogEntry(
             val signedPreviousSignature = ownFeed.getOwnPublisher().sign(previousSignature)
             Log.i(TAG, "signedPreviousSignature = "+previousSignature)
             val type = LOG_ENTRY
-            // TODO: initialize things and construct HoFEntry
             var content = ""
 
-            // TODO* CHECK: test if this works
             val fdp = FeedDataParser()
             val feedNamesFile = File(context, Constants.FEED_NAMES_FILE)
             val feedNameContent = feedNamesFile.readText()

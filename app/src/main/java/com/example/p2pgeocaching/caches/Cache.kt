@@ -3,8 +3,6 @@ package com.example.p2pgeocaching.caches
 import android.util.Log
 import com.example.p2pgeocaching.RSA.RSA
 
-
-// TODO: cache should update with bluetooth connection transfer
 /**
  * This class saves all the data related to a cache.
  * Cache class can be called in two ways, either to create a new cache or to save an existing one.

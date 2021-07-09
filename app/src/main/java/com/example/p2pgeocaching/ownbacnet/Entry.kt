@@ -19,7 +19,4 @@ open class Entry(
     val type: String,
     val signature: String
 ) {
-
-    // TODO
-
 }

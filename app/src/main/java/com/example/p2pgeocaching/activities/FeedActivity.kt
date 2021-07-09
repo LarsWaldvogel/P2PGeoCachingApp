@@ -17,8 +17,6 @@ import java.io.File
  */
 class FeedActivity : AppCompatActivity() {
 
-    // TODO
-
     companion object {
         const val TAG = "FeedActivity"
     }
@@ -103,7 +101,6 @@ class FeedActivity : AppCompatActivity() {
      */
     override fun onRestart() {
         super.onRestart()
-        // TODO: add refresh of list
         val context = applicationContext
         val feedsNameFile = File(context.filesDir, FEED_NAMES_FILE)
         if (!feedsNameFile.exists() && !USE_DUMMY_FEED_NAME_LIST) {
@@ -137,5 +134,4 @@ class FeedActivity : AppCompatActivity() {
             }
         }
     }
-
 }

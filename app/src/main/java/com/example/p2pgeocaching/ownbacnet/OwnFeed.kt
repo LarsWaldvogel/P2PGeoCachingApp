@@ -10,7 +10,6 @@ import android.content.Context
  */
 class OwnFeed(entries: List<Entry>, ownPublisher: OwnPublisher) : Feed(entries, ownPublisher) {
 
-    // TODO
     companion object {
         const val TAG = "OwnFeed"
     }
@@ -25,7 +24,9 @@ class OwnFeed(entries: List<Entry>, ownPublisher: OwnPublisher) : Feed(entries, 
         file.createNewFile()
     }
 
-    //*
+    /** This method is used to create a new own feed and to delete the
+     * old feed
+     */
     fun createNewFeed(oldusername: String, key:String, context: File) {
         var str = ""
         val name = getOwnPublisher().name
@@ -40,7 +41,6 @@ class OwnFeed(entries: List<Entry>, ownPublisher: OwnPublisher) : Feed(entries, 
         file.createNewFile()
     }
 
-    // TODO addEntry()
     /**
      * Returns the [Publisher] as an [OwnPublisher] object (which it always is).
      */

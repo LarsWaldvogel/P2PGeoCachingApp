@@ -22,12 +22,6 @@ import com.example.p2pgeocaching.ownbacnet.OwnPublisher
 import java.io.File
 import java.util.*
 
-
-// TODO add manifest to get bluetooth permissions
-// TODO add bluetooth transfer function
-// TODO when first opened, create publisher with username and a random public/private
-//  keypair
-// TODO button to get to FeedsActivity
 /**
  * This activity serves as the center of the app.
  * From here, we can change our name, create a new cache, look at our caches and transfer caches
@@ -53,25 +47,6 @@ class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         Log.d(TAG, "onCreate is called")
-
-        // TODO: On startup: make new CacheListFile from all Feeds
-        //  specifics:
-        //  When receiving new data, read all feeds for caches.
-        //  When caches are found, search all other feeds for HoF entries.
-        //  Create a Cache object based on the cache and HoF entries.
-        //  Add all those caches to a cache list.
-        //  Serialize cacheList to file.
-        //  Now always read only from cacheList file until new HoF entry or cache entry is made
-        //  by yourself or received from another person.
-
-        // TODO: Feeds should be saved to separate files. also have a file containing all feeds.
-        //  When feed is subscribed/unsubscribed, make new files or remove them,
-        //  also update feed list.
-
-        // TODO: Implement BaCNet, and have it so the feeds can be serialized.
-
-        // TODO: Have the user be able to add and remove feeds from within the app.
-
 
         // Initialize the binding object
         binding = ActivityMainBinding.inflate(layoutInflater)

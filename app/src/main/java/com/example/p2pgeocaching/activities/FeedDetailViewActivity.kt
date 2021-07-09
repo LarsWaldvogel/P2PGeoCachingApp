@@ -13,8 +13,6 @@ import java.io.File
  */
 class FeedDetailViewActivity : AppCompatActivity() {
 
-    // TODO
-
     companion object {
         const val TAG = "FeedDetailViewActivity"
     }
@@ -74,5 +72,4 @@ class FeedDetailViewActivity : AppCompatActivity() {
             finish()
         }
     }
-
 }

@@ -91,11 +91,7 @@ class NewCacheActivity : AppCompatActivity() {
             return
         }
 
-        //TODO* create class which does that
-        // Create the new Cache and add it to the cacheList
         val newCache = OwnCache(cacheTitle, cacheDesc, creator, this)
-        //cacheList.add(newCache)
-        //val filename = "personData"
         var file = File(context, Constants.PERSON_DATA)
         val content = file.readText()
         val keys = content.split(" ")
@@ -106,7 +102,6 @@ class NewCacheActivity : AppCompatActivity() {
         val feedFile = File(context, feedname)
         val feedParser = FeedDataParser()
         val entryList = feedParser.feedToEntrylist(feedFile)
-        //val entryList = Serializer.deserializeCacheListFromFile(feedFile)
         val op = OwnPublisher(creator, keys[0], keys[1])
         val ownFeed = OwnFeed(entryList, op)
 
@@ -134,9 +129,5 @@ class NewCacheActivity : AppCompatActivity() {
         Log.i(TAG, "Feed Content = "+feedFile.readText())
         val generator = CacheListGenerator()
         generator.getCacheListFileContent(context)
-
-        // Save the new list to file
-        //Serializer.serializeCacheListToFile(cacheList, cacheListFile)
     }
-
 }
